@@ -60,7 +60,8 @@ public class PlayerController : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
-
+        gameObject.GetComponent<BoxCollider2D>().enabled = false;
+        
         playerPos = transform.position;
 
     }
@@ -124,25 +125,37 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
-            animator.Play("DownIdlePlayer");
+            player.gameObject.GetComponent<BoxCollider2D>().enabled = true;
+            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+
+            //콜라이더 캡슐 끄고 박스 켜서 충돌 바꿔주기 
+            animator.Play("DownPlayer");
         }
 
         public override void Update()
         {
-            animator.Play("DownPlayer");
+            axisH = Input.GetAxisRaw("Horizontal");
+            axisV = Input.GetAxisRaw("Vertical"); 
+
+            if(axisH<0.0f)
+            {
+                renderer.flipX = true;
+            }
+
+            animator.Play("DownIdlePlayer");
         }
 
         public override void Transition()
         {
             if(axisV>=0.0f)
             {
+                player.gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
                 ChangeState(State.Idle);
             }
         }
 
     }
-
-
 
     private class IdleState : PlayerState  //이러면 필수매개변수 player가 없다고 나온다. 위에서 생성자를 만들면 
     {

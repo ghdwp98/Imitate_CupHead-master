@@ -14,7 +14,6 @@ public class StateMachine :MonoBehaviour
 
     public void Start()
     {
-        
         curState.Enter();
     }
 
