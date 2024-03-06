@@ -33,6 +33,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 inputDir;
     private bool onGround;
     private int groundCount;
+    private bool isJumping;
+    private bool isParried;
 
 
     private StateMachine stateMachine;
@@ -90,6 +92,7 @@ public class PlayerController : MonoBehaviour
     {
         if (groundCheckLayer.Contain(collision.gameObject.layer))
         {
+            Debug.Log("접촉");
             groundCount = 1;
         }
     }
@@ -138,7 +141,7 @@ public class PlayerController : MonoBehaviour
 
 
             //콜라이더 캡슐 끄고 박스 켜서 충돌 바꿔주기 
-            animator.Play("DownPlayer");
+            animator.Play("Down");
         }
 
         public override void Update()
@@ -156,7 +159,7 @@ public class PlayerController : MonoBehaviour
 
             }
 
-            animator.Play("DownIdlePlayer");
+            animator.Play("DownIdle");
         }
 
         public override void Transition()
@@ -178,7 +181,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Update() //계속 돌아가면서 체크 업데이트 + 트랜지션 
         {
-            animator.Play("IdlePlayer");
+            animator.Play("Idle");
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
 
@@ -220,7 +223,6 @@ public class PlayerController : MonoBehaviour
         public override void Enter()
         {
             rigidbody.velocity = Vector2.zero;
-
         }
 
 
@@ -239,11 +241,7 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-
-
-
     }
-
     private class JumpState : PlayerState
     {
         public bool isLongJump = false;
@@ -251,7 +249,6 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
-  
             Jump();
         }
 
@@ -266,6 +263,12 @@ public class PlayerController : MonoBehaviour
                 isLongJump= false;
             }
                 
+            if(player.isJumping==true&&Input.GetKeyDown(KeyCode.Z)&&player.isParried==false)
+            {
+                Debug.Log("패리");
+                player.isParried = true;
+
+            }
 
 
             axisH = Input.GetAxisRaw("Horizontal");
@@ -303,11 +306,11 @@ public class PlayerController : MonoBehaviour
         {
             if(isLongJump)
             {
-                rigidbody.gravityScale = 0.9f;
+                rigidbody.gravityScale = 1.0f;
             }
             else
             {
-                rigidbody.gravityScale = 2f;
+                rigidbody.gravityScale = 1.7f;
             }
         }
           
@@ -315,10 +318,11 @@ public class PlayerController : MonoBehaviour
         {
             if (onGround && groundCount == 1)
             {
-                player.gameObject.GetComponent<CircleCollider2D>().enabled = false;
-                
-                player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+                Debug.Log("점프 끝"); 
                 rigidbody.gravityScale = 1;
+                groundCount = 0;
+                player.isJumping = false;
+                player.isParried = false;
                 ChangeState(State.Idle);
             }
             
@@ -327,13 +331,13 @@ public class PlayerController : MonoBehaviour
 
         public void Jump()
         {
-
+            if(player.isJumping==false)
+            Debug.Log("점프");
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
-            animator.Play("JumpPlayer");
-            player.gameObject.GetComponent<CircleCollider2D>().enabled = true;
-            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+            animator.Play("Jump");
             groundCount = 0;
-            
+            player.isJumping = true;
+
         }
     }
 
@@ -357,7 +361,7 @@ public class PlayerController : MonoBehaviour
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                animator.Play("RunPlayer");
+                animator.Play("Run");
                 renderer.flipX = true;  //왼쪽으로 모습 바꿔주기
 
             }
@@ -366,7 +370,7 @@ public class PlayerController : MonoBehaviour
 
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                animator.Play("RunPlayer");
+                animator.Play("Run");
                 renderer.flipX = false;  //오른쪽으로 (오른쪽이 디폴트)
 
             }
