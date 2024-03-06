@@ -310,13 +310,13 @@ public class PlayerController : MonoBehaviour
                 rigidbody.gravityScale = 2f;
             }
         }
-
+          
         public override void Transition()
         {
             if (onGround && groundCount == 1)
             {
                 player.gameObject.GetComponent<CircleCollider2D>().enabled = false;
-                //이거 이부분 고쳐야 점프 제대로 됨 차라리 캡슐의 크기를 바꾸는건?? 
+                
                 player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
                 rigidbody.gravityScale = 1;
                 ChangeState(State.Idle);
