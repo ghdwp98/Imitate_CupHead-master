@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -6,8 +5,9 @@ public class PlayerController : MonoBehaviour
     //각각의 상태 클래스에서 뭘 할지 결정하고 어떤 상황이 되면 다른 상태로 트랜지션 할지 결정 
     //이동은 그냥 고전시스템으로 처리하자 그게 훨씬 쉬울것 같다. 
     // groundCheck가 필요한 친구들은 피봇을 바텀으로 두고 쓰자 
+    // 좌 쉬프트로 대시 공중 + 땅 2가지 
 
-    public enum State { Idle, Run, Attack, Jump, attackRun, JumpAttack, Down }
+    public enum State { Idle, Run, Attack, Jump, attackRun, JumpAttack, Down,Anchor }
     //앵커 c키 누르면 이동 없이  8방향 조준 전환 가능 
 
     [Header("Player")]
@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] int mp = 0;
     [SerializeField] float axisH;
     [SerializeField] float axisV;
+    [SerializeField] bool parry; 
 
     [Header("Component")]
     [SerializeField] new Rigidbody2D rigidbody;
@@ -25,7 +26,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float maxSpeed = 5.0f;
     [SerializeField] float accelPower = 10.0f;
     [SerializeField] float decelPower = 20.0f;
-    [SerializeField] float jumpSpeed = 15.0f;
+    [SerializeField] float jumpSpeed = 10.0f ;
     [SerializeField] LayerMask groundCheckLayer; //땅위에서만 점프 가능 or 패리 위에서만 점프가능 
     [SerializeField] Vector2 playerPos;
 
@@ -49,6 +50,7 @@ public class PlayerController : MonoBehaviour
         stateMachine.AddState(State.Attack, new AttackState(this));
         stateMachine.AddState(State.Jump, new JumpState(this));
         stateMachine.AddState(State.Down, new DownState(this));
+        stateMachine.AddState(State.Anchor, new AnchorState(this));
 
         stateMachine.InitState(State.Idle); //최초 상태를 Idle 상태로 시작 
 
@@ -61,7 +63,8 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
-        
+        gameObject.GetComponent<CircleCollider2D>().enabled = false;
+
         playerPos = transform.position;
 
     }
@@ -71,7 +74,7 @@ public class PlayerController : MonoBehaviour
         stateMachine.Update(); //업데이트마다 스테이트머신을 업데이트 시켜줘야함 
                                //curState의 update와 transition을 담당하고 있는 statemachine의 update 함수 
 
-        
+
 
     }
 
@@ -79,11 +82,13 @@ public class PlayerController : MonoBehaviour
     {
         //플레이어가 리지드바디를 쓰면 픽스드업데이트가 필요할 경우가 있음
         stateMachine.FixedUpdate();
+        onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if(groundCheckLayer.Contain(collision.gameObject.layer))
+        if (groundCheckLayer.Contain(collision.gameObject.layer))
         {
             groundCount = 1;
         }
@@ -111,6 +116,8 @@ public class PlayerController : MonoBehaviour
         protected bool onGround { get { return player.onGround; } set { player.onGround = value; } }
         protected int groundCount { get { return player.groundCount; } set { player.groundCount = value; } }
 
+        protected bool parry { get { return player.parry; } set { player.parry = value; } }
+
         public PlayerState(PlayerController player)
         {
             this.player = player;
@@ -127,6 +134,8 @@ public class PlayerController : MonoBehaviour
         {
             player.gameObject.GetComponent<BoxCollider2D>().enabled = true;
             player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+            rigidbody.velocity = Vector2.zero;
+
 
             //콜라이더 캡슐 끄고 박스 켜서 충돌 바꿔주기 
             animator.Play("DownPlayer");
@@ -135,11 +144,16 @@ public class PlayerController : MonoBehaviour
         public override void Update()
         {
             axisH = Input.GetAxisRaw("Horizontal");
-            axisV = Input.GetAxisRaw("Vertical"); 
+            axisV = Input.GetAxisRaw("Vertical");
 
-            if(axisH<0.0f)
+            if (axisH < 0.0f)
             {
                 renderer.flipX = true;
+            }
+            else if (axisH > 0.0f)
+            {
+                renderer.flipX = false;
+
             }
 
             animator.Play("DownIdlePlayer");
@@ -147,7 +161,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Transition()
         {
-            if(axisV>=0.0f)
+            if (axisV >= 0.0f)
             {
                 player.gameObject.GetComponent<BoxCollider2D>().enabled = false;
                 player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
@@ -157,7 +171,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private class IdleState : PlayerState  //이러면 필수매개변수 player가 없다고 나온다. 위에서 생성자를 만들면 
+    private class IdleState : PlayerState
     {
         //자식이 부모 클래스의 생성자를 강제로 호출 Base 이용 
         public IdleState(PlayerController player) : base(player) { }
@@ -171,7 +185,6 @@ public class PlayerController : MonoBehaviour
 
         }
 
-
         public override void Transition()
         {
             if (axisH != 0) //이동이 있으면 상태전환 
@@ -184,29 +197,76 @@ public class PlayerController : MonoBehaviour
             {
                 ChangeState(State.Jump);
             }
-            
-            if (axisV<0.0f)
+
+            if (axisV < 0.0f)
             {
                 ChangeState(State.Down);
             }
 
+            if(Input.GetKeyDown(KeyCode.C)) //앵커 상태 
+            {
+                ChangeState(State.Anchor);
+            }
 
         }
     }
 
-    
+    private class AnchorState:PlayerState
+    {
+        public AnchorState(PlayerController player) : base(player) { }
+
+        //앵커상황이 되면 조준 애니메이션이 나와줘야함 
+
+        public override void Enter()
+        {
+            rigidbody.velocity = Vector2.zero;
+
+        }
+
+
+        public override void Update()
+        {
+            Debug.Log("앵커");
+        }
+
+        public override void Transition()
+        {
+            // c 키를 누르고 있지 않으면 idle로 탈출 
+
+            if(Input.GetKeyUp(KeyCode.C))
+            {
+                ChangeState(State.Idle);
+            }
+
+        }
+
+
+
+    }
 
     private class JumpState : PlayerState
     {
+        public bool isLongJump = false;
         public JumpState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
+  
             Jump();
         }
 
         public override void Update()
         {
+            if(Input.GetKey(KeyCode.Z))
+            {
+                isLongJump= true;
+            }
+            else if(Input.GetKeyUp(KeyCode.Z))
+            {
+                isLongJump= false;
+            }
+                
+
 
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
@@ -228,35 +288,52 @@ public class PlayerController : MonoBehaviour
             //감속상태 --> 일정속도 유지 및 정지시 바로 멈추도록 
             if (axisH == 0 && rigidbody.velocity.x > 0.1f) //오른쪽으로 이동중인 상태에서 멈추면 
             {
-                
+
 
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
             else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //왼쪽 이동 중 정지 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
-                
+
             }
         }
 
         public override void FixedUpdate()
         {
-            onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
-
+            if(isLongJump)
+            {
+                rigidbody.gravityScale = 0.9f;
+            }
+            else
+            {
+                rigidbody.gravityScale = 2f;
+            }
         }
+
         public override void Transition()
         {
-           if(onGround&&groundCount==1)
+            if (onGround && groundCount == 1)
             {
+                player.gameObject.GetComponent<CircleCollider2D>().enabled = false;
+                //이거 이부분 고쳐야 점프 제대로 됨 차라리 캡슐의 크기를 바꾸는건?? 
+                player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+                rigidbody.gravityScale = 1;
                 ChangeState(State.Idle);
             }
+            
+
         }
 
         public void Jump()
         {
+
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
             animator.Play("JumpPlayer");
+            player.gameObject.GetComponent<CircleCollider2D>().enabled = true;
+            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
             groundCount = 0;
+            
         }
     }
 
@@ -315,6 +392,16 @@ public class PlayerController : MonoBehaviour
 
                 ChangeState(State.Jump);
             }
+            if (axisV < 0.0f)
+            {
+                ChangeState(State.Down);
+            }
+
+            if (Input.GetKeyDown(KeyCode.C)) //앵커 상태 
+            {
+                ChangeState(State.Anchor);
+            }
+
         }
 
     }
