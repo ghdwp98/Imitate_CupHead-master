@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player")]
     [SerializeField] int hp;
-    [SerializeField] int mp;
+    [SerializeField] int mp;    
 
 
 
