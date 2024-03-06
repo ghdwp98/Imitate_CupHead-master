@@ -239,12 +239,14 @@ public class PlayerController : MonoBehaviour
             {
                 ChangeState(State.Idle);
             }
+            
 
         }
     }
     private class JumpState : PlayerState
     {
         public bool isLongJump = false;
+        
         public JumpState(PlayerController player) : base(player) { }
 
         public override void Enter()
@@ -263,14 +265,6 @@ public class PlayerController : MonoBehaviour
                 isLongJump= false;
             }
                 
-            if(player.isJumping==true&&Input.GetKeyDown(KeyCode.Z)&&player.isParried==false)
-            {
-                Debug.Log("패리");
-                player.isParried = true;
-
-            }
-
-
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
 
@@ -302,6 +296,17 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+        public override void LateUpdate()
+        {
+            if (player.isJumping == true && Input.GetKeyDown(KeyCode.Z) && player.isParried == false)
+            {
+                Debug.Log("패리");
+                player.isParried = true;
+
+            }
+        }
+
+
         public override void FixedUpdate()
         {
             if(isLongJump)
@@ -332,11 +337,14 @@ public class PlayerController : MonoBehaviour
         public void Jump()
         {
             if(player.isJumping==false)
-            Debug.Log("점프");
-            rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
-            animator.Play("Jump");
-            groundCount = 0;
-            player.isJumping = true;
+            {
+                animator.Play("Jump");
+                Debug.Log("점프");
+                rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
+                groundCount = 0;
+                player.isJumping = true;
+            }
+            
 
         }
     }
