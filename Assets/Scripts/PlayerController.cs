@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -6,7 +7,7 @@ public class PlayerController : MonoBehaviour
     //이동은 그냥 고전시스템으로 처리하자 그게 훨씬 쉬울것 같다. 
     // groundCheck가 필요한 친구들은 피봇을 바텀으로 두고 쓰자 
 
-    public enum State { Idle, Run, Attack, Jump, attackRun, JumpAttack, anchor }
+    public enum State { Idle, Run, Attack, Jump, attackRun, JumpAttack, Down }
     //앵커 c키 누르면 이동 없이  8방향 조준 전환 가능 
 
     [Header("Player")]
@@ -31,7 +32,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 inputDir;
     private bool onGround;
     private int groundCount;
-    
+
 
     private StateMachine stateMachine;
 
@@ -47,6 +48,8 @@ public class PlayerController : MonoBehaviour
         stateMachine.AddState(State.Run, new RunState(this));
         stateMachine.AddState(State.Attack, new AttackState(this));
         stateMachine.AddState(State.Jump, new JumpState(this));
+        stateMachine.AddState(State.Down, new DownState(this));
+
         stateMachine.InitState(State.Idle); //최초 상태를 Idle 상태로 시작 
 
     }
@@ -65,7 +68,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         stateMachine.Update(); //업데이트마다 스테이트머신을 업데이트 시켜줘야함 
-        //curState의 update와 transition을 담당하고 있는 statemachine의 update 함수 
+                               //curState의 update와 transition을 담당하고 있는 statemachine의 update 함수 
+
+        
+
     }
 
     private void FixedUpdate()
@@ -73,6 +79,15 @@ public class PlayerController : MonoBehaviour
         //플레이어가 리지드바디를 쓰면 픽스드업데이트가 필요할 경우가 있음
         stateMachine.FixedUpdate();
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(groundCheckLayer.Contain(collision.gameObject.layer))
+        {
+            groundCount = 1;
+        }
+    }
+
 
     private class PlayerState : BaseState //베이스스테이트 상속해서 뼈대가 될 클래스 
     {
@@ -95,13 +110,39 @@ public class PlayerController : MonoBehaviour
         protected bool onGround { get { return player.onGround; } set { player.onGround = value; } }
         protected int groundCount { get { return player.groundCount; } set { player.groundCount = value; } }
 
-
         public PlayerState(PlayerController player)
         {
             this.player = player;
         }
 
     }
+
+
+    private class DownState : PlayerState //숙인 상태에서는 움직임 불가 but 좌우 전환은가능 
+    {
+        public DownState(PlayerController player) : base(player) { }
+
+        public override void Enter()
+        {
+            animator.Play("DownIdlePlayer");
+        }
+
+        public override void Update()
+        {
+            animator.Play("DownPlayer");
+        }
+
+        public override void Transition()
+        {
+            if(axisV>=0.0f)
+            {
+                ChangeState(State.Idle);
+            }
+        }
+
+    }
+
+
 
     private class IdleState : PlayerState  //이러면 필수매개변수 player가 없다고 나온다. 위에서 생성자를 만들면 
     {
@@ -114,7 +155,10 @@ public class PlayerController : MonoBehaviour
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
 
+
         }
+
+
         public override void Transition()
         {
             if (axisH != 0) //이동이 있으면 상태전환 
@@ -123,34 +167,73 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Run);
             }
 
-            if(Input.GetKeyDown(KeyCode.Z))
+            if (Input.GetKeyDown(KeyCode.Z))
             {
                 ChangeState(State.Jump);
+            }
+            
+            if (axisV<0.0f)
+            {
+                ChangeState(State.Down);
             }
 
 
         }
     }
+
+    
+
     private class JumpState : PlayerState
     {
         public JumpState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
-            Debug.Log("a");
             Jump();
-            animator.Play("JumpPlayer");
+        }
+
+        public override void Update()
+        {
+
+            axisH = Input.GetAxisRaw("Horizontal");
+            axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
+
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //왼쪽 이동
+            {
+
+                rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
+                renderer.flipX = true;  //왼쪽으로 모습 바꿔주기
+
+            }
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //오른쪽 이동 항상 일정한 속도 
+            {
+
+                rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
+                renderer.flipX = false;  //오른쪽으로 (오른쪽이 디폴트)
+
+            }
+            //감속상태 --> 일정속도 유지 및 정지시 바로 멈추도록 
+            if (axisH == 0 && rigidbody.velocity.x > 0.1f) //오른쪽으로 이동중인 상태에서 멈추면 
+            {
+                
+
+                rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
+            }
+            else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //왼쪽 이동 중 정지 
+            {
+                rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
+                
+            }
         }
 
         public override void FixedUpdate()
         {
             onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
 
-            
         }
         public override void Transition()
         {
-            if(onGround)
+           if(onGround&&groundCount==1)
             {
                 ChangeState(State.Idle);
             }
@@ -159,10 +242,9 @@ public class PlayerController : MonoBehaviour
         public void Jump()
         {
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
+            animator.Play("JumpPlayer");
+            groundCount = 0;
         }
-
-        
-
     }
 
     private class AttackState : PlayerState
@@ -201,11 +283,11 @@ public class PlayerController : MonoBehaviour
             //감속상태 --> 일정속도 유지 및 정지시 바로 멈추도록 
             if (axisH == 0 && rigidbody.velocity.x > 0.1f) //오른쪽으로 이동중인 상태에서 멈추면 
             {
-                rigidbody.velocity = Vector3.zero;
+                rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
             else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //왼쪽 이동 중 정지 
             {
-                rigidbody.velocity = Vector3.zero;
+                rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
         }
         public override void Transition() //트랜지션에서 달리면서 쏘기 달리면서 점프 등등 전환구현 
@@ -217,12 +299,13 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Z))
             {
+
                 ChangeState(State.Jump);
             }
         }
 
     }
-    
+
 
 
 
