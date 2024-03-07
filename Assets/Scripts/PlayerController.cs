@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     // groundCheck가 필요한 친구들은 피봇을 바텀으로 두고 쓰자 
     // 좌 쉬프트로 대시 공중 + 땅 2가지 
 
-    public enum State { Idle, Run, Attack, Jump, attackRun, JumpAttack, Down, Anchor, Dash, JumpDash
+    public enum State { Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
     , Fall,Parrying}
     //앵커 c키 누르면 이동 없이  8방향 조준 전환 가능 
 
@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] LayerMask groundCheckLayer; //땅위에서만 점프 가능 or 패리 위에서만 점프가능 
     [SerializeField] Vector2 playerPos;
     [SerializeField] bool FootIsTrigger = false;
+    [SerializeField] Vector2 bulletPos;
 
 
     private Vector2 inputDir;
@@ -59,6 +60,7 @@ public class PlayerController : MonoBehaviour
         stateMachine.AddState(State.Idle, new IdleState(this));
         stateMachine.AddState(State.Run, new RunState(this));
         stateMachine.AddState(State.Attack, new AttackState(this));
+        stateMachine.AddState(State.AttackRun, new AttackRunState(this));
         stateMachine.AddState(State.Jump, new JumpState(this));
         stateMachine.AddState(State.Down, new DownState(this));
         stateMachine.AddState(State.Anchor, new AnchorState(this));
@@ -66,6 +68,7 @@ public class PlayerController : MonoBehaviour
         stateMachine.AddState(State.JumpDash, new JumpDashState(this));
         stateMachine.AddState(State.Fall, new FallState(this));
         stateMachine.AddState(State.Parrying, new ParryingState(this));
+
         
  
         stateMachine.InitState(State.Idle); //최초 상태를 Idle 상태로 시작 
@@ -80,6 +83,7 @@ public class PlayerController : MonoBehaviour
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         playerPos = transform.position;
+        bulletPos = bulletSpawner.transform.position;
 
 
     }
@@ -159,6 +163,25 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+    private class AttackState : PlayerState  //상태를 만들지 아니면 상태 내에서 그냥 어택 애니메이션 추가할지?
+    {
+        public AttackState(PlayerController player) : base(player) { }
+
+
+
+    }
+
+    private class AttackRunState : PlayerState
+    {
+        public AttackRunState(PlayerController player) : base(player) { }
+
+
+
+    }
+
+
+
 
     private class ParryingState : PlayerState
     {
@@ -625,7 +648,6 @@ public class PlayerController : MonoBehaviour
             {
                 ChangeState(State.Parrying);
             }
-
         }
 
         public void Jump()
@@ -645,19 +667,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private class AttackState : PlayerState
-    {
-        public AttackState(PlayerController player) : base(player) { }
-
-        //오브젝트 풀링 구현 함과 동시에 아 그런데 이거 그러면 다른 상태랑 같이 안되는데
-        // 어택 상태 대신에 그냥 각 상태마다 오브젝트 풀링을 구현해줘야하나?? 
-        // 특히 앵커상태 아이들어택 이나 이동런 상태는 그냥 상태 만들어주고 애니메이션 주고 하면될것 같은데
-        // 앵커상태가 문제네 
-
-
-
-
-    }
+    
 
     private class RunState : PlayerState
     {
