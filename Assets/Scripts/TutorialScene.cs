@@ -11,10 +11,13 @@ public class TutorialScene : BaseScene
     [SerializeField] int size = 20;
     [SerializeField] int capacity = 30;
 
-    void Start()
+    private void Awake()
     {
         Manager.Pool.CreatePool(bulletPrefab, size, capacity);
-        
+    }
+    void Start()
+    {
+
     }
 
   

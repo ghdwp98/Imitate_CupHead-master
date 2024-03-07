@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
                        
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            Debug.Log("GetPOll½Ãµµ");
+            
             Manager.Pool.GetPool(bulletPrefab,bulletSpawner.transform.position,bulletSpawner.transform.rotation);
         }
 

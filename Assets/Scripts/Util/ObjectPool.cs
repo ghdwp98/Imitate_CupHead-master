@@ -48,6 +48,7 @@ public class ObjectPool : MonoBehaviour
 
     public void ReturnPool(PooledObject instance) //풀에 돌려준다. 비활성화를 통하여 
     {
+        Debug.Log("리턴풀 상태 오브젝트풀");
         if (objectPool.Count < capacity)
         {
             Debug.Log("리턴풀 capacity보다 작아용 ");

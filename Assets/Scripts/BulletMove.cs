@@ -19,11 +19,11 @@ public class BulletMove : PooledObject
     void Update()
     {
 
-        if(this.transform.position.x>20)
+        /*if(this.transform.position.x>20)
         {
             Release();
-        }
-        rb.velocity=new Vector2(100*speed*Time.deltaTime,rb.velocity.y);
+        }*/
+        rb.velocity=new Vector2(30*speed*Time.deltaTime,rb.velocity.y);
 
         
     }
@@ -35,6 +35,8 @@ public class BulletMove : PooledObject
         {
             return;
         }
+
+        Release();
     }
 
 
