@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    [SerializeField] PooledObject prefab;
+    [SerializeField] PooledObject prefab; //pooled 상속한 프리팹들만 오브젝트풀링 하겠다는 의미
     [SerializeField] int size;
     [SerializeField] int capacity;
 
@@ -50,6 +50,7 @@ public class ObjectPool : MonoBehaviour
     {
         if (objectPool.Count < capacity)
         {
+            Debug.Log("리턴풀 capacity보다 작아용 ");
             instance.gameObject.SetActive(false);
             instance.transform.parent = transform;
             objectPool.Push(instance); //스택에 다시 푸쉬한다. 

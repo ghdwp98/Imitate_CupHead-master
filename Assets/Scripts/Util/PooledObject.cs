@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PooledObject : MonoBehaviour
+public class PooledObject : MonoBehaviour //이거 상속받는 친구들만 상속 하겠다는 able같은 거인가? 
 {
     [SerializeField] bool autoRelease;
     [SerializeField] float releaseTime;

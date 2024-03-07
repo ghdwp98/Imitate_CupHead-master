@@ -93,7 +93,12 @@ public class PlayerController : MonoBehaviour
     {
         stateMachine.Update(); //업데이트마다 스테이트머신을 업데이트 시켜줘야함 
                                //curState의 update와 transition을 담당하고 있는 statemachine의 update 함수
-                               //
+                       
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("GetPOll시도");
+            Manager.Pool.GetPool(bulletPrefab,bulletSpawner.transform.position,bulletSpawner.transform.rotation);
+        }
 
     }
 
@@ -104,6 +109,8 @@ public class PlayerController : MonoBehaviour
         stateMachine.FixedUpdate();
         onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
         
+        
+
 
     }
 

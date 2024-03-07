@@ -36,7 +36,8 @@ public class PoolManager : Singleton<PoolManager>
 
     public PooledObject GetPool(PooledObject prefab, Vector3 position, Quaternion rotation)
     {
-        return poolDic[prefab.GetInstanceID()].GetPool(position, rotation);
+        Debug.Log("getpool시도");
+        return poolDic[prefab.GetInstanceID()].GetPool(position, rotation); //이 부분에서 문제 발생함. 
 
         //오브젝트풀에서 가지고옴 
     }

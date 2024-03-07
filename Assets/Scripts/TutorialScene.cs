@@ -5,10 +5,16 @@ using UnityEngine;
 public class TutorialScene : BaseScene
 {
     [SerializeField] PooledObject bulletPrefab;
+    [SerializeField] PooledObject SparklePrefab;
+    [SerializeField] PooledObject ExplosionPrefab;
+
+    [SerializeField] int size = 20;
+    [SerializeField] int capacity = 30;
 
     void Start()
     {
-        Manager.Pool.CreatePool(bulletPrefab, 20, 30);
+        Manager.Pool.CreatePool(bulletPrefab, size, capacity);
+        
     }
 
   

@@ -14,7 +14,7 @@ public class ParryCheck : MonoBehaviour
         }
 
         isParryed = true;
-        Debug.Log("자식 탈출");
+       
     }
 
     private void OnTriggerStay2D(Collider2D collision)
@@ -25,7 +25,7 @@ public class ParryCheck : MonoBehaviour
         }
 
         isParryed = false;
-        Debug.Log("자식 붙음");
+        
     }
 
     
