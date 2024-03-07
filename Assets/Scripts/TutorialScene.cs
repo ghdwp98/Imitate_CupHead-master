@@ -4,18 +4,16 @@ using UnityEngine;
 
 public class TutorialScene : BaseScene
 {
-    public override IEnumerator LoadingRoutine()
-    {
-        yield return null;
-    }
+    [SerializeField] PooledObject bulletPrefab;
 
     void Start()
     {
-        
+        Manager.Pool.CreatePool(bulletPrefab, 20, 30);
     }
 
-    void Update()
+  
+    public override IEnumerator LoadingRoutine()
     {
-        
+        yield return null;
     }
 }

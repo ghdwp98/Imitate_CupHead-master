@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject bulletSpawner;
     [SerializeField] GameObject FootBoxCollider;
     [SerializeField] ParryCheck parryCheck;
+    [SerializeField] PooledObject bulletPrefab;
 
     [Header("Spec")]
     [SerializeField] float maxSpeed = 5.0f;
@@ -91,9 +92,11 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         stateMachine.Update(); //업데이트마다 스테이트머신을 업데이트 시켜줘야함 
-                               //curState의 update와 transition을 담당하고 있는 statemachine의 update 함수 
+                               //curState의 update와 transition을 담당하고 있는 statemachine의 update 함수
+                               //
 
     }
+
 
     private void FixedUpdate()
     {

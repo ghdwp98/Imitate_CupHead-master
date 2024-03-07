@@ -1,0 +1,5 @@
+PooledObject effect = Manager.Pool.GetPool
+(hitEffectPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+
+
+
