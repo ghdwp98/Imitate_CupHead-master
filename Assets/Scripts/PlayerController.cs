@@ -646,8 +646,6 @@ public class PlayerController : MonoBehaviour
         public override void Enter()
         {
             rigidbody.velocity = Vector2.zero;
-
-
         }
 
         public override void Update()
@@ -660,44 +658,72 @@ public class PlayerController : MonoBehaviour
             {
                 animator.Play("AimStraight");
                 renderer.flipX = true; //방향 전환 
+
+
             }
             else if (axisH == 0.0f && axisV == 0.0f)
             {
                 animator.Play("AimStraight");
+
+
+
             }
             else if (axisH == 1.0f && axisV == 0.0f)
             {
                 animator.Play("AimStraight");
                 renderer.flipX = false;
+
+
+
             }
             else if (axisH == 0.0f && axisV == 1.0f)
             {
                 animator.Play("AimUp");
+
+
+
             }
             else if (axisH == 0.0f && axisV == -1.0f)
             {
                 animator.Play("AimDown");
+
+
+
             }
             else if (axisH == 1.0f && axisV == 1.0f) //up diagonal 
             {
                 animator.Play("AimDiagonalUp");
                 renderer.flipX = false;
+
+
+
             }
+
             else if (axisH == -1.0f && axisV == 1.0f) // -1 1
             {
                 animator.Play("AimDiagonalUp");
                 renderer.flipX = true;
+
+
+
 
             }
             else if (axisH == 1.0f && axisV == -1.0f)
             {
                 renderer.flipX = false;
                 animator.Play("AimDiagonalDown");
+
+
+
             }
             else if (axisH == -1.0f && axisV == -1.0f)
             {
                 renderer.flipX = true;
                 animator.Play("AimDiagonalDown");
+
+
+
+
             }
         }
 
