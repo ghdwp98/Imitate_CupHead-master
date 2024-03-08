@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BulletMove : MonoBehaviour
 {
-    public float speed = 35f;
+    [SerializeField]float speed = 35f;
     
     [SerializeField]Animator animator;
     [SerializeField]Rigidbody2D rb;
@@ -18,11 +18,6 @@ public class BulletMove : MonoBehaviour
 
     void Update()
     {
-
-        /*if(this.transform.position.x>20)
-        {
-            Release();
-        }*/
         rb.velocity=new Vector2(30*speed*Time.deltaTime,rb.velocity.y);
 
         
@@ -36,7 +31,8 @@ public class BulletMove : MonoBehaviour
             return;
         }
 
-        pooledObject.Release();
+        pooledObject.Release(); //다른 장소에 부딪히면 파괴 --> 파괴 애니메이션 출력 필요
+
     }
 
 

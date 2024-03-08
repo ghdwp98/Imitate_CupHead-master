@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34ae919f43ea1434ab24fd5c70a3282e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletPrefab: {fileID: -3380803921473055578, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
+  bulletPrefab: {fileID: 2050243851}
   SparklePrefab: {fileID: 0}
   ExplosionPrefab: {fileID: 0}
   size: 20
@@ -654,7 +654,7 @@ PrefabInstance:
     - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: bulletPrefab
       value: 
-      objectReference: {fileID: -3380803921473055578, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
+      objectReference: {fileID: 2050243851}
     - target: {fileID: 5287111981818179436, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: m_Name
       value: Player
@@ -791,7 +791,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -4633695143222858909, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
       propertyPath: speed
-      value: 5
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 390976772572679348, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
       propertyPath: m_LocalPosition.x
@@ -833,6 +833,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2606218724657552123, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
+      propertyPath: autoRelease
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2606218724657552123, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
+      propertyPath: releaseTime
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8210418574040705551, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
       propertyPath: m_Name
       value: Bullet
@@ -842,6 +850,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
+--- !u!114 &2050243851 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2606218724657552123, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
+  m_PrefabInstance: {fileID: 2050243849}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 481092cc15e545d48820e7d078f98942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
