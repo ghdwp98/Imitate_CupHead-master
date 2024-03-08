@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PooledObject : MonoBehaviour //이거 상속받는 친구들만 상속 하겠다는 able같은 거인가? 
+public class PooledObject : MonoBehaviour 
 {
     [SerializeField] bool autoRelease;
     [SerializeField] float releaseTime;
@@ -25,8 +25,6 @@ public class PooledObject : MonoBehaviour //이거 상속받는 친구들만 상속 하겠다는
 
     public void Release()  //결국 지금 상황이 뭐냐면 pool이 null인 상태인거거든 근대 Pool도 null임... 왜 ?
     {
-        Debug.Log("오토릴리즈");
-        
         if (pool != null)
         {
             

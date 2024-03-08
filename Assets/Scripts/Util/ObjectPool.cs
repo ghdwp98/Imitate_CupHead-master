@@ -18,6 +18,7 @@ public class ObjectPool : MonoBehaviour
         objectPool = new Stack<PooledObject>(capacity);
         for (int i = 0; i < size; i++)  //지정한 size 만큼 객체를 생성해서 스택에 저장해둔다. 
         {
+           
             PooledObject instance = Instantiate(prefab);
             instance.gameObject.SetActive(false); //보이지 않아야 하므로 비활성화한다.
             instance.Pool = this;

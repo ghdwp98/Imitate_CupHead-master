@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     // 좌 쉬프트로 대시 공중 + 땅 2가지 
 
     public enum State { Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
-    , Fall,Parrying}
+    , Fall,Parrying,Up}
     //앵커 c키 누르면 이동 없이  8방향 조준 전환 가능 
 
     [Header("Player")]
@@ -24,10 +24,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] new Rigidbody2D rigidbody;
     [SerializeField] new SpriteRenderer renderer;
     [SerializeField] Animator animator;
-    [SerializeField] GameObject bulletSpawner;
+    [SerializeField] BulletSpawner bulletSpawner;
     [SerializeField] GameObject FootBoxCollider;
     [SerializeField] ParryCheck parryCheck;
     [SerializeField] PooledObject bulletPrefab;
+    [SerializeField] PooledObject bulletSparkle;
 
     [Header("Spec")]
     [SerializeField] float maxSpeed = 5.0f;
@@ -69,9 +70,8 @@ public class PlayerController : MonoBehaviour
         stateMachine.AddState(State.JumpDash, new JumpDashState(this));
         stateMachine.AddState(State.Fall, new FallState(this));
         stateMachine.AddState(State.Parrying, new ParryingState(this));
-
+        stateMachine.AddState(State.Up, new UpState(this));
         
- 
         stateMachine.InitState(State.Idle); //최초 상태를 Idle 상태로 시작 
 
     }
@@ -82,24 +82,16 @@ public class PlayerController : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+        
+
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         playerPos = transform.position;
-        bulletPos = bulletSpawner.transform.position;
-
-
     }
 
     private void Update()
     {
         stateMachine.Update(); //업데이트마다 스테이트머신을 업데이트 시켜줘야함 
                                //curState의 update와 transition을 담당하고 있는 statemachine의 update 함수
-                       
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            
-            Manager.Pool.GetPool(bulletPrefab,bulletSpawner.transform.position,bulletSpawner.transform.rotation);
-        }
-
     }
 
 
@@ -143,7 +135,6 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    
     private class PlayerState : BaseState //베이스스테이트 상속해서 뼈대가 될 클래스 
     {
         protected PlayerController player; //Player로 이를 상속하는 state클래스들에서
@@ -167,11 +158,50 @@ public class PlayerController : MonoBehaviour
 
         protected bool parry { get { return player.parry; } set { player.parry = value; } }
 
+        protected PooledObject bulletPrefab => player.bulletPrefab;
+        protected PooledObject bulletSparkle => player.bulletSparkle;
+        protected BulletSpawner bulletSpawner=> player.bulletSpawner;
+        
+
         public PlayerState(PlayerController player)
         {
             this.player = player;
         }
 
+    }
+
+    private class UpState :PlayerState
+    {
+        public UpState(PlayerController player) : base(player) { }
+
+        public override void Enter()
+        {
+            animator.Play("AimUp");
+        }
+        public override void Update()
+        {
+            axisH = Input.GetAxisRaw("Horizontal");
+        }
+        public override void Transition()
+        {
+            if(Input.GetKeyUp(KeyCode.UpArrow))
+            {
+                ChangeState(State.Idle);
+            }
+            //바로 다운 가는건 없는게 나은듯 키 떼고 전환시키도록 그냥 바로 donw 가는건 없애자.
+            else if (Input.GetKeyDown(KeyCode.Z))
+            {
+                ChangeState(State.Jump);
+            }
+            else if (!onGround && player.FootIsTrigger == false)
+            {
+                ChangeState(State.Fall);
+            }
+            else if(axisH!=0.0f)
+            {
+                ChangeState(State.Run);
+            }
+        }
     }
 
     private class AttackState : PlayerState  //상태를 만들지 아니면 상태 내에서 그냥 어택 애니메이션 추가할지?
@@ -189,9 +219,6 @@ public class PlayerController : MonoBehaviour
 
 
     }
-
-
-
 
     private class ParryingState : PlayerState
     {
@@ -449,13 +476,28 @@ public class PlayerController : MonoBehaviour
         //자식이 부모 클래스의 생성자를 강제로 호출 Base 이용 
         public IdleState(PlayerController player) : base(player) { }
 
-        public override void Update() //계속 돌아가면서 체크 업데이트 + 트랜지션 
+        public override void Enter()
         {
             animator.Play("Idle");
+        }
+
+        public override void Update() //계속 돌아가면서 체크 업데이트 + 트랜지션 
+        {
+            
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
 
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                animator.SetBool("ShootStraight", true);
+                bulletSpawner.ObjectSpawn(); //요놈을 코루틴에 넣어두자 어차피 총알생성이니까 
 
+            }
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("ShootStraight") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                animator.SetBool("ShootStraight", false);
+            }
         }
 
         public override void Transition()
@@ -489,6 +531,10 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Fall);
             }
 
+            if(Input.GetKey(KeyCode.UpArrow))
+            {
+                ChangeState(State.Up);
+            }
         }
     }
 
@@ -751,7 +797,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
+    
 
 
 
