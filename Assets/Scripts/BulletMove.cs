@@ -9,13 +9,13 @@ public class BulletMove : MonoBehaviour
     [SerializeField] Rigidbody2D rb;
     [SerializeField] PooledObject pooledObject;
     [SerializeField] PooledObject bulletCollision;
-    [SerializeField] Transform spawnPos;
+    [SerializeField] GameObject spawnPos;
 
 
 
     private void OnEnable()
     {
-
+        
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         animator.Play("WeaponShot");
@@ -23,8 +23,7 @@ public class BulletMove : MonoBehaviour
 
     void Update()
     {
-        
-        rb.velocity = Vector2.right * speed;
+        rb.velocity = transform.right * speed; //x축이 바라보는 방향으로 발사되도록 
     }
 
 

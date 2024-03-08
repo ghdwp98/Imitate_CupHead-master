@@ -1,6 +1,5 @@
 
 using System.Collections;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -10,8 +9,11 @@ public class PlayerController : MonoBehaviour
     // groundCheck가 필요한 친구들은 피봇을 바텀으로 두고 쓰자 
     // 좌 쉬프트로 대시 공중 + 땅 2가지 
 
-    public enum State { Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
-    , Fall,Parrying,Up}
+    public enum State
+    {
+        Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
+    , Fall, Parrying, Up
+    }
     //앵커 c키 누르면 이동 없이  8방향 조준 전환 가능 
 
     [Header("Player")]
@@ -76,7 +78,7 @@ public class PlayerController : MonoBehaviour
         stateMachine.AddState(State.Fall, new FallState(this));
         stateMachine.AddState(State.Parrying, new ParryingState(this));
         stateMachine.AddState(State.Up, new UpState(this));
-        
+
         stateMachine.InitState(State.Idle); //최초 상태를 Idle 상태로 시작 
 
     }
@@ -108,8 +110,8 @@ public class PlayerController : MonoBehaviour
         //플레이어가 리지드바디를 쓰면 픽스드업데이트가 필요할 경우가 있음
         stateMachine.FixedUpdate();
         onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
-        
-        
+
+
 
 
     }
@@ -124,9 +126,9 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private void OnCollisionExit2D(Collision2D collision) 
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -169,8 +171,8 @@ public class PlayerController : MonoBehaviour
 
         protected PooledObject bulletPrefab => player.bulletPrefab;
         protected PooledObject bulletSparkle => player.bulletSparkle;
-        protected BulletSpawner bulletSpawner=> player.bulletSpawner;
-        
+        protected BulletSpawner bulletSpawner => player.bulletSpawner;
+
 
         public PlayerState(PlayerController player)
         {
@@ -179,7 +181,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private class UpState :PlayerState
+    private class UpState : PlayerState
     {
         public UpState(PlayerController player) : base(player) { }
 
@@ -190,10 +192,35 @@ public class PlayerController : MonoBehaviour
         public override void Update()
         {
             axisH = Input.GetAxisRaw("Horizontal");
+
+            if (renderer.flipX == true) //왼쪽 보고 있으면 
+            {
+                spawnPos.transform.localRotation = Quaternion.Euler(0f, 0, 90);
+                spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
+            }
+            else //오른쪽 보고 있으면 
+            {
+                spawnPos.transform.localRotation = Quaternion.Euler(0f, 0, 90);
+                spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
+            }
+
+            
+
+
+            if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
+            {
+                animator.SetBool("ShootUp", true);
+                player.StartCoroutine(player.ShootCoroutine());
+            }
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("ShootUp") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                animator.SetBool("ShootUp", false);
+            }
         }
         public override void Transition()
         {
-            if(Input.GetKeyUp(KeyCode.UpArrow))
+            if (Input.GetKeyUp(KeyCode.UpArrow))
             {
                 ChangeState(State.Idle);
             }
@@ -206,7 +233,7 @@ public class PlayerController : MonoBehaviour
             {
                 ChangeState(State.Fall);
             }
-            else if(axisH!=0.0f)
+            else if (axisH != 0.0f)
             {
                 ChangeState(State.Run);
             }
@@ -290,7 +317,8 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-    }
+    }  //패링 중에서 공격 되는지 확인해보기 
+
     private class DashState : PlayerState
     {
         public DashState(PlayerController player) : base(player) { }
@@ -298,7 +326,7 @@ public class PlayerController : MonoBehaviour
         public int dashSpeed = 10;
         public override void Enter()
         {
-            
+
             if (renderer.flipX == false)
             {
                 animator.Play("Dash");
@@ -314,7 +342,7 @@ public class PlayerController : MonoBehaviour
         public override void FixedUpdate()
         {
             rigidbody.velocity = new Vector2(dashSpeed, 0);
-            
+
             if (renderer.flipX == true)
             {
                 rigidbody.velocity = new Vector2(-dashSpeed, 0);
@@ -340,11 +368,11 @@ public class PlayerController : MonoBehaviour
         public int jumpDashSpeed = 10;
         public override void Enter()
         {
-            if(renderer.flipX==false)
+            if (renderer.flipX == false)
             {
                 animator.Play("JumpDash");
             }
-            else if(renderer.flipX==true)
+            else if (renderer.flipX == true)
             {
                 renderer.flipX = true;
                 animator.Play("JumpDash");
@@ -357,7 +385,7 @@ public class PlayerController : MonoBehaviour
         {
             rigidbody.velocity = new Vector2(jumpDashSpeed, 0);
             rigidbody.gravityScale = 0;
-            if(renderer.flipX==true)
+            if (renderer.flipX == true)
             {
                 rigidbody.velocity = new Vector2(-jumpDashSpeed, 0);
 
@@ -366,22 +394,22 @@ public class PlayerController : MonoBehaviour
 
         public override void Transition()
         {
-            if(animator.GetCurrentAnimatorStateInfo(0).IsName("JumpDash")&&
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime>=1f)
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("JumpDash") &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 rigidbody.gravityScale = 1; //상황 이동시에 다시 스케일1로 변환해주기 중요!
                 rigidbody.velocity = Vector2.zero; //이게 없으면 날아가버리지만 폴링 상태로 진입 하기가 힘드네
 
                 if (!onGround)
                 {
-                    ChangeState(State.Fall); 
+                    ChangeState(State.Fall);
                 }
-                else 
+                else
                 {
                     ChangeState(State.Idle); //점프대시는 Fall 상태로 전환해주자 
-                } 
+                }
             }
-            
+
         }
     }
 
@@ -394,8 +422,25 @@ public class PlayerController : MonoBehaviour
             animator.Play("Jump");
         }
 
+        //떨어지는 상황에서도 딱히 다른 애니메이션이 없으므로 (점프애니메이션 이므로)
+
         public override void Update()
         {
+            if (renderer.flipX == true) //왼쪽 보고 있으면 
+            {
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
+            }
+            else //오른쪽 보고 있으면 
+            {
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+            }
+            if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
+            {
+                player.StartCoroutine(player.ShootCoroutine());
+            }
+
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
 
@@ -422,7 +467,7 @@ public class PlayerController : MonoBehaviour
 
             }
             // 떨어지는 동안은 좌우 이동만 가능 
- 
+
         }
         public override void Transition()
         {
@@ -445,13 +490,37 @@ public class PlayerController : MonoBehaviour
             player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
             rigidbody.velocity = Vector2.zero;
 
-
-            //콜라이더 캡슐 끄고 박스 켜서 충돌 바꿔주기 
-            animator.Play("Down");
+            // Idle Exit에서 Down 애니메이션 재생했음 
         }
-
         public override void Update()
         {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Down") &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                animator.Play("DownIdle");
+            }
+            if (renderer.flipX == true) //왼쪽 보고 있으면 
+            {
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                spawnPos.transform.localPosition = new Vector2(-1.6f, 0.7f);
+            }
+            else //오른쪽 보고 있으면 
+            {
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                spawnPos.transform.localPosition = new Vector2(1.3f, 0.7f);
+            }
+
+            if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
+            {
+                animator.SetBool("ShootDuck", true);
+                player.StartCoroutine(player.ShootCoroutine());
+            }
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("DuckShoot") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                animator.SetBool("ShootDuck", false);
+            }
+
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical");
 
@@ -464,8 +533,6 @@ public class PlayerController : MonoBehaviour
                 renderer.flipX = false;
 
             }
-
-            animator.Play("DownIdle");
         }
 
         public override void Transition()
@@ -488,26 +555,26 @@ public class PlayerController : MonoBehaviour
         public override void Enter()
         {
             animator.Play("Idle");
-            
+
         }
 
         public override void Update() //계속 돌아가면서 체크 업데이트 + 트랜지션 
         {
-            if(renderer.flipX==true) //왼쪽 보고 있으면 
+            if (renderer.flipX == true) //왼쪽 보고 있으면 
             {
-                spawnPos.transform.localPosition = new Vector2(-1.5f,0.8f);
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
             }
             else //오른쪽 보고 있으면 
             {
-
-                spawnPos.transform.localPosition = new Vector2(0.9f,0.8f);
-
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
             }
 
             axisH = Input.GetAxisRaw("Horizontal");
-            axisV = Input.GetAxisRaw("Vertical"); 
+            axisV = Input.GetAxisRaw("Vertical");
 
-            if (Input.GetKeyDown(KeyCode.X)|| Input.GetKey(KeyCode.X))
+            if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
             {
                 animator.SetBool("ShootStraight", true);
                 player.StartCoroutine(player.ShootCoroutine());
@@ -517,6 +584,11 @@ public class PlayerController : MonoBehaviour
             {
                 animator.SetBool("ShootStraight", false);
             }
+        }
+
+        public override void Exit()
+        {
+            animator.Play("Down");
         }
 
         public override void Transition()
@@ -534,6 +606,7 @@ public class PlayerController : MonoBehaviour
 
             if (axisV < 0.0f)
             {
+
                 ChangeState(State.Down);
             }
 
@@ -550,11 +623,12 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Fall);
             }
 
-            if(Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.UpArrow))
             {
                 ChangeState(State.Up);
             }
         }
+
     }
 
     private class AnchorState : PlayerState
@@ -562,8 +636,6 @@ public class PlayerController : MonoBehaviour
         public AnchorState(PlayerController player) : base(player) { }
 
         //앵커상황이 되면 조준 애니메이션이 나와줘야함 
-
-
 
         public override void Enter()
         {
@@ -638,7 +710,7 @@ public class PlayerController : MonoBehaviour
     private class JumpState : PlayerState
     {
         public bool isLongJump = false;
-        
+
         public JumpState(PlayerController player) : base(player) { }
 
         public override void Enter()
@@ -648,6 +720,21 @@ public class PlayerController : MonoBehaviour
 
         public override void Update()
         {
+            if (renderer.flipX == true) //왼쪽 보고 있으면 
+            {
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
+            }
+            else //오른쪽 보고 있으면 
+            {
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+            }
+            if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
+            {
+                player.StartCoroutine(player.ShootCoroutine());  //점프 중에 슈팅은 애니메이션이 따로없음 
+            }
+
             if (Input.GetKey(KeyCode.Z))
             {
                 isLongJump = true;
@@ -701,7 +788,7 @@ public class PlayerController : MonoBehaviour
         }
         public override void Transition()
         {
-            if (onGround&& groundCount == 1)
+            if (onGround && groundCount == 1)
             {
                 Debug.Log("점프 끝");
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 1.16f);
@@ -716,7 +803,7 @@ public class PlayerController : MonoBehaviour
             {
                 ChangeState(State.JumpDash);
             }
-            else if(player.parryCheck.isParryed == true && 
+            else if (player.parryCheck.isParryed == true &&
                 Input.GetKeyDown(KeyCode.Z) &&
                 player.isJumping == true)
             {
@@ -741,35 +828,77 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+
 
     private class RunState : PlayerState
     {
         public RunState(PlayerController player) : base(player) { }
 
         //엑셀로 일정한 속도 유지 할 수 있도록 
+
+        public override void Enter()
+        {
+            animator.Play("Run");
+        }
+
         public override void Update()
         {
             axisH = Input.GetAxisRaw("Horizontal");
-            axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
+            axisV = Input.GetAxisRaw("Vertical"); //대각선 위로 달리는거 구현해줘야함 
+            
 
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //왼쪽 이동
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed&&axisV==0.0f) //왼쪽 이동
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                animator.Play("Run");
+                //animator.Play("Run");
                 renderer.flipX = true;  //왼쪽으로 모습 바꿔주기
 
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                spawnPos.transform.localPosition = new Vector2(-1.8f, 1.2f);
+
+                if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
+                {
+                    animator.SetBool("RunShoot", true);
+                    player.StartCoroutine(player.ShootCoroutine());
+                }
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("RunShoot") &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f||
+                Input.GetKeyUp(KeyCode.X))
+                {
+                    animator.SetBool("RunShoot", false);
+                    
+                }
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //오른쪽 이동 항상 일정한 속도 
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed&&axisV==0.0f) //오른쪽 이동 항상 일정한 속도 
             {
 
-
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                animator.Play("Run");
+                //animator.Play("Run");
                 renderer.flipX = false;  //오른쪽으로 (오른쪽이 디폴트)
 
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                spawnPos.transform.localPosition = new Vector2(1.1f, 1.2f);
+
+                if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
+                {
+                    animator.SetBool("RunShoot", true);
+                    player.StartCoroutine(player.ShootCoroutine());
+                }
+                if (animator.GetCurrentAnimatorStateInfo(0).IsName("RunShoot") &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f||
+                Input.GetKeyUp(KeyCode.X))
+                {
+                    animator.SetBool("RunShoot", false);
+                }
             }
+
+
+
+
+
+
+           
             //감속상태 --> 일정속도 유지 및 정지시 바로 멈추도록 
             if (axisH == 0 && rigidbody.velocity.x > 0.1f) //오른쪽으로 이동중인 상태에서 멈추면 
             {
@@ -780,6 +909,7 @@ public class PlayerController : MonoBehaviour
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
         }
+
         public override void Transition() //트랜지션에서 달리면서 쏘기 달리면서 점프 등등 전환구현 
         {
             if (rigidbody.velocity.x == 0.0f) //속도가 0 일 때 (움직임이 없을 때 idle로 체인지 해주기 )
@@ -792,24 +922,22 @@ public class PlayerController : MonoBehaviour
 
                 ChangeState(State.Jump);
             }
-            if (axisV < 0.0f)
-            {
-                ChangeState(State.Down);
-            }
 
             if (Input.GetKeyDown(KeyCode.C)) //앵커 상태 
             {
                 ChangeState(State.Anchor);
             }
+            //달리는중 다운 상태 구현 하지 말자 멈추고 하자..
 
             if (Input.GetKeyDown(KeyCode.LeftShift)) //레프트쉬프트로 대시 구현 
             {
                 ChangeState(State.Dash);
             }
-            if(!onGround&&player.FootIsTrigger==false)
+            if (!onGround && player.FootIsTrigger == false)
             {
                 ChangeState(State.Fall);
             }
+            
 
         }
 
@@ -817,13 +945,13 @@ public class PlayerController : MonoBehaviour
 
 
 
-    
+
     public IEnumerator ShootCoroutine()
     {
         float coolTime = 0.1f; //이거 계속 누르고 있으면 계속 나가니까 그거 생각해서 쿨타임 정해줘야함 
-        if(isShooting==false)
+        if (isShooting == false)
         {
-            isShooting= true;
+            isShooting = true;
             bulletSpawner.ObjectSpawn();
             yield return new WaitForSeconds(coolTime);
             isShooting = false;
