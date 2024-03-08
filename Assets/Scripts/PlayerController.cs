@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
     public enum State
     {
         Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
-    , Fall, Parrying, Up
+        , Fall, Parrying, Up
     }
     //앵커 c키 누르면 이동 없이  8방향 조준 전환 가능 
 
@@ -204,7 +204,7 @@ public class PlayerController : MonoBehaviour
                 spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
             }
 
-            
+
 
 
             if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
@@ -845,9 +845,11 @@ public class PlayerController : MonoBehaviour
         {
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //대각선 위로 달리는거 구현해줘야함 
-            
 
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed&&axisV==0.0f) //왼쪽 이동
+            // if문 분기 문제가 좀 있는듯 ㅠㅠ 
+
+
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed && (axisV == 0.0f || axisV == -1.0f)) //왼쪽 이동
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
@@ -863,14 +865,14 @@ public class PlayerController : MonoBehaviour
                     player.StartCoroutine(player.ShootCoroutine());
                 }
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName("RunShoot") &&
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f||
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f ||
                 Input.GetKeyUp(KeyCode.X))
                 {
                     animator.SetBool("RunShoot", false);
-                    
+
                 }
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed&&axisV==0.0f) //오른쪽 이동 항상 일정한 속도 
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed && (axisV == 0.0f || axisV == -1.0f)) //오른쪽 이동 항상 일정한 속도 
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
@@ -886,7 +888,7 @@ public class PlayerController : MonoBehaviour
                     player.StartCoroutine(player.ShootCoroutine());
                 }
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName("RunShoot") &&
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f||
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f ||
                 Input.GetKeyUp(KeyCode.X))
                 {
                     animator.SetBool("RunShoot", false);
@@ -894,25 +896,69 @@ public class PlayerController : MonoBehaviour
             }
 
 
+           /* else if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed && axisV == 1.0f
+                && (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))) //왼쪽 대각선 +공격시에만 모션나오도록
+            {
+                Debug.Log("왼쪽 대각선");
+                rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
+                renderer.flipX = true;  //왼쪽으로 모습 바꿔주기
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                spawnPos.transform.localPosition = new Vector2(-1.8f, 1.5f);
 
+                animator.SetBool("RunShootDiagUp", true);
+                player.StartCoroutine(player.ShootCoroutine());
 
+                if ((animator.GetCurrentAnimatorStateInfo(0).IsName("RunShootDiagUp") &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f) ||
+                Input.GetKeyUp(KeyCode.X))
+                {
+                    animator.SetBool("RunShootDiagUp", false);
 
+                }
 
-           
+            }
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed && axisV == 1.0f
+                && (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))) //오른쪽 대각이동공격
+            {
+                Debug.Log("오른쪽대각선");
+                rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
+                renderer.flipX = false;  //오른쪽으로 (오른쪽이 디폴트)
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                spawnPos.transform.localPosition = new Vector2(1.1f, 1.5f);
+
+                animator.SetBool("RunShootDiagUp", true);
+                player.StartCoroutine(player.ShootCoroutine());
+
+                if ((animator.GetCurrentAnimatorStateInfo(0).IsName("RunShootDiagUp") &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f) ||
+                Input.GetKeyUp(KeyCode.X))
+                {
+                    animator.SetBool("RunShootDiagUp", false);
+                }
+
+            }
+*/
+
             //감속상태 --> 일정속도 유지 및 정지시 바로 멈추도록 
-            if (axisH == 0 && rigidbody.velocity.x > 0.1f) //오른쪽으로 이동중인 상태에서 멈추면 
+            if (axisH == 0 && rigidbody.velocity.x > 0.02f) //오른쪽으로 이동중인 상태에서 멈추면 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
-            else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //왼쪽 이동 중 정지 
+            else if (axisH == 0 && rigidbody.velocity.x < -0.02f) //왼쪽 이동 중 정지 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
         }
 
+        public override void Exit()
+        {
+            animator.Play("Down");
+        }
+
+
         public override void Transition() //트랜지션에서 달리면서 쏘기 달리면서 점프 등등 전환구현 
         {
-            if (rigidbody.velocity.x == 0.0f) //속도가 0 일 때 (움직임이 없을 때 idle로 체인지 해주기 )
+            if (axisH == 0 && axisV == 0) //속도가 0 일 때 (움직임이 없을 때 idle로 체인지 해주기 )
             {
                 ChangeState(State.Idle);
             }
@@ -937,7 +983,16 @@ public class PlayerController : MonoBehaviour
             {
                 ChangeState(State.Fall);
             }
+
+            if (axisH == 0 && axisV == -1)
+            {
+                ChangeState(State.Down);
+
+            }
             
+
+
+
 
         }
 
