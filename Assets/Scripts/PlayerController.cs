@@ -4,17 +4,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //각각의 상태 클래스에서 뭘 할지 결정하고 어떤 상황이 되면 다른 상태로 트랜지션 할지 결정 
-    //이동은 그냥 고전시스템으로 처리하자 그게 훨씬 쉬울것 같다. 
-    // groundCheck가 필요한 친구들은 피봇을 바텀으로 두고 쓰자 
-    // 좌 쉬프트로 대시 공중 + 땅 2가지 
+    //그라운드 체커 확인 및 콜라이더 모서리에서 떨어지는 모션이 생기는 문제 해결해보기 
 
     public enum State
     {
         Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
         , Fall, Parrying, Up
     }
-    //앵커 c키 누르면 이동 없이  8방향 조준 전환 가능 
+    
 
     [Header("Player")]
     [SerializeField] int hp = 3;
@@ -38,10 +35,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Transform spawnPos;
 
     [Header("Spec")]
-    [SerializeField] float maxSpeed = 5.0f;
-    [SerializeField] float accelPower = 10.0f;
+    [SerializeField] float maxSpeed = 10.0f;
+    [SerializeField] float accelPower = 13.0f;
     [SerializeField] float decelPower = 20.0f;
-    [SerializeField] float jumpSpeed = 10.0f;
+    [SerializeField] float jumpSpeed = 11.0f;
     [SerializeField] LayerMask groundCheckLayer; //땅위에서만 점프 가능 or 패리 위에서만 점프가능 
     [SerializeField] Vector2 playerPos;
     [SerializeField] bool FootIsTrigger = false;
@@ -52,7 +49,7 @@ public class PlayerController : MonoBehaviour
     private bool onGround;
     private int groundCount;
     private bool isJumping;
-    private bool isParried;
+    private bool isParried; 
 
 
     private StateMachine stateMachine;
@@ -60,10 +57,7 @@ public class PlayerController : MonoBehaviour
     string nowAnime = "";
     string oldAnime = "";
 
-    //이동 앉기 대시 점프 조준 슈팅 -->상태머신 구현 
-    //그라운드 오브젝트 옆에서 그라운드로 판단되서 점프 모션 사라지는거 고쳐야함 
-
-    void Awake() //시작 시에 상태를 추가 하고 시작 (딕셔너리에 add함 )
+    void Awake() 
     {
         stateMachine = gameObject.AddComponent<StateMachine>();
         stateMachine.AddState(State.Idle, new IdleState(this));
@@ -93,15 +87,14 @@ public class PlayerController : MonoBehaviour
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 
         spawnPos = transform.FindChild("BulletSpawn");
-        Debug.Log(spawnPos);
+       
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         playerPos = transform.position;
     }
 
     private void Update()
     {
-        stateMachine.Update(); //업데이트마다 스테이트머신을 업데이트 시켜줘야함 
-                               //curState의 update와 transition을 담당하고 있는 statemachine의 update 함수
+        stateMachine.Update(); 
     }
 
 
@@ -248,15 +241,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private class AttackRunState : PlayerState
-    {
-        public AttackRunState(PlayerController player) : base(player) { }
-
-
-
-    }
-
-    private class ParryingState : PlayerState
+    private class ParryingState : PlayerState  //패리 상태랑.... 점프 상태랑... 8방향 쏘기 구현해야됨... ㅠㅠ
     {
         public ParryingState(PlayerController player) : base(player) { }
 
@@ -276,6 +261,22 @@ public class PlayerController : MonoBehaviour
             animator.Play("Parry");
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
+
+            if (renderer.flipX == true) //왼쪽 보고 있으면 
+            {
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
+            }
+            else //오른쪽 보고 있으면 
+            {
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+            }
+            if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
+            {
+                player.StartCoroutine(player.ShootCoroutine());  //점프 중에 슈팅은 애니메이션이 따로없음 
+            }
+
 
             if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //왼쪽 이동
             {
@@ -317,8 +318,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-    }  //패링 중에서 공격 되는지 확인해보기 
-
+    }   
     private class DashState : PlayerState
     {
         public DashState(PlayerController player) : base(player) { }
@@ -361,7 +361,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private class JumpDashState : PlayerState
+    private class JumpDashState : PlayerState  //대시 상태중에는 공격 안 받는듯 한대?? 
     {
         public JumpDashState(PlayerController player) : base(player) { }
 
@@ -411,7 +411,7 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-    }
+    } 
 
     private class FallState : PlayerState
     {
@@ -474,6 +474,12 @@ public class PlayerController : MonoBehaviour
             if (onGround)
             {
                 ChangeState(State.Idle);
+            }
+            //&& player.isJumping == true)
+            if (player.parryCheck.isParryed == true &&
+                Input.GetKeyDown(KeyCode.Z))
+            {
+                ChangeState(State.Parrying);
             }
 
         }
@@ -707,7 +713,7 @@ public class PlayerController : MonoBehaviour
 
         }
     }
-    private class JumpState : PlayerState
+    private class JumpState : PlayerState  //점프 상태... 8방향 쏘기... 구현... 해야함... 
     {
         public bool isLongJump = false;
 
@@ -749,23 +755,17 @@ public class PlayerController : MonoBehaviour
 
             if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //왼쪽 이동
             {
-
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
                 renderer.flipX = true;  //왼쪽으로 모습 바꿔주기
-
             }
             else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //오른쪽 이동 항상 일정한 속도 
             {
-
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
                 renderer.flipX = false;  //오른쪽으로 (오른쪽이 디폴트)
-
             }
             //감속상태 --> 일정속도 유지 및 정지시 바로 멈추도록 
             if (axisH == 0 && rigidbody.velocity.x > 0.1f) //오른쪽으로 이동중인 상태에서 멈추면 
             {
-
-
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
             else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //왼쪽 이동 중 정지 
@@ -829,12 +829,9 @@ public class PlayerController : MonoBehaviour
     }
 
 
-
     private class RunState : PlayerState
     {
         public RunState(PlayerController player) : base(player) { }
-
-        //엑셀로 일정한 속도 유지 할 수 있도록 
 
         public override void Enter()
         {
@@ -846,10 +843,8 @@ public class PlayerController : MonoBehaviour
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //대각선 위로 달리는거 구현해줘야함 
 
-            // if문 분기 문제가 좀 있는듯 ㅠㅠ 
 
-
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed && (axisV == 0.0f || axisV == -1.0f)) //왼쪽 이동
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //왼쪽 이동
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
@@ -857,7 +852,7 @@ public class PlayerController : MonoBehaviour
                 renderer.flipX = true;  //왼쪽으로 모습 바꿔주기
 
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
-                spawnPos.transform.localPosition = new Vector2(-1.8f, 1.2f);
+                spawnPos.transform.localPosition = new Vector2(-2.0f, 1.2f);
 
                 if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
                 {
@@ -872,7 +867,7 @@ public class PlayerController : MonoBehaviour
 
                 }
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed && (axisV == 0.0f || axisV == -1.0f)) //오른쪽 이동 항상 일정한 속도 
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //오른쪽 이동 항상 일정한 속도 
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
@@ -880,7 +875,7 @@ public class PlayerController : MonoBehaviour
                 renderer.flipX = false;  //오른쪽으로 (오른쪽이 디폴트)
 
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                spawnPos.transform.localPosition = new Vector2(1.1f, 1.2f);
+                spawnPos.transform.localPosition = new Vector2(1.3f, 1.2f);
 
                 if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
                 {
@@ -894,50 +889,6 @@ public class PlayerController : MonoBehaviour
                     animator.SetBool("RunShoot", false);
                 }
             }
-
-
-           /* else if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed && axisV == 1.0f
-                && (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))) //왼쪽 대각선 +공격시에만 모션나오도록
-            {
-                Debug.Log("왼쪽 대각선");
-                rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = true;  //왼쪽으로 모습 바꿔주기
-                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
-                spawnPos.transform.localPosition = new Vector2(-1.8f, 1.5f);
-
-                animator.SetBool("RunShootDiagUp", true);
-                player.StartCoroutine(player.ShootCoroutine());
-
-                if ((animator.GetCurrentAnimatorStateInfo(0).IsName("RunShootDiagUp") &&
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f) ||
-                Input.GetKeyUp(KeyCode.X))
-                {
-                    animator.SetBool("RunShootDiagUp", false);
-
-                }
-
-            }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed && axisV == 1.0f
-                && (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))) //오른쪽 대각이동공격
-            {
-                Debug.Log("오른쪽대각선");
-                rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = false;  //오른쪽으로 (오른쪽이 디폴트)
-                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                spawnPos.transform.localPosition = new Vector2(1.1f, 1.5f);
-
-                animator.SetBool("RunShootDiagUp", true);
-                player.StartCoroutine(player.ShootCoroutine());
-
-                if ((animator.GetCurrentAnimatorStateInfo(0).IsName("RunShootDiagUp") &&
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f) ||
-                Input.GetKeyUp(KeyCode.X))
-                {
-                    animator.SetBool("RunShootDiagUp", false);
-                }
-
-            }
-*/
 
             //감속상태 --> 일정속도 유지 및 정지시 바로 멈추도록 
             if (axisH == 0 && rigidbody.velocity.x > 0.02f) //오른쪽으로 이동중인 상태에서 멈추면 
@@ -954,7 +905,6 @@ public class PlayerController : MonoBehaviour
         {
             animator.Play("Down");
         }
-
 
         public override void Transition() //트랜지션에서 달리면서 쏘기 달리면서 점프 등등 전환구현 
         {
@@ -989,10 +939,54 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Down);
 
             }
-            
+
+            //런 + 대각선 공격 상태 --> 공격상태가 아니면 그냥 업 키 눌러도 런 상태가 유지되도록 
+            if((axisH != 0 &&axisV==1.0f)&&(Input.GetKeyDown(KeyCode.X)||Input.GetKey(KeyCode.X)))
+            {
+                ChangeState(State.AttackRun);
+            }    
+             
+
+        }
+
+    }
+
+    private class AttackRunState : PlayerState //런 + 대각 상단 + 슈팅 3가지 상태가 모여야 애니메이션 + 불렛스폰 위치 이동 
+    {
+        public AttackRunState(PlayerController player) : base(player) { }
+
+        public override void Enter()
+        {
+            Debug.Log("어택런진입");
+            animator.Play("RunShootDiagUp"); //애니메이션 루프 해두고 
+        }
+
+        public override void Update()
+        {
+            axisH = Input.GetAxisRaw("Horizontal");
+            axisV = Input.GetAxisRaw("Vertical"); //대각선 위로 달리는거 구현해줘야함 
 
 
 
+            //불렛 스포너 위치 바꿔주고 
+            //총 쏘기 구현 +애니메이션 출력 
+        }
+
+        //트랜지션 해야 하는 상황
+        // 1. 대각선 이동 -> 런 상태 (런슛은 어차피 런상태 내부에 포함되어 있으니까 )
+        // 2. 점프 상태 
+        // 3. 런과 마찬가지로 떨어지면 Fall 상태로 
+        // 4. idle 상태 
+        public override void Transition()  
+        {
+            if(axisV!=-1) //일단 y축 값이 -1이 아니면 탈출해야 하니까 하나 만들고
+            {
+
+            }
+            else
+            {
+
+            }
 
         }
 
