@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
         Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
         , Fall, Parrying, Up
     }
-    
+
 
     [Header("Player")]
     [SerializeField] int hp = 3;
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
     private bool onGround;
     private int groundCount;
     private bool isJumping;
-    private bool isParried; 
+    private bool isParried;
 
 
     private StateMachine stateMachine;
@@ -57,7 +57,7 @@ public class PlayerController : MonoBehaviour
     string nowAnime = "";
     string oldAnime = "";
 
-    void Awake() 
+    void Awake()
     {
         stateMachine = gameObject.AddComponent<StateMachine>();
         stateMachine.AddState(State.Idle, new IdleState(this));
@@ -87,14 +87,14 @@ public class PlayerController : MonoBehaviour
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 
         spawnPos = transform.FindChild("BulletSpawn");
-       
+
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         playerPos = transform.position;
     }
 
     private void Update()
     {
-        stateMachine.Update(); 
+        stateMachine.Update();
     }
 
 
@@ -318,7 +318,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-    }   
+    }
     private class DashState : PlayerState
     {
         public DashState(PlayerController player) : base(player) { }
@@ -411,7 +411,7 @@ public class PlayerController : MonoBehaviour
             }
 
         }
-    } 
+    }
 
     private class FallState : PlayerState
     {
@@ -934,18 +934,18 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Fall);
             }
 
-            if (axisH == 0 && axisV == -1)
+            if (axisV == -1)
             {
                 ChangeState(State.Down);
 
             }
 
             //런 + 대각선 공격 상태 --> 공격상태가 아니면 그냥 업 키 눌러도 런 상태가 유지되도록 
-            if((axisH != 0 &&axisV==1.0f)&&(Input.GetKeyDown(KeyCode.X)||Input.GetKey(KeyCode.X)))
+            if ((axisH != 0 && axisV == 1.0f) && (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X)))
             {
                 ChangeState(State.AttackRun);
-            }    
-             
+            }
+
 
         }
 
@@ -966,28 +966,70 @@ public class PlayerController : MonoBehaviour
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //대각선 위로 달리는거 구현해줘야함 
 
+            // 총 쏘기 + 불렛 스포너 위치 변경 + 애니메이션 재생 -->애니는 이미 loop로 재생중이니까 
+            // 애니 말고 총 쏘기 작업 + 그에 맞는불렛 작업만 하자.
+            player.StartCoroutine(player.ShootCoroutine());
 
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //왼쪽 이동
+            {
+                rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
+                renderer.flipX = true;  //왼쪽으로 모습 바꿔주기
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
+                spawnPos.transform.localPosition = new Vector2(-2.2f, 2.4f);
 
-            //불렛 스포너 위치 바꿔주고 
-            //총 쏘기 구현 +애니메이션 출력 
+            }
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //오른쪽 이동 항상 일정한 속도 
+            {
+                rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
+                renderer.flipX = false;  //오른쪽으로 (오른쪽이 디폴트)
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
+                spawnPos.transform.localPosition = new Vector2(1.6f, 2.4f);
+
+            }
+
+            //감속 구현 필수! 이거 안하면 미끄러짐 ㅠㅠ 
+            if (axisH == 0 && rigidbody.velocity.x > 0.02f) //오른쪽으로 이동중인 상태에서 멈추면 
+            {
+                rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
+            }
+            else if (axisH == 0 && rigidbody.velocity.x < -0.02f) //왼쪽 이동 중 정지 
+            {
+                rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
+            }
         }
 
-        //트랜지션 해야 하는 상황
-        // 1. 대각선 이동 -> 런 상태 (런슛은 어차피 런상태 내부에 포함되어 있으니까 )
-        // 2. 점프 상태 
-        // 3. 런과 마찬가지로 떨어지면 Fall 상태로 
-        // 4. idle 상태 
-        public override void Transition()  
+        public override void Exit()
         {
-            if(axisV!=-1) //일단 y축 값이 -1이 아니면 탈출해야 하니까 하나 만들고
+            animator.Play("Down");
+        }
+        public override void Transition()
+        {
+            if (axisV != 1.0f&&axisH==0) //일단 y축 값이 +1이 아니면 탈출해야 하니까 하나 만들고
+            {
+                ChangeState(State.Idle);
+            }
+
+            if(axisH!=0&&axisV==0)
+            {
+                ChangeState(State.Run);
+            }
+            
+            if(axisV==1.0f&&axisH==0.0f)
+            {
+                rigidbody.velocity =new Vector2(0,rigidbody.velocity.y);
+                ChangeState (State.Up);
+            }
+
+            if (Input.GetKeyDown(KeyCode.Z))
             {
 
+                ChangeState(State.Jump);
             }
-            else
+
+            if (!onGround && player.FootIsTrigger == false)
             {
-
+                ChangeState(State.Fall);
             }
-
         }
 
     }
