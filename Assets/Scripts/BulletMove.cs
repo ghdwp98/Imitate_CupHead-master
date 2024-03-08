@@ -1,3 +1,4 @@
+using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class BulletMove : MonoBehaviour
@@ -8,10 +9,13 @@ public class BulletMove : MonoBehaviour
     [SerializeField] Rigidbody2D rb;
     [SerializeField] PooledObject pooledObject;
     [SerializeField] PooledObject bulletCollision;
+    [SerializeField] Transform spawnPos;
+
 
 
     private void OnEnable()
     {
+
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         animator.Play("WeaponShot");
@@ -19,10 +23,8 @@ public class BulletMove : MonoBehaviour
 
     void Update()
     {
-
-
-
-        rb.velocity = new Vector2(30 * speed * Time.deltaTime, rb.velocity.y);
+        
+        rb.velocity = Vector2.right * speed;
     }
 
 

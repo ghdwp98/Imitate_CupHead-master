@@ -1,4 +1,5 @@
 
+using System.Collections;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -19,16 +20,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float axisH;
     [SerializeField] float axisV;
     [SerializeField] bool parry;
+    [SerializeField] bool isShooting = false;
 
     [Header("Component")]
     [SerializeField] new Rigidbody2D rigidbody;
     [SerializeField] new SpriteRenderer renderer;
     [SerializeField] Animator animator;
+
     [SerializeField] BulletSpawner bulletSpawner;
     [SerializeField] GameObject FootBoxCollider;
     [SerializeField] ParryCheck parryCheck;
+
     [SerializeField] PooledObject bulletPrefab;
     [SerializeField] PooledObject bulletSparkle;
+    [SerializeField] Transform spawnPos;
 
     [Header("Spec")]
     [SerializeField] float maxSpeed = 5.0f;
@@ -75,6 +80,8 @@ public class PlayerController : MonoBehaviour
         stateMachine.InitState(State.Idle); //최초 상태를 Idle 상태로 시작 
 
     }
+
+    [System.Obsolete]
     private void Start()
     {
         nowAnime = "IdlePlayer";
@@ -82,8 +89,9 @@ public class PlayerController : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
-        
 
+        spawnPos = transform.FindChild("BulletSpawn");
+        Debug.Log(spawnPos);
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         playerPos = transform.position;
     }
@@ -157,6 +165,7 @@ public class PlayerController : MonoBehaviour
         protected int groundCount { get { return player.groundCount; } set { player.groundCount = value; } }
 
         protected bool parry { get { return player.parry; } set { player.parry = value; } }
+        protected Transform spawnPos { get { return player.spawnPos; } set { player.spawnPos = value; } }
 
         protected PooledObject bulletPrefab => player.bulletPrefab;
         protected PooledObject bulletSparkle => player.bulletSparkle;
@@ -479,19 +488,29 @@ public class PlayerController : MonoBehaviour
         public override void Enter()
         {
             animator.Play("Idle");
+            
         }
 
         public override void Update() //계속 돌아가면서 체크 업데이트 + 트랜지션 
         {
-            
-            axisH = Input.GetAxisRaw("Horizontal");
-            axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
+            if(renderer.flipX==true) //왼쪽 보고 있으면 
+            {
+                spawnPos.transform.localPosition = new Vector2(-1.5f,0.8f);
+            }
+            else //오른쪽 보고 있으면 
+            {
 
-            if (Input.GetKeyDown(KeyCode.X))
+                spawnPos.transform.localPosition = new Vector2(0.9f,0.8f);
+
+            }
+
+            axisH = Input.GetAxisRaw("Horizontal");
+            axisV = Input.GetAxisRaw("Vertical"); 
+
+            if (Input.GetKeyDown(KeyCode.X)|| Input.GetKey(KeyCode.X))
             {
                 animator.SetBool("ShootStraight", true);
-                bulletSpawner.ObjectSpawn(); //요놈을 코루틴에 넣어두자 어차피 총알생성이니까 
-
+                player.StartCoroutine(player.ShootCoroutine());
             }
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("ShootStraight") &&
             animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
@@ -552,7 +571,6 @@ public class PlayerController : MonoBehaviour
 
 
         }
-
 
         public override void Update()
         {
@@ -797,8 +815,21 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    
 
+
+    
+    public IEnumerator ShootCoroutine()
+    {
+        float coolTime = 0.1f; //이거 계속 누르고 있으면 계속 나가니까 그거 생각해서 쿨타임 정해줘야함 
+        if(isShooting==false)
+        {
+            isShooting= true;
+            bulletSpawner.ObjectSpawn();
+            yield return new WaitForSeconds(coolTime);
+            isShooting = false;
+        }
+
+    }
 
 
 
