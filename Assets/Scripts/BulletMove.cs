@@ -1,12 +1,12 @@
 using UnityEngine;
 
-public class BulletMove : PooledObject
+public class BulletMove : MonoBehaviour
 {
     public float speed = 35f;
     
-    Animator animator;
-    Rigidbody2D rb;
-
+    [SerializeField]Animator animator;
+    [SerializeField]Rigidbody2D rb;
+    [SerializeField] PooledObject pooledObject;
 
     void Start()
     {
@@ -36,7 +36,7 @@ public class BulletMove : PooledObject
             return;
         }
 
-        Release();
+        pooledObject.Release();
     }
 
 
