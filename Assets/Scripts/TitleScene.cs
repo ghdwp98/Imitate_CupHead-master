@@ -10,7 +10,7 @@ public class TitleScene : BaseScene
    
     private void Update()
     {
-        if(Input.anyKey)
+        if(Input.anyKeyDown)
         {
             Manager.Scene.LoadScene("TutorialScene");
         }

@@ -13,10 +13,14 @@ public class TutorialScene : BaseScene
     [SerializeField] int jumpSize = 3;
     [SerializeField] int jumpCapacity = 3;
 
-    void Awake()
+    private void Update()
     {
-       
+        
     }
+
+
+
+
     public override IEnumerator LoadingRoutine()
     {
         Manager.Pool.CreatePool(bulletPrefab, size, capacity);
@@ -24,5 +28,9 @@ public class TutorialScene : BaseScene
         Manager.Pool.CreatePool(ExplosionPrefab, size, capacity);
         Manager.Pool.CreatePool(jumpEffectPrefab, jumpSize, jumpCapacity);
         yield return null;
+
+
+
+
     }
 }

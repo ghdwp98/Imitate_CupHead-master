@@ -8,6 +8,7 @@ public class SceneManager : Singleton<SceneManager>
     [SerializeField] Image fade;
     [SerializeField] Slider loadingBar;
     [SerializeField] float fadeTime;
+    [SerializeField] GameObject loadingAnim;
 
     private BaseScene curScene;
 
@@ -45,13 +46,16 @@ public class SceneManager : Singleton<SceneManager>
         Manager.UI.CloseInGameUI();
 
         Time.timeScale = 0f;
-        loadingBar.gameObject.SetActive(true);
+
+        loadingAnim.gameObject.SetActive(true);
 
         AsyncOperation oper = UnitySceneManager.LoadSceneAsync(sceneName);
         while (oper.isDone == false)
         {
-            loadingBar.value = oper.progress;
-            yield return null;
+
+            loadingAnim.gameObject.GetComponent<Animator>().Play("LoadingAnim");
+            
+            yield return new WaitForSecondsRealtime(2.3f);
         }
 
         Manager.UI.EnsureEventSystem();
@@ -59,7 +63,7 @@ public class SceneManager : Singleton<SceneManager>
         BaseScene curScene = GetCurScene();
         yield return curScene.LoadingRoutine();
 
-        loadingBar.gameObject.SetActive(false);
+        loadingAnim.gameObject.SetActive(false);
         Time.timeScale = 1f;
 
         yield return FadeIn();
@@ -71,7 +75,7 @@ public class SceneManager : Singleton<SceneManager>
         Color fadeOutColor = new Color(fade.color.r, fade.color.g, fade.color.b, 1f);
         Color fadeInColor = new Color(fade.color.r, fade.color.g, fade.color.b, 0f);
 
-        while (rate <= 1)
+        while (rate <= 2)
         {
             rate += Time.deltaTime / fadeTime;
             fade.color = Color.Lerp(fadeInColor, fadeOutColor, rate);
@@ -85,7 +89,7 @@ public class SceneManager : Singleton<SceneManager>
         Color fadeOutColor = new Color(fade.color.r, fade.color.g, fade.color.b, 1f);
         Color fadeInColor = new Color(fade.color.r, fade.color.g, fade.color.b, 0f);
 
-        while (rate <= 1)
+        while (rate <= 2)
         {
             rate += Time.deltaTime / fadeTime;
             fade.color = Color.Lerp(fadeOutColor, fadeInColor, rate);
