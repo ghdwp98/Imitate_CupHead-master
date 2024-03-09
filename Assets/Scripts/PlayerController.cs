@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     //그라운드 체커 확인 및 콜라이더 모서리에서 떨어지는 모션이 생기는 문제 해결해보기 
+    // 앵커상태에서 up 상태로 진행중에 c키만 떼면 상태는 idle->up  으로 잘 전환되는데
+    // 애니메이션이 계속 idle 애니메이션이 나옴.. 
 
     public enum State
     {
@@ -137,7 +139,6 @@ public class PlayerController : MonoBehaviour
         FootIsTrigger = false;
     }
 
-
     private class PlayerState : BaseState //베이스스테이트 상속해서 뼈대가 될 클래스 
     {
         protected PlayerController player; //Player로 이를 상속하는 state클래스들에서
@@ -180,11 +181,14 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
+            Debug.Log("up상태진입");
             animator.Play("AimUp");
         }
         public override void Update()
         {
+
             axisH = Input.GetAxisRaw("Horizontal");
+            axisV = Input.GetAxisRaw("Vertical");
 
             if (renderer.flipX == true) //왼쪽 보고 있으면 
             {
@@ -197,18 +201,17 @@ public class PlayerController : MonoBehaviour
                 spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
             }
 
-
-
-
             if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
             {
                 animator.SetBool("ShootUp", true);
                 player.StartCoroutine(player.ShootCoroutine());
             }
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("ShootUp") &&
-            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f ||
+            Input.GetKeyUp(KeyCode.X))
             {
                 animator.SetBool("ShootUp", false);
+
             }
         }
         public override void Transition()
@@ -217,18 +220,25 @@ public class PlayerController : MonoBehaviour
             {
                 ChangeState(State.Idle);
             }
+
             //바로 다운 가는건 없는게 나은듯 키 떼고 전환시키도록 그냥 바로 donw 가는건 없애자.
             else if (Input.GetKeyDown(KeyCode.Z))
             {
                 ChangeState(State.Jump);
             }
-            else if (!onGround && player.FootIsTrigger == false)
-            {
-                ChangeState(State.Fall);
-            }
             else if (axisH != 0.0f)
             {
                 ChangeState(State.Run);
+            }
+
+            if (!onGround && player.FootIsTrigger == false)
+            {
+                ChangeState(State.Fall);
+            }
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                ChangeState(State.Anchor);
             }
         }
     }
@@ -492,6 +502,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
+            Debug.Log("다운상태진입");
             player.gameObject.GetComponent<BoxCollider2D>().enabled = true;
             player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
             rigidbody.velocity = Vector2.zero;
@@ -560,8 +571,8 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
+            Debug.Log("idle상태진입");
             animator.Play("Idle");
-
         }
 
         public override void Update() //계속 돌아가면서 체크 업데이트 + 트랜지션 
@@ -592,16 +603,10 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        public override void Exit()
-        {
-            animator.Play("Down");
-        }
-
         public override void Transition()
         {
             if (axisH != 0) //이동이 있으면 상태전환 
             {
-
                 ChangeState(State.Run);
             }
 
@@ -610,9 +615,9 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Jump);
             }
 
-            if (axisV < 0.0f)
+            if (axisV < 0.0f && axisH == 0)
             {
-
+                animator.Play("Down");
                 ChangeState(State.Down);
             }
 
@@ -629,10 +634,13 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Fall);
             }
 
-            if (Input.GetKey(KeyCode.UpArrow))
+            if (axisV == 1.0f && axisH == 0.0f)
             {
+                animator.Play("AimUp"); //도대체 왜... 앵커->idle -> up으로 가면 애니메이션전환이안돼?
+                //rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
                 ChangeState(State.Up);
             }
+
         }
 
     }
@@ -645,8 +653,10 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
+            Debug.Log("앵커상태 진입");
             rigidbody.velocity = Vector2.zero;
         }
+        //애니메이션 이름을 공유하지 말자! 같은 애니메이션도 새롭게 이름 정해주자. 
 
         public override void Update()
         {
@@ -656,75 +666,165 @@ public class PlayerController : MonoBehaviour
 
             if (axisH == -1.0f && axisV == 0.0f) //왼쪽 누르면 왼쪽으로 애니메이션 전환 
             {
-                animator.Play("AimStraight");
                 renderer.flipX = true; //방향 전환 
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -180);
+                spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
 
+                if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.X))
+                {
+                    animator.Play("AimShootStraight");
+                    player.StartCoroutine(player.ShootCoroutine());
+                    return;
+                }
 
-            }
-            else if (axisH == 0.0f && axisV == 0.0f)
-            {
                 animator.Play("AimStraight");
 
-
-
             }
-            else if (axisH == 1.0f && axisV == 0.0f)
+            else if (axisH == 0.0f && axisV == 0.0f) //아무것도 안누를 때 그 flip상태로 기본 상태로 리턴
             {
-                animator.Play("AimStraight");
+
+                if (renderer.flipX == true)  //왼쪽 보고 있는 상태면 
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -180);
+                    spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
+                    if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.X))
+                    {
+                        animator.Play("AimShootStraight");
+                        player.StartCoroutine(player.ShootCoroutine());
+                        return;
+                    }
+                    animator.Play("AimStraight");
+
+                }
+                else
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+                    if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.X))
+                    {
+                        animator.Play("AimShootStraight");
+                        player.StartCoroutine(player.ShootCoroutine());
+                        return;
+                    }
+                    animator.Play("AimStraight");
+
+                }
+            }
+            else if (axisH == 1.0f && axisV == 0.0f) //오른쪽 
+            {
                 renderer.flipX = false;
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+                if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.X))
+                {
+                    animator.Play("AimShootStraight");
+                    player.StartCoroutine(player.ShootCoroutine());
+                    return;
+                }
 
-
-
+                animator.Play("AimStraight");
             }
-            else if (axisH == 0.0f && axisV == 1.0f)
+            else if (axisH == 0.0f && axisV == 1.0f) //위쪽 
             {
-                animator.Play("AimUp");
+                if(renderer.flipX==true)
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                    spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
+                }
+                else
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                    spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
+                }
 
-
+                if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.X))
+                {
+                    animator.Play("AnchorShootUp");
+                    player.StartCoroutine(player.ShootCoroutine());
+                    return;
+                }
+                animator.Play("AnchorAimUp");
 
             }
             else if (axisH == 0.0f && axisV == -1.0f)
             {
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+
+                if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.X))
+                {
+                    animator.Play("ShootDown");
+                    player.StartCoroutine(player.ShootCoroutine());
+                    return;
+                }
                 animator.Play("AimDown");
 
-
-
             }
-            else if (axisH == 1.0f && axisV == 1.0f) //up diagonal 
-            {
-                animator.Play("AimDiagonalUp");
+            else if (axisH == 1.0f && axisV == 1.0f) //up diagonal 오른쪽 대각선 위 
+            {            
                 renderer.flipX = false;
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
+                spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
 
-
+                if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.X))
+                {
+                    animator.Play("ShootDiagUp");
+                    player.StartCoroutine(player.ShootCoroutine());
+                    return;
+                }
+                animator.Play("AimDiagonalUp");
 
             }
 
-            else if (axisH == -1.0f && axisV == 1.0f) // -1 1
+            else if (axisH == -1.0f && axisV == 1.0f) //왼쪽 대각선 위
             {
-                animator.Play("AimDiagonalUp");
+               
                 renderer.flipX = true;
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
+                spawnPos.transform.localPosition = new Vector2(-1.5f, 2.1f);
 
-
-
+                if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.X))
+                {
+                    animator.Play("ShootDiagUp");
+                    player.StartCoroutine(player.ShootCoroutine());
+                    return;
+                }
+                animator.Play("AimDiagonalUp");
 
             }
-            else if (axisH == 1.0f && axisV == -1.0f)
+            else if (axisH == 1.0f && axisV == -1.0f)  //대각선 아래 오른쪽 
             {
                 renderer.flipX = false;
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
+                spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
+                if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.X))
+                {
+                    animator.Play("ShootDiagDown");
+                    player.StartCoroutine(player.ShootCoroutine());
+                    return;
+                }
                 animator.Play("AimDiagonalDown");
 
 
 
             }
-            else if (axisH == -1.0f && axisV == -1.0f)
+            else if (axisH == -1.0f && axisV == -1.0f) //대각선 아래 왼쪽 
             {
                 renderer.flipX = true;
+                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 225);
+                spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
+                if (Input.GetKey(KeyCode.X) || Input.GetKey(KeyCode.X))
+                {
+                    animator.Play("ShootDiagDown");
+                    player.StartCoroutine(player.ShootCoroutine());
+                    return;
+                }
+
+
                 animator.Play("AimDiagonalDown");
 
-
-
-
             }
+
         }
 
         public override void Transition()
@@ -735,6 +835,13 @@ public class PlayerController : MonoBehaviour
             {
                 ChangeState(State.Idle);
             }
+
+            if (axisV == 1.0 && Input.GetKeyUp(KeyCode.C))
+            {
+                
+                ChangeState(State.Up);
+            }
+
 
 
         }
@@ -972,6 +1079,11 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.AttackRun);
             }
 
+            if (axisH == 0 && axisV == 1.0f)
+            {
+                ChangeState(State.Up);
+            }
+
 
         }
 
@@ -1030,20 +1142,25 @@ public class PlayerController : MonoBehaviour
         }
         public override void Transition()
         {
-            if (axisV != 1.0f&&axisH==0) //일단 y축 값이 +1이 아니면 탈출해야 하니까 하나 만들고
+            if (axisH == 0) //일단 y축 값이 +1이 아니면 탈출해야 하니까 하나 만들고
             {
                 ChangeState(State.Idle);
             }
 
-            if(axisH!=0&&axisV==0)
+            if (axisH == 0 && axisV == -1)
+            {
+                ChangeState(State.Down);
+            }
+
+            if (axisH != 0 && axisV != 1.0f)
             {
                 ChangeState(State.Run);
             }
-            
-            if(axisV==1.0f&&axisH==0.0f)
+
+            if (axisV == 1.0f && axisH == 0.0f)
             {
-                rigidbody.velocity =new Vector2(0,rigidbody.velocity.y);
-                ChangeState (State.Up);
+                rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
+                ChangeState(State.Up);
             }
 
             if (Input.GetKeyDown(KeyCode.Z))
@@ -1056,6 +1173,11 @@ public class PlayerController : MonoBehaviour
             {
                 ChangeState(State.Fall);
             }
+
+            if (Input.GetKeyDown(KeyCode.C))
+            {
+                ChangeState(State.Anchor);
+            }
         }
 
     }
@@ -1065,7 +1187,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator ShootCoroutine()
     {
-        float coolTime = 0.1f; //이거 계속 누르고 있으면 계속 나가니까 그거 생각해서 쿨타임 정해줘야함 
+        float coolTime = 0.12f; //이거 계속 누르고 있으면 계속 나가니까 그거 생각해서 쿨타임 정해줘야함 
         if (isShooting == false)
         {
             isShooting = true;
