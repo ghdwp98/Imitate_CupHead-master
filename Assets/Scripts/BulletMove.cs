@@ -29,7 +29,8 @@ public class BulletMove : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Bullet")
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Bullet"||
+            collision.gameObject.tag=="Checking")
         {
             return;
         }

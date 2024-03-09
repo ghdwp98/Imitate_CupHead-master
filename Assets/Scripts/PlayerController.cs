@@ -32,9 +32,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject FootBoxCollider;
     [SerializeField] ParryCheck parryCheck;
 
-    [SerializeField] PooledObject bulletPrefab;
-    [SerializeField] PooledObject bulletSparkle;
-    [SerializeField] Transform spawnPos;
+     PooledObject bulletPrefab;
+     PooledObject bulletSparkle;
+    Transform spawnPos;
 
     [Header("Spec")]
     [SerializeField] float maxSpeed = 10.0f;
@@ -270,24 +270,71 @@ public class PlayerController : MonoBehaviour
             //패리 중 패리성공 하던 뭐 하던 그런 상황들 넣어주기 
             animator.Play("Parry");
             axisH = Input.GetAxisRaw("Horizontal");
-            axisV = Input.GetAxisRaw("Vertical"); //점프가 아니라 위 아래 보는 느낌으로?
+            axisV = Input.GetAxisRaw("Vertical");
 
-            if (renderer.flipX == true) //왼쪽 보고 있으면 
+            if (renderer.flipX == true) //왼쪽 
             {
-                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
-                spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
+                if (axisV == 0)
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                    spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
+                }
+                else if ((axisH == 0.0f && axisV == +1.0f))  //up
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                    spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
+                }
+                else if (axisH == 0.0f && axisV == -1.0f) //down 
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                    spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+                }
+                else if (axisH == -1.0f && axisV == 1.0f)
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
+                    spawnPos.transform.localPosition = new Vector2(-1.5f, 2.1f);
+
+                }
+                else if (axisH == -1.0f && axisV == -1.0f)
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 225);
+                    spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
+                }
             }
-            else //오른쪽 보고 있으면 
+            else //오른쪽 
             {
-                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+                if (axisV == 0)
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+                }
+                else if ((axisH == 0.0f && axisV == +1.0f))  //up
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                    spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
+                }
+                else if (axisH == 0.0f && axisV == -1.0f) //down 
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                    spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+                }
+                else if (axisH == 1.0f && axisV == 1.0f) //대각선 상단 오른쪽 
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
+                    spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
+
+                }
+                else if (axisH == 1.0f && axisV == -1.0f)  //대각선 하단 오른쪽 
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
+                    spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
+
+                }
             }
             if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
             {
                 player.StartCoroutine(player.ShootCoroutine());  //점프 중에 슈팅은 애니메이션이 따로없음 
             }
-
-
             if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //왼쪽 이동
             {
 
@@ -726,7 +773,7 @@ public class PlayerController : MonoBehaviour
             }
             else if (axisH == 0.0f && axisV == 1.0f) //위쪽 
             {
-                if(renderer.flipX==true)
+                if (renderer.flipX == true)
                 {
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
                     spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
@@ -761,7 +808,7 @@ public class PlayerController : MonoBehaviour
 
             }
             else if (axisH == 1.0f && axisV == 1.0f) //up diagonal 오른쪽 대각선 위 
-            {            
+            {
                 renderer.flipX = false;
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
                 spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
@@ -778,7 +825,7 @@ public class PlayerController : MonoBehaviour
 
             else if (axisH == -1.0f && axisV == 1.0f) //왼쪽 대각선 위
             {
-               
+
                 renderer.flipX = true;
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
                 spawnPos.transform.localPosition = new Vector2(-1.5f, 2.1f);
@@ -804,9 +851,6 @@ public class PlayerController : MonoBehaviour
                     return;
                 }
                 animator.Play("AimDiagonalDown");
-
-
-
             }
             else if (axisH == -1.0f && axisV == -1.0f) //대각선 아래 왼쪽 
             {
@@ -819,10 +863,7 @@ public class PlayerController : MonoBehaviour
                     player.StartCoroutine(player.ShootCoroutine());
                     return;
                 }
-
-
                 animator.Play("AimDiagonalDown");
-
             }
 
         }
@@ -838,7 +879,7 @@ public class PlayerController : MonoBehaviour
 
             if (axisV == 1.0 && Input.GetKeyUp(KeyCode.C))
             {
-                
+
                 ChangeState(State.Up);
             }
 
@@ -859,16 +900,66 @@ public class PlayerController : MonoBehaviour
 
         public override void Update()
         {
-            if (renderer.flipX == true) //왼쪽 보고 있으면 
+            if (renderer.flipX == true) //왼쪽 
             {
-                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
-                spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
+                if (axisV == 0)
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                    spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
+                }
+                else if ((axisH == 0.0f && axisV == +1.0f))  //up
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                    spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
+                }
+                else if (axisH == 0.0f && axisV == -1.0f) //down 
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                    spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+                }
+                else if (axisH == -1.0f && axisV == 1.0f)
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
+                    spawnPos.transform.localPosition = new Vector2(-1.5f, 2.1f);
+
+                }
+                else if (axisH == -1.0f && axisV == -1.0f)
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 225);
+                    spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
+                }
             }
-            else //오른쪽 보고 있으면 
+            else //오른쪽 
             {
-                spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+                if (axisV == 0)
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+                }
+                else if ((axisH == 0.0f && axisV == +1.0f))  //up
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                    spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
+                }
+                else if (axisH == 0.0f && axisV == -1.0f) //down 
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                    spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+                }
+                else if (axisH == 1.0f && axisV == 1.0f) //대각선 상단 오른쪽 
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
+                    spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
+
+                }
+                else if (axisH == 1.0f && axisV == -1.0f)  //대각선 하단 오른쪽 
+                {
+                    spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
+                    spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
+
+                }
             }
+
             if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
             {
                 player.StartCoroutine(player.ShootCoroutine());  //점프 중에 슈팅은 애니메이션이 따로없음 
