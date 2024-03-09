@@ -30,10 +30,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] BulletSpawner bulletSpawner;
     [SerializeField] GameObject FootBoxCollider;
+    [SerializeField] JumpEffectSpawn JumpEffectSpawn;
     [SerializeField] ParryCheck parryCheck;
 
-     PooledObject bulletPrefab;
-     PooledObject bulletSparkle;
+    PooledObject bulletPrefab;
+    PooledObject bulletSparkle;
     Transform spawnPos;
 
     [Header("Spec")]
@@ -412,8 +413,19 @@ public class PlayerController : MonoBehaviour
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Dash") &&
                 animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
-                rigidbody.velocity = Vector2.zero;
-                ChangeState(State.Idle); //임시로 탈출용 
+                if (!onGround)
+                {
+                    rigidbody.velocity = Vector2.zero;
+
+                    ChangeState(State.Fall);
+                }
+                else
+                {
+                    rigidbody.velocity = Vector2.zero;
+                    ChangeState(State.Idle);
+                }
+
+                
             }
         }
     }
@@ -530,6 +542,7 @@ public class PlayerController : MonoBehaviour
         {
             if (onGround)
             {
+                player.JumpEffectSpawn.JumpEffect();
                 ChangeState(State.Idle);
             }
             //&& player.isJumping == true)
@@ -1019,6 +1032,7 @@ public class PlayerController : MonoBehaviour
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.56f, 2.26f);
                 rigidbody.gravityScale = 1;
                 groundCount = 0;
+                player.JumpEffectSpawn.JumpEffect();
                 player.isJumping = false;
                 player.isParried = false;
                 ChangeState(State.Idle);

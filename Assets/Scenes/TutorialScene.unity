@@ -176,8 +176,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 306573487}
+  - component: {fileID: 306573488}
+  - component: {fileID: 306573489}
   m_Layer: 9
-  m_Name: PlayerEffect
+  m_Name: JumpEffectSpawner
   m_TagString: Checking
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -192,12 +194,46 @@ Transform:
   m_GameObject: {fileID: 306573486}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1532926289}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &306573488
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306573486}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 6673af6f955a9fd4e86c7ecb43b43718, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &306573489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306573486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f03860d5f133d964fb4bc84a4093c83a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpEffectPrefab: {fileID: 6752829863844379704, guid: 037db83695e59a1408fd4d21401d937b, type: 3}
 --- !u!1 &726025126
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,6 +903,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+      propertyPath: JumpEffect
+      value: 
+      objectReference: {fileID: 306573489}
+    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+      propertyPath: PlayerEffect
+      value: 
+      objectReference: {fileID: 306573486}
+    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+      propertyPath: JumpEffectSpawn
+      value: 
+      objectReference: {fileID: 306573489}
     - target: {fileID: 5287111981818179436, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: m_Name
       value: Player

@@ -12,7 +12,7 @@ public class BulletSpawner : MonoBehaviour
 
     [SerializeField] int size = 20;
     [SerializeField] int capacity = 30;
-    public Transform bulletBoxPos;
+    
 
     void Start()
     {
