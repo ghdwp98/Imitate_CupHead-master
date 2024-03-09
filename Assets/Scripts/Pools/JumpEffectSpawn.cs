@@ -10,7 +10,7 @@ public class JumpEffectSpawn : MonoBehaviour
     int capacity = 3;
     private void Start()
     {
-        Manager.Pool.CreatePool(jumpEffectPrefab, size, capacity);
+        //Manager.Pool.CreatePool(jumpEffectPrefab, size, capacity);
 
     }
 

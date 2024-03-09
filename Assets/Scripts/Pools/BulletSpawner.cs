@@ -16,10 +16,9 @@ public class BulletSpawner : MonoBehaviour
 
     void Start()
     {
-
-        Manager.Pool.CreatePool(bulletPrefab, size, capacity);
+        /*Manager.Pool.CreatePool(bulletPrefab, size, capacity);
         Manager.Pool.CreatePool(SparklePrefab, size, capacity);
-        Manager.Pool.CreatePool(ExplosionPrefab, size, capacity);
+        Manager.Pool.CreatePool(ExplosionPrefab, size, capacity);*/
     }
     void Update()
     { 

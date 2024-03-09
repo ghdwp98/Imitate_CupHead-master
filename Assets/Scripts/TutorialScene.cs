@@ -4,14 +4,25 @@ using UnityEngine;
 
 public class TutorialScene : BaseScene
 {
-    void Start()
+    [SerializeField] PooledObject bulletPrefab;
+    [SerializeField] PooledObject SparklePrefab;
+    [SerializeField] PooledObject ExplosionPrefab;
+    [SerializeField] PooledObject jumpEffectPrefab;
+    [SerializeField] int size = 20;
+    [SerializeField] int capacity = 30;
+    [SerializeField] int jumpSize = 3;
+    [SerializeField] int jumpCapacity = 3;
+
+    void Awake()
     {
-
+       
     }
-
-  
     public override IEnumerator LoadingRoutine()
     {
+        Manager.Pool.CreatePool(bulletPrefab, size, capacity);
+        Manager.Pool.CreatePool(SparklePrefab, size, capacity);
+        Manager.Pool.CreatePool(ExplosionPrefab, size, capacity);
+        Manager.Pool.CreatePool(jumpEffectPrefab, jumpSize, jumpCapacity);
         yield return null;
     }
 }

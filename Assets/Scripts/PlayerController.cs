@@ -368,6 +368,7 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("패리 끝 ");
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 1.16f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.56f, 2.26f);
+                player.JumpEffectSpawn.JumpEffect();
                 rigidbody.gravityScale = 1;
                 groundCount = 0;
                 player.isJumping = false;
@@ -697,7 +698,7 @@ public class PlayerController : MonoBehaviour
             if (axisV == 1.0f && axisH == 0.0f)
             {
                 animator.Play("AimUp"); //도대체 왜... 앵커->idle -> up으로 가면 애니메이션전환이안돼?
-                //rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
+                rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
                 ChangeState(State.Up);
             }
 
