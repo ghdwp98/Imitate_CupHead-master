@@ -30,6 +30,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] GameObject FootBoxCollider;
     [SerializeField] JumpEffectSpawn JumpEffectSpawn;
     [SerializeField] ParryCheck parryCheck;
+    [SerializeField] DashEffectSpawn DashEffectSpawn;
+    [SerializeField] Transform dashSpawn;
 
     PooledObject bulletPrefab;
     PooledObject bulletSparkle;
@@ -394,11 +396,16 @@ public class PlayerController : MonoBehaviour
             if (renderer.flipX == false)
             {
                 animator.Play("Dash");
+                player.dashSpawn.transform.localPosition = new Vector2(-1f, 0.3f);
+                player.DashEffectSpawn.DashEffect();
             }
             else if (renderer.flipX == true)
             {
                 renderer.flipX = true;
                 animator.Play("Dash");
+
+                player.dashSpawn.transform.localPosition = new Vector2(1f, 0.3f);
+                player.DashEffectSpawn.DashEffect();
 
             }
         }
@@ -443,14 +450,19 @@ public class PlayerController : MonoBehaviour
         public int jumpDashSpeed = 10;
         public override void Enter()
         {
+           
             if (renderer.flipX == false)
             {
                 animator.Play("JumpDash");
+                player.dashSpawn.transform.localPosition = new Vector2(-1f, 0.3f);
+                player.DashEffectSpawn.DashEffect();
             }
             else if (renderer.flipX == true)
             {
                 renderer.flipX = true;
                 animator.Play("JumpDash");
+                player.dashSpawn.transform.localPosition = new Vector2(1f, 0.3f);
+                player.DashEffectSpawn.DashEffect();
 
             }
 
@@ -715,14 +727,13 @@ public class PlayerController : MonoBehaviour
     {
         public AnchorState(PlayerController player) : base(player) { }
 
-        //��Ŀ��Ȳ�� �Ǹ� ���� �ִϸ��̼��� ��������� 
-
+        
         public override void Enter()
         {
-            Debug.Log("��Ŀ���� ����");
+            
             rigidbody.velocity = Vector2.zero;
         }
-        //�ִϸ��̼� �̸��� �������� ����! ���� �ִϸ��̼ǵ� ���Ӱ� �̸� ��������. 
+       
 
         public override void Update()
         {
@@ -906,7 +917,7 @@ public class PlayerController : MonoBehaviour
 
         }
     }
-    private class JumpState : PlayerState  //���� ����... 8���� ���... ����... �ؾ���... 
+    private class JumpState : PlayerState  
     {
         public bool isLongJump = false;
 
@@ -1033,7 +1044,7 @@ public class PlayerController : MonoBehaviour
         {
             if (onGround && groundCount == 1)
             {
-                Debug.Log("���� ��");
+                
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 1.16f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.56f, 2.26f);
                 rigidbody.gravityScale = 1;

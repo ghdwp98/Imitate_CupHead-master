@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ElderScnen : BaseScene
+public class ElderScene : BaseScene
 {
     public override IEnumerator LoadingRoutine()
     {
