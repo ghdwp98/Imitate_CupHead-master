@@ -23,10 +23,12 @@ public class TutorialScene : BaseScene
 
     public override IEnumerator LoadingRoutine()
     {
-        Manager.Pool.CreatePool(bulletPrefab, size, capacity);
+        /*Manager.Pool.CreatePool(bulletPrefab, size, capacity);
         Manager.Pool.CreatePool(SparklePrefab, size, capacity);
         Manager.Pool.CreatePool(ExplosionPrefab, size, capacity);
-        Manager.Pool.CreatePool(jumpEffectPrefab, jumpSize, jumpCapacity);
+        Manager.Pool.CreatePool(jumpEffectPrefab, jumpSize, jumpCapacity);*/
+
+        // 잠깐 꺼두기 
         yield return null;
 
 

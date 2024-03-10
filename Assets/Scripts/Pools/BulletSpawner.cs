@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class BulletSpawner : MonoBehaviour
 {
-    //½ºÆ÷³ÊÀÇ »ı¼º À§Ä¡¸¦ ÇÃ·¹ÀÌ¾î°¡ °áÁ¤ÇÏ´Â°Ô ´õ ÁÁÀº ¹æ¹ı 
-    //±×·¡µµ render °°Àº »óÅÂ´Â ¿©±â¼­ ÆÇ´ÜÇÏ´Â°Ô?? 
+    //ìŠ¤í¬ë„ˆì˜ ìƒì„± ìœ„ì¹˜ë¥¼ í”Œë ˆì´ì–´ê°€ ê²°ì •í•˜ëŠ”ê²Œ ë” ì¢‹ì€ ë°©ë²• 
+    //ê·¸ë˜ë„ render ê°™ì€ ìƒíƒœëŠ” ì—¬ê¸°ì„œ íŒë‹¨í•˜ëŠ”ê²Œ?? 
 
     [SerializeField] PlayerController player;
     [SerializeField] PooledObject bulletPrefab;
@@ -16,16 +16,16 @@ public class BulletSpawner : MonoBehaviour
 
     void Start()
     {
-        /*Manager.Pool.CreatePool(bulletPrefab, size, capacity);
+        Manager.Pool.CreatePool(bulletPrefab, size, capacity);
         Manager.Pool.CreatePool(SparklePrefab, size, capacity);
-        Manager.Pool.CreatePool(ExplosionPrefab, size, capacity);*/
+        Manager.Pool.CreatePool(ExplosionPrefab, size, capacity);
     }
     void Update()
     { 
         
     }
 
-    public void ObjectSpawn() //¼ÒÈ¯ÇÏ´Â À§Ä¡°¡ ÀÚ½ÅÀÇ À§Ä¡´Ï±î ÇÃ·¹ÀÌ¾îÀÇ »óÅÂ¿¡ µû¶ó¼­ ±× À§Ä¡¸¦ ¹Ù²ãÁÖÀÚ.
+    public void ObjectSpawn() //ì†Œí™˜í•˜ëŠ” ìœ„ì¹˜ê°€ ìì‹ ì˜ ìœ„ì¹˜ë‹ˆê¹Œ í”Œë ˆì´ì–´ì˜ ìƒíƒœì— ë”°ë¼ì„œ ê·¸ ìœ„ì¹˜ë¥¼ ë°”ê¿”ì£¼ì.
     {
         Manager.Pool.GetPool(bulletPrefab, transform.position, transform.rotation);
         Manager.Pool.GetPool(SparklePrefab, transform.position, transform.rotation);

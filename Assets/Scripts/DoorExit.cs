@@ -10,11 +10,11 @@ public class DoorExit : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            //³ª°¡±â ÆË¾÷Ã¢ ¶ç¿öÁÖ°í
+            //ë‚˜ê°€ê¸° íŒì—…ì°½ ë„ì›Œì£¼ê³ 
 
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                Manager.Scene.LoadScene("WorldMapScene");
+                Manager.Scene.LoadScene("ElderScene");
             }
         }
     }

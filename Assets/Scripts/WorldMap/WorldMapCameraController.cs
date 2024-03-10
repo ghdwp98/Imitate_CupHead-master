@@ -4,15 +4,19 @@ using UnityEngine;
 
 public class WorldMapCameraController : MonoBehaviour
 {
-    // Start is called before the first frame update
+    [SerializeField] GameObject player;
+    Transform targetPos;
+    Vector3 cameraPos=new Vector3 (0,0,-10);
+    [SerializeField] float cameraSpeed=5f;
+
     void Start()
     {
-        
+        targetPos = player.transform;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void FixedUpdate()
     {
-        
+        transform.position = Vector3.Lerp(transform.position, targetPos.position + cameraPos,
+                                  Time.deltaTime * cameraSpeed);
     }
 }

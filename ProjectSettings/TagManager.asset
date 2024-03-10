@@ -43,6 +43,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Ocean
+    uniqueID: 2042533013
+    locked: 0
   - name: BackGround
     uniqueID: 3824434345
     locked: 0
@@ -51,6 +54,9 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 1410328109
+    locked: 0
+  - name: TopLevelGround
+    uniqueID: 3395615869
     locked: 0
   - name: Monster
     uniqueID: 1731650097

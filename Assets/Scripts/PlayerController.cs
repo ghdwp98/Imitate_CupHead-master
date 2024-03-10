@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //�׶��� üĿ Ȯ�� �� �ݶ��̴� �𼭸����� �������� ����� ����� ���� �ذ��غ��� 
-    // ��Ŀ���¿��� up ���·� �����߿� cŰ�� ���� ���´� idle->up  ���� �� ��ȯ�Ǵµ�
-    // �ִϸ��̼��� ��� idle �ִϸ��̼��� ����.. 
+   
 
     public enum State
     {
@@ -258,22 +256,22 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
-            Debug.Log("�и�");
+            
             player.isParried = true;
             player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.81f);
             player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.3f, 1.56f);
             groundCount = 0;
-            player.isJumping = true; //isjumping�� ���߿� parry��Ȳ üũ�� �� �������. 
+            player.isJumping = true; 
         }
 
         public override void Update()
         {
-            //�и� �� �и����� �ϴ� �� �ϴ� �׷� ��Ȳ�� �־��ֱ� 
+            
             animator.Play("Parry");
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical");
 
-            if (renderer.flipX == true) //���� 
+            if (renderer.flipX == true) 
             {
                 if (axisV == 0)
                 {
@@ -319,13 +317,13 @@ public class PlayerController : MonoBehaviour
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
                     spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
                 }
-                else if (axisH == 1.0f && axisV == 1.0f) //�밢�� ��� ������ 
+                else if (axisH == 1.0f && axisV == 1.0f) 
                 {
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
                     spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
 
                 }
-                else if (axisH == 1.0f && axisV == -1.0f)  //�밢�� �ϴ� ������ 
+                else if (axisH == 1.0f && axisV == -1.0f)  
                 {
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
                     spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
@@ -334,28 +332,28 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
             {
-                player.StartCoroutine(player.ShootCoroutine());  //���� �߿� ������ �ִϸ��̼��� ���ξ��� 
+                player.StartCoroutine(player.ShootCoroutine());  
             }
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //���� �̵�
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) 
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = true;  //�������� ��� �ٲ��ֱ�
+                renderer.flipX = true;  
 
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //������ �̵� �׻� ������ �ӵ� 
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) 
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = false;  //���������� (�������� ����Ʈ)
+                renderer.flipX = false;  
 
             }
-            //���ӻ��� --> �����ӵ� ���� �� ������ �ٷ� ���ߵ��� 
-            if (axisH == 0 && rigidbody.velocity.x > 0.1f) //���������� �̵����� ���¿��� ���߸� 
+            
+            if (axisH == 0 && rigidbody.velocity.x > 0.1f) 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
-            else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //���� �̵� �� ���� 
+            else if (axisH == 0 && rigidbody.velocity.x < -0.1f)
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
@@ -365,7 +363,7 @@ public class PlayerController : MonoBehaviour
         {
             if (onGround && groundCount == 1)
             {
-                Debug.Log("�и� �� ");
+                
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 1.16f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.56f, 2.26f);
                 player.JumpEffectSpawn.JumpEffect();
@@ -375,6 +373,13 @@ public class PlayerController : MonoBehaviour
                 player.isParried = false;
                 ChangeState(State.Idle);
             }
+
+            if (Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                ChangeState(State.Dash);
+            }
+
+
         }
 
     }
@@ -627,23 +632,23 @@ public class PlayerController : MonoBehaviour
 
     private class IdleState : PlayerState
     {
-        //�ڽ��� �θ� Ŭ������ �����ڸ� ������ ȣ�� Base �̿� 
+        
         public IdleState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
-            Debug.Log("idle��������");
+            
             animator.Play("Idle");
         }
 
-        public override void Update() //��� ���ư��鼭 üũ ������Ʈ + Ʈ������ 
+        public override void Update() 
         {
-            if (renderer.flipX == true) //���� ���� ������ 
+            if (renderer.flipX == true) 
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
                 spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
             }
-            else //������ ���� ������ 
+            else 
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
@@ -666,7 +671,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Transition()
         {
-            if (axisH != 0) //�̵��� ������ ������ȯ 
+            if (axisH != 0) 
             {
                 ChangeState(State.Run);
             }
@@ -682,11 +687,11 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Down);
             }
 
-            if (Input.GetKeyDown(KeyCode.C)) //��Ŀ ���� 
+            if (Input.GetKeyDown(KeyCode.C)) 
             {
                 ChangeState(State.Anchor);
             }
-            if (Input.GetKeyDown(KeyCode.LeftShift)) //����Ʈ����Ʈ�� ��� ���� 
+            if (Input.GetKeyDown(KeyCode.LeftShift)) 
             {
                 ChangeState(State.Dash);
             }
@@ -697,7 +702,7 @@ public class PlayerController : MonoBehaviour
 
             if (axisV == 1.0f && axisH == 0.0f)
             {
-                animator.Play("AimUp"); //����ü ��... ��Ŀ->idle -> up���� ���� �ִϸ��̼���ȯ�̾ȵ�?
+                animator.Play("AimUp"); 
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
                 ChangeState(State.Up);
             }
@@ -1057,10 +1062,10 @@ public class PlayerController : MonoBehaviour
                 animator.Play("Jump");
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.81f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.3f, 1.56f);
-                Debug.Log("����");
+                
                 rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
                 groundCount = 0;
-                player.isJumping = true; //isjumping�� ���߿� parry��Ȳ üũ�� �� �������. 
+                player.isJumping = true; 
             }
 
 
