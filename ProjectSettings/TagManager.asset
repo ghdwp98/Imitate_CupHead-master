@@ -8,6 +8,7 @@ TagManager:
   - BackGround
   - Bullet
   - Checking
+  - Exit
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - BackGround
   - Bullet
   - Checking
-  - 
+  - Exit
   - 
   - 
   - 

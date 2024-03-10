@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //±×¶ó¿îµå Ã¼Ä¿ È®ÀÎ ¹× ÄÝ¶óÀÌ´õ ¸ð¼­¸®¿¡¼­ ¶³¾îÁö´Â ¸ð¼ÇÀÌ »ý±â´Â ¹®Á¦ ÇØ°áÇØº¸±â 
-    // ¾ÞÄ¿»óÅÂ¿¡¼­ up »óÅÂ·Î ÁøÇàÁß¿¡ cÅ°¸¸ ¶¼¸é »óÅÂ´Â idle->up  À¸·Î Àß ÀüÈ¯µÇ´Âµ¥
-    // ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ °è¼Ó idle ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³ª¿È.. 
+    //ï¿½×¶ï¿½ï¿½ï¿½ Ã¼Ä¿ È®ï¿½ï¿½ ï¿½ï¿½ ï¿½Ý¶ï¿½ï¿½Ì´ï¿½ ï¿½ð¼­¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ø°ï¿½ï¿½Øºï¿½ï¿½ï¿½ 
+    // ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ up ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß¿ï¿½ cÅ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â´ï¿½ idle->up  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ç´Âµï¿½
+    // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ idle ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.. 
 
     public enum State
     {
@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float accelPower = 13.0f;
     [SerializeField] float decelPower = 20.0f;
     [SerializeField] float jumpSpeed = 11.0f;
-    [SerializeField] LayerMask groundCheckLayer; //¶¥À§¿¡¼­¸¸ Á¡ÇÁ °¡´É or ÆÐ¸® À§¿¡¼­¸¸ Á¡ÇÁ°¡´É 
+    [SerializeField] LayerMask groundCheckLayer; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ or ï¿½Ð¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
     [SerializeField] Vector2 playerPos;
     [SerializeField] bool FootIsTrigger = false;
     [SerializeField] Vector2 bulletPos;
@@ -76,11 +76,11 @@ public class PlayerController : MonoBehaviour
         stateMachine.AddState(State.Parrying, new ParryingState(this));
         stateMachine.AddState(State.Up, new UpState(this));
 
-        stateMachine.InitState(State.Idle); //ÃÖÃÊ »óÅÂ¸¦ Idle »óÅÂ·Î ½ÃÀÛ 
+        stateMachine.InitState(State.Idle); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ Idle ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 
     }
 
-    [System.Obsolete]
+    
     private void Start()
     {
         nowAnime = "IdlePlayer";
@@ -89,7 +89,7 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 
-        spawnPos = transform.FindChild("BulletSpawn");
+        spawnPos = transform.Find("BulletSpawn");
 
         gameObject.GetComponent<BoxCollider2D>().enabled = false;
         playerPos = transform.position;
@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //ÇÃ·¹ÀÌ¾î°¡ ¸®Áöµå¹Ùµð¸¦ ¾²¸é ÇÈ½ºµå¾÷µ¥ÀÌÆ®°¡ ÇÊ¿äÇÒ °æ¿ì°¡ ÀÖÀ½
+        //ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ùµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ì°¡ ï¿½ï¿½ï¿½ï¿½
         stateMachine.FixedUpdate();
         onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
 
@@ -116,7 +116,7 @@ public class PlayerController : MonoBehaviour
     {
         if (groundCheckLayer.Contain(collision.gameObject.layer))
         {
-            Debug.Log("Á¢ÃË");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½");
             groundCount = 1;
         }
 
@@ -140,10 +140,10 @@ public class PlayerController : MonoBehaviour
         FootIsTrigger = false;
     }
 
-    private class PlayerState : BaseState //º£ÀÌ½º½ºÅ×ÀÌÆ® »ó¼ÓÇØ¼­ »À´ë°¡ µÉ Å¬·¡½º 
+    private class PlayerState : BaseState //ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ë°¡ ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ 
     {
-        protected PlayerController player; //Player·Î ÀÌ¸¦ »ó¼ÓÇÏ´Â stateÅ¬·¡½ºµé¿¡¼­
-        // player.hp µîÀ¸·Î ÇÃ·¹ÀÌ¾îÀÇ º¯¼ö¸¦ ÀÌ¿ëÇÒ ¼ö ÀÖµµ·Ï ÇÑ´Ù. 
+        protected PlayerController player; //Playerï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ stateÅ¬ï¿½ï¿½ï¿½ï¿½ï¿½é¿¡ï¿½ï¿½
+        // player.hp ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Öµï¿½ï¿½ï¿½ ï¿½Ñ´ï¿½. 
         protected Transform transform => player.transform;
         protected int hp { get { return player.hp; } set { player.hp = value; } }
         protected int mp { get { return player.mp; } set { player.mp = value; } }
@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
-            Debug.Log("up»óÅÂÁøÀÔ");
+            Debug.Log("upï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             animator.Play("AimUp");
         }
         public override void Update()
@@ -191,12 +191,12 @@ public class PlayerController : MonoBehaviour
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical");
 
-            if (renderer.flipX == true) //¿ÞÂÊ º¸°í ÀÖÀ¸¸é 
+            if (renderer.flipX == true) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0f, 0, 90);
                 spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
             }
-            else //¿À¸¥ÂÊ º¸°í ÀÖÀ¸¸é 
+            else //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0f, 0, 90);
                 spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
@@ -222,7 +222,7 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Idle);
             }
 
-            //¹Ù·Î ´Ù¿î °¡´Â°Ç ¾ø´Â°Ô ³ªÀºµí Å° ¶¼°í ÀüÈ¯½ÃÅ°µµ·Ï ±×³É ¹Ù·Î donw °¡´Â°Ç ¾ø¾ÖÀÚ.
+            //ï¿½Ù·ï¿½ ï¿½Ù¿ï¿½ ï¿½ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å° ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½Å°ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½Ù·ï¿½ donw ï¿½ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
             else if (Input.GetKeyDown(KeyCode.Z))
             {
                 ChangeState(State.Jump);
@@ -244,7 +244,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private class AttackState : PlayerState  //»óÅÂ¸¦ ¸¸µéÁö ¾Æ´Ï¸é »óÅÂ ³»¿¡¼­ ±×³É ¾îÅÃ ¾Ö´Ï¸ÞÀÌ¼Ç Ãß°¡ÇÒÁö?
+    private class AttackState : PlayerState  //ï¿½ï¿½ï¿½Â¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½?
     {
         public AttackState(PlayerController player) : base(player) { }
 
@@ -252,28 +252,28 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private class ParryingState : PlayerState  //ÆÐ¸® »óÅÂ¶û.... Á¡ÇÁ »óÅÂ¶û... 8¹æÇâ ½î±â ±¸ÇöÇØ¾ßµÊ... ¤Ð¤Ð
+    private class ParryingState : PlayerState  //ï¿½Ð¸ï¿½ ï¿½ï¿½ï¿½Â¶ï¿½.... ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¶ï¿½... 8ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¾ßµï¿½... ï¿½Ð¤ï¿½
     {
         public ParryingState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
-            Debug.Log("ÆÐ¸µ");
+            Debug.Log("ï¿½Ð¸ï¿½");
             player.isParried = true;
             player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.81f);
             player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.3f, 1.56f);
             groundCount = 0;
-            player.isJumping = true; //isjumpingÀº ³ªÁß¿¡ parry»óÈ² Ã¼Å©ÇÒ ¶§ »ç¿ëÇÏÀÚ. 
+            player.isJumping = true; //isjumpingï¿½ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ parryï¿½ï¿½È² Ã¼Å©ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. 
         }
 
         public override void Update()
         {
-            //ÆÐ¸® Áß ÆÐ¸®¼º°ø ÇÏ´ø ¹¹ ÇÏ´ø ±×·± »óÈ²µé ³Ö¾îÁÖ±â 
+            //ï¿½Ð¸ï¿½ ï¿½ï¿½ ï¿½Ð¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½×·ï¿½ ï¿½ï¿½È²ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½Ö±ï¿½ 
             animator.Play("Parry");
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical");
 
-            if (renderer.flipX == true) //¿ÞÂÊ 
+            if (renderer.flipX == true) //ï¿½ï¿½ï¿½ï¿½ 
             {
                 if (axisV == 0)
                 {
@@ -302,7 +302,7 @@ public class PlayerController : MonoBehaviour
                     spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
                 }
             }
-            else //¿À¸¥ÂÊ 
+            else //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 if (axisV == 0)
                 {
@@ -319,13 +319,13 @@ public class PlayerController : MonoBehaviour
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
                     spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
                 }
-                else if (axisH == 1.0f && axisV == 1.0f) //´ë°¢¼± »ó´Ü ¿À¸¥ÂÊ 
+                else if (axisH == 1.0f && axisV == 1.0f) //ï¿½ë°¢ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
                 {
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
                     spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
 
                 }
-                else if (axisH == 1.0f && axisV == -1.0f)  //´ë°¢¼± ÇÏ´Ü ¿À¸¥ÂÊ 
+                else if (axisH == 1.0f && axisV == -1.0f)  //ï¿½ë°¢ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
                 {
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
                     spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
@@ -334,28 +334,28 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
             {
-                player.StartCoroutine(player.ShootCoroutine());  //Á¡ÇÁ Áß¿¡ ½´ÆÃÀº ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ µû·Î¾øÀ½ 
+                player.StartCoroutine(player.ShootCoroutine());  //ï¿½ï¿½ï¿½ï¿½ ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¾ï¿½ï¿½ï¿½ 
             }
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //¿ÞÂÊ ÀÌµ¿
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = true;  //¿ÞÂÊÀ¸·Î ¸ð½À ¹Ù²ãÁÖ±â
+                renderer.flipX = true;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ö±ï¿½
 
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //¿À¸¥ÂÊ ÀÌµ¿ Ç×»ó ÀÏÁ¤ÇÑ ¼Óµµ 
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½×»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ 
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = false;  //¿À¸¥ÂÊÀ¸·Î (¿À¸¥ÂÊÀÌ µðÆúÆ®)
+                renderer.flipX = false;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®)
 
             }
-            //°¨¼Ó»óÅÂ --> ÀÏÁ¤¼Óµµ À¯Áö ¹× Á¤Áö½Ã ¹Ù·Î ¸ØÃßµµ·Ï 
-            if (axisH == 0 && rigidbody.velocity.x > 0.1f) //¿À¸¥ÂÊÀ¸·Î ÀÌµ¿ÁßÀÎ »óÅÂ¿¡¼­ ¸ØÃß¸é 
+            //ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ --> ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ 
+            if (axisH == 0 && rigidbody.velocity.x > 0.1f) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¸ï¿½ 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
-            else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //¿ÞÂÊ ÀÌµ¿ Áß Á¤Áö 
+            else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
@@ -365,7 +365,7 @@ public class PlayerController : MonoBehaviour
         {
             if (onGround && groundCount == 1)
             {
-                Debug.Log("ÆÐ¸® ³¡ ");
+                Debug.Log("ï¿½Ð¸ï¿½ ï¿½ï¿½ ");
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 1.16f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.56f, 2.26f);
                 player.JumpEffectSpawn.JumpEffect();
@@ -431,7 +431,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private class JumpDashState : PlayerState  //´ë½Ã »óÅÂÁß¿¡´Â °ø°Ý ¾È ¹Þ´Âµí ÇÑ´ë?? 
+    private class JumpDashState : PlayerState  //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ßµï¿½ 
     {
         public JumpDashState(PlayerController player) : base(player) { }
 
@@ -467,8 +467,8 @@ public class PlayerController : MonoBehaviour
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("JumpDash") &&
                 animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
-                rigidbody.gravityScale = 1; //»óÈ² ÀÌµ¿½Ã¿¡ ´Ù½Ã ½ºÄÉÀÏ1·Î º¯È¯ÇØÁÖ±â Áß¿ä!
-                rigidbody.velocity = Vector2.zero; //ÀÌ°Ô ¾øÀ¸¸é ³¯¾Æ°¡¹ö¸®Áö¸¸ Æú¸µ »óÅÂ·Î ÁøÀÔ ÇÏ±â°¡ Èûµå³×
+                rigidbody.gravityScale = 1; //ï¿½ï¿½È² ï¿½Ìµï¿½ï¿½Ã¿ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½1ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½Ö±ï¿½ ï¿½ß¿ï¿½!
+                rigidbody.velocity = Vector2.zero; //ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï±â°¡ ï¿½ï¿½ï¿½ï¿½ï¿½
 
                 if (!onGround)
                 {
@@ -476,7 +476,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    ChangeState(State.Idle); //Á¡ÇÁ´ë½Ã´Â Fall »óÅÂ·Î ÀüÈ¯ÇØÁÖÀÚ 
+                    ChangeState(State.Idle); 
                 }
             }
 
@@ -492,16 +492,16 @@ public class PlayerController : MonoBehaviour
             animator.Play("Jump");
         }
 
-        //¶³¾îÁö´Â »óÈ²¿¡¼­µµ µüÈ÷ ´Ù¸¥ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ¾øÀ¸¹Ç·Î (Á¡ÇÁ¾Ö´Ï¸ÞÀÌ¼Ç ÀÌ¹Ç·Î)
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Ì¹Ç·ï¿½)
 
         public override void Update()
         {
-            if (renderer.flipX == true) //¿ÞÂÊ º¸°í ÀÖÀ¸¸é 
+            if (renderer.flipX == true) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
                 spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
             }
-            else //¿À¸¥ÂÊ º¸°í ÀÖÀ¸¸é 
+            else //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
@@ -512,31 +512,31 @@ public class PlayerController : MonoBehaviour
             }
 
             axisH = Input.GetAxisRaw("Horizontal");
-            axisV = Input.GetAxisRaw("Vertical"); //Á¡ÇÁ°¡ ¾Æ´Ï¶ó À§ ¾Æ·¡ º¸´Â ´À³¦À¸·Î?
+            axisV = Input.GetAxisRaw("Vertical"); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¶ï¿½ ï¿½ï¿½ ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //¿ÞÂÊ ÀÌµ¿
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = true;  //¿ÞÂÊÀ¸·Î ¸ð½À ¹Ù²ãÁÖ±â
+                renderer.flipX = true;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ö±ï¿½
 
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //¿À¸¥ÂÊ ÀÌµ¿ Ç×»ó ÀÏÁ¤ÇÑ ¼Óµµ 
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½×»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ 
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = false;  //¿À¸¥ÂÊÀ¸·Î (¿À¸¥ÂÊÀÌ µðÆúÆ®)
+                renderer.flipX = false;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®)
 
             }
-            //°¨¼Ó»óÅÂ --> ÀÏÁ¤¼Óµµ À¯Áö ¹× Á¤Áö½Ã ¹Ù·Î ¸ØÃßµµ·Ï 
-            if (axisH == 0 && rigidbody.velocity.x > 0.1f) //¿À¸¥ÂÊÀ¸·Î ÀÌµ¿ÁßÀÎ »óÅÂ¿¡¼­ ¸ØÃß¸é 
+            //ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ --> ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ 
+            if (axisH == 0 && rigidbody.velocity.x > 0.1f) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¸ï¿½ 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
-            else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //¿ÞÂÊ ÀÌµ¿ Áß Á¤Áö 
+            else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
 
             }
-            // ¶³¾îÁö´Â µ¿¾ÈÀº ÁÂ¿ì ÀÌµ¿¸¸ °¡´É 
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â¿ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
 
         }
         public override void Transition()
@@ -557,18 +557,18 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private class DownState : PlayerState //¼÷ÀÎ »óÅÂ¿¡¼­´Â ¿òÁ÷ÀÓ ºÒ°¡ but ÁÂ¿ì ÀüÈ¯Àº°¡´É 
+    private class DownState : PlayerState //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ but ï¿½Â¿ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
     {
         public DownState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
-            Debug.Log("´Ù¿î»óÅÂÁøÀÔ");
+            Debug.Log("ï¿½Ù¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             player.gameObject.GetComponent<BoxCollider2D>().enabled = true;
             player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
             rigidbody.velocity = Vector2.zero;
 
-            // Idle Exit¿¡¼­ Down ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ýÇßÀ½ 
+            // Idle Exitï¿½ï¿½ï¿½ï¿½ Down ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
         }
         public override void Update()
         {
@@ -577,12 +577,12 @@ public class PlayerController : MonoBehaviour
             {
                 animator.Play("DownIdle");
             }
-            if (renderer.flipX == true) //¿ÞÂÊ º¸°í ÀÖÀ¸¸é 
+            if (renderer.flipX == true) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
                 spawnPos.transform.localPosition = new Vector2(-1.6f, 0.7f);
             }
-            else //¿À¸¥ÂÊ º¸°í ÀÖÀ¸¸é 
+            else //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 spawnPos.transform.localPosition = new Vector2(1.3f, 0.7f);
@@ -627,23 +627,23 @@ public class PlayerController : MonoBehaviour
 
     private class IdleState : PlayerState
     {
-        //ÀÚ½ÄÀÌ ºÎ¸ð Å¬·¡½ºÀÇ »ý¼ºÀÚ¸¦ °­Á¦·Î È£Ãâ Base ÀÌ¿ë 
+        //ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½ Base ï¿½Ì¿ï¿½ 
         public IdleState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
-            Debug.Log("idle»óÅÂÁøÀÔ");
+            Debug.Log("idleï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             animator.Play("Idle");
         }
 
-        public override void Update() //°è¼Ó µ¹¾Æ°¡¸é¼­ Ã¼Å© ¾÷µ¥ÀÌÆ® + Æ®·£Áö¼Ç 
+        public override void Update() //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½é¼­ Ã¼Å© ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® + Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
         {
-            if (renderer.flipX == true) //¿ÞÂÊ º¸°í ÀÖÀ¸¸é 
+            if (renderer.flipX == true) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
                 spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
             }
-            else //¿À¸¥ÂÊ º¸°í ÀÖÀ¸¸é 
+            else //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
@@ -666,7 +666,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Transition()
         {
-            if (axisH != 0) //ÀÌµ¿ÀÌ ÀÖÀ¸¸é »óÅÂÀüÈ¯ 
+            if (axisH != 0) //ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¯ 
             {
                 ChangeState(State.Run);
             }
@@ -682,11 +682,11 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Down);
             }
 
-            if (Input.GetKeyDown(KeyCode.C)) //¾ÞÄ¿ »óÅÂ 
+            if (Input.GetKeyDown(KeyCode.C)) //ï¿½ï¿½Ä¿ ï¿½ï¿½ï¿½ï¿½ 
             {
                 ChangeState(State.Anchor);
             }
-            if (Input.GetKeyDown(KeyCode.LeftShift)) //·¹ÇÁÆ®½¬ÇÁÆ®·Î ´ë½Ã ±¸Çö 
+            if (Input.GetKeyDown(KeyCode.LeftShift)) //ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             {
                 ChangeState(State.Dash);
             }
@@ -697,7 +697,7 @@ public class PlayerController : MonoBehaviour
 
             if (axisV == 1.0f && axisH == 0.0f)
             {
-                animator.Play("AimUp"); //µµ´ëÃ¼ ¿Ö... ¾ÞÄ¿->idle -> upÀ¸·Î °¡¸é ¾Ö´Ï¸ÞÀÌ¼ÇÀüÈ¯ÀÌ¾ÈµÅ?
+                animator.Play("AimUp"); //ï¿½ï¿½ï¿½ï¿½Ã¼ ï¿½ï¿½... ï¿½ï¿½Ä¿->idle -> upï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½È¯ï¿½Ì¾Èµï¿½?
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
                 ChangeState(State.Up);
             }
@@ -710,24 +710,24 @@ public class PlayerController : MonoBehaviour
     {
         public AnchorState(PlayerController player) : base(player) { }
 
-        //¾ÞÄ¿»óÈ²ÀÌ µÇ¸é Á¶ÁØ ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³ª¿ÍÁà¾ßÇÔ 
+        //ï¿½ï¿½Ä¿ï¿½ï¿½È²ï¿½ï¿½ ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 
         public override void Enter()
         {
-            Debug.Log("¾ÞÄ¿»óÅÂ ÁøÀÔ");
+            Debug.Log("ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             rigidbody.velocity = Vector2.zero;
         }
-        //¾Ö´Ï¸ÞÀÌ¼Ç ÀÌ¸§À» °øÀ¯ÇÏÁö ¸»ÀÚ! °°Àº ¾Ö´Ï¸ÞÀÌ¼Çµµ »õ·Ó°Ô ÀÌ¸§ Á¤ÇØÁÖÀÚ. 
+        //ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½! ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼Çµï¿½ ï¿½ï¿½ï¿½Ó°ï¿½ ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. 
 
         public override void Update()
         {
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical");
-            //ÀÔ·ÂÀ» ÅëÇØ ¾Ö´Ï¸ÞÀÌ¼Ç ÀüÈ¯ ÇÊ¿ä 
+            //ï¿½Ô·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½È¯ ï¿½Ê¿ï¿½ 
 
-            if (axisH == -1.0f && axisV == 0.0f) //¿ÞÂÊ ´©¸£¸é ¿ÞÂÊÀ¸·Î ¾Ö´Ï¸ÞÀÌ¼Ç ÀüÈ¯ 
+            if (axisH == -1.0f && axisV == 0.0f) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½È¯ 
             {
-                renderer.flipX = true; //¹æÇâ ÀüÈ¯ 
+                renderer.flipX = true; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ 
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -180);
                 spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
 
@@ -741,10 +741,10 @@ public class PlayerController : MonoBehaviour
                 animator.Play("AimStraight");
 
             }
-            else if (axisH == 0.0f && axisV == 0.0f) //¾Æ¹«°Íµµ ¾È´©¸¦ ¶§ ±× flip»óÅÂ·Î ±âº» »óÅÂ·Î ¸®ÅÏ
+            else if (axisH == 0.0f && axisV == 0.0f) //ï¿½Æ¹ï¿½ï¿½Íµï¿½ ï¿½È´ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ flipï¿½ï¿½ï¿½Â·ï¿½ ï¿½âº» ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½
             {
 
-                if (renderer.flipX == true)  //¿ÞÂÊ º¸°í ÀÖ´Â »óÅÂ¸é 
+                if (renderer.flipX == true)  //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ 
                 {
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -180);
                     spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
@@ -771,7 +771,7 @@ public class PlayerController : MonoBehaviour
 
                 }
             }
-            else if (axisH == 1.0f && axisV == 0.0f) //¿À¸¥ÂÊ 
+            else if (axisH == 1.0f && axisV == 0.0f) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 renderer.flipX = false;
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
@@ -785,7 +785,7 @@ public class PlayerController : MonoBehaviour
 
                 animator.Play("AimStraight");
             }
-            else if (axisH == 0.0f && axisV == 1.0f) //À§ÂÊ 
+            else if (axisH == 0.0f && axisV == 1.0f) //ï¿½ï¿½ï¿½ï¿½ 
             {
                 if (renderer.flipX == true)
                 {
@@ -821,7 +821,7 @@ public class PlayerController : MonoBehaviour
                 animator.Play("AimDown");
 
             }
-            else if (axisH == 1.0f && axisV == 1.0f) //up diagonal ¿À¸¥ÂÊ ´ë°¢¼± À§ 
+            else if (axisH == 1.0f && axisV == 1.0f) //up diagonal ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ë°¢ï¿½ï¿½ ï¿½ï¿½ 
             {
                 renderer.flipX = false;
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
@@ -837,7 +837,7 @@ public class PlayerController : MonoBehaviour
 
             }
 
-            else if (axisH == -1.0f && axisV == 1.0f) //¿ÞÂÊ ´ë°¢¼± À§
+            else if (axisH == -1.0f && axisV == 1.0f) //ï¿½ï¿½ï¿½ï¿½ ï¿½ë°¢ï¿½ï¿½ ï¿½ï¿½
             {
 
                 renderer.flipX = true;
@@ -853,7 +853,7 @@ public class PlayerController : MonoBehaviour
                 animator.Play("AimDiagonalUp");
 
             }
-            else if (axisH == 1.0f && axisV == -1.0f)  //´ë°¢¼± ¾Æ·¡ ¿À¸¥ÂÊ 
+            else if (axisH == 1.0f && axisV == -1.0f)  //ï¿½ë°¢ï¿½ï¿½ ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 renderer.flipX = false;
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
@@ -866,7 +866,7 @@ public class PlayerController : MonoBehaviour
                 }
                 animator.Play("AimDiagonalDown");
             }
-            else if (axisH == -1.0f && axisV == -1.0f) //´ë°¢¼± ¾Æ·¡ ¿ÞÂÊ 
+            else if (axisH == -1.0f && axisV == -1.0f) //ï¿½ë°¢ï¿½ï¿½ ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             {
                 renderer.flipX = true;
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 225);
@@ -884,7 +884,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Transition()
         {
-            // c Å°¸¦ ´©¸£°í ÀÖÁö ¾ÊÀ¸¸é idle·Î Å»Ãâ 
+            // c Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ idleï¿½ï¿½ Å»ï¿½ï¿½ 
 
             if (Input.GetKeyUp(KeyCode.C))
             {
@@ -901,7 +901,7 @@ public class PlayerController : MonoBehaviour
 
         }
     }
-    private class JumpState : PlayerState  //Á¡ÇÁ »óÅÂ... 8¹æÇâ ½î±â... ±¸Çö... ÇØ¾ßÇÔ... 
+    private class JumpState : PlayerState  //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½... 8ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½... ï¿½ï¿½ï¿½ï¿½... ï¿½Ø¾ï¿½ï¿½ï¿½... 
     {
         public bool isLongJump = false;
 
@@ -914,7 +914,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Update()
         {
-            if (renderer.flipX == true) //¿ÞÂÊ 
+            if (renderer.flipX == true) //ï¿½ï¿½ï¿½ï¿½ 
             {
                 if (axisV == 0)
                 {
@@ -943,7 +943,7 @@ public class PlayerController : MonoBehaviour
                     spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
                 }
             }
-            else //¿À¸¥ÂÊ 
+            else //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
             {
                 if (axisV == 0)
                 {
@@ -960,13 +960,13 @@ public class PlayerController : MonoBehaviour
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
                     spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
                 }
-                else if (axisH == 1.0f && axisV == 1.0f) //´ë°¢¼± »ó´Ü ¿À¸¥ÂÊ 
+                else if (axisH == 1.0f && axisV == 1.0f) //ï¿½ë°¢ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
                 {
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
                     spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
 
                 }
-                else if (axisH == 1.0f && axisV == -1.0f)  //´ë°¢¼± ÇÏ´Ü ¿À¸¥ÂÊ 
+                else if (axisH == 1.0f && axisV == -1.0f)  //ï¿½ë°¢ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
                 {
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
                     spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
@@ -976,7 +976,7 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
             {
-                player.StartCoroutine(player.ShootCoroutine());  //Á¡ÇÁ Áß¿¡ ½´ÆÃÀº ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ µû·Î¾øÀ½ 
+                player.StartCoroutine(player.ShootCoroutine());  //ï¿½ï¿½ï¿½ï¿½ ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Î¾ï¿½ï¿½ï¿½ 
             }
 
             if (Input.GetKey(KeyCode.Z))
@@ -989,24 +989,24 @@ public class PlayerController : MonoBehaviour
             }
 
             axisH = Input.GetAxisRaw("Horizontal");
-            axisV = Input.GetAxisRaw("Vertical"); //Á¡ÇÁ°¡ ¾Æ´Ï¶ó À§ ¾Æ·¡ º¸´Â ´À³¦À¸·Î?
+            axisV = Input.GetAxisRaw("Vertical"); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¶ï¿½ ï¿½ï¿½ ï¿½Æ·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?
 
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //¿ÞÂÊ ÀÌµ¿
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = true;  //¿ÞÂÊÀ¸·Î ¸ð½À ¹Ù²ãÁÖ±â
+                renderer.flipX = true;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ö±ï¿½
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //¿À¸¥ÂÊ ÀÌµ¿ Ç×»ó ÀÏÁ¤ÇÑ ¼Óµµ 
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½×»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ 
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = false;  //¿À¸¥ÂÊÀ¸·Î (¿À¸¥ÂÊÀÌ µðÆúÆ®)
+                renderer.flipX = false;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®)
             }
-            //°¨¼Ó»óÅÂ --> ÀÏÁ¤¼Óµµ À¯Áö ¹× Á¤Áö½Ã ¹Ù·Î ¸ØÃßµµ·Ï 
-            if (axisH == 0 && rigidbody.velocity.x > 0.1f) //¿À¸¥ÂÊÀ¸·Î ÀÌµ¿ÁßÀÎ »óÅÂ¿¡¼­ ¸ØÃß¸é 
+            //ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ --> ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ 
+            if (axisH == 0 && rigidbody.velocity.x > 0.1f) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¸ï¿½ 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
-            else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //¿ÞÂÊ ÀÌµ¿ Áß Á¤Áö 
+            else if (axisH == 0 && rigidbody.velocity.x < -0.1f) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
 
@@ -1028,7 +1028,7 @@ public class PlayerController : MonoBehaviour
         {
             if (onGround && groundCount == 1)
             {
-                Debug.Log("Á¡ÇÁ ³¡");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½");
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 1.16f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.56f, 2.26f);
                 rigidbody.gravityScale = 1;
@@ -1038,7 +1038,7 @@ public class PlayerController : MonoBehaviour
                 player.isParried = false;
                 ChangeState(State.Idle);
             }
-            else if (player.isJumping == true && Input.GetKeyDown(KeyCode.LeftShift)) //·¹ÇÁÆ®½¬ÇÁÆ®·Î ´ë½Ã ±¸Çö 
+            else if (player.isJumping == true && Input.GetKeyDown(KeyCode.LeftShift)) //ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             {
                 ChangeState(State.JumpDash);
             }
@@ -1057,10 +1057,10 @@ public class PlayerController : MonoBehaviour
                 animator.Play("Jump");
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.81f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.3f, 1.56f);
-                Debug.Log("Á¡ÇÁ");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½");
                 rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
                 groundCount = 0;
-                player.isJumping = true; //isjumpingÀº ³ªÁß¿¡ parry»óÈ² Ã¼Å©ÇÒ ¶§ »ç¿ëÇÏÀÚ. 
+                player.isJumping = true; //isjumpingï¿½ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ parryï¿½ï¿½È² Ã¼Å©ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. 
             }
 
 
@@ -1080,15 +1080,15 @@ public class PlayerController : MonoBehaviour
         public override void Update()
         {
             axisH = Input.GetAxisRaw("Horizontal");
-            axisV = Input.GetAxisRaw("Vertical"); //´ë°¢¼± À§·Î ´Þ¸®´Â°Å ±¸ÇöÇØÁà¾ßÇÔ 
+            axisV = Input.GetAxisRaw("Vertical"); //ï¿½ë°¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¸ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 
 
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //¿ÞÂÊ ÀÌµ¿
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
                 //animator.Play("Run");
-                renderer.flipX = true;  //¿ÞÂÊÀ¸·Î ¸ð½À ¹Ù²ãÁÖ±â
+                renderer.flipX = true;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ö±ï¿½
 
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
                 spawnPos.transform.localPosition = new Vector2(-2.0f, 1.2f);
@@ -1106,12 +1106,12 @@ public class PlayerController : MonoBehaviour
 
                 }
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //¿À¸¥ÂÊ ÀÌµ¿ Ç×»ó ÀÏÁ¤ÇÑ ¼Óµµ 
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½×»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ 
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
                 //animator.Play("Run");
-                renderer.flipX = false;  //¿À¸¥ÂÊÀ¸·Î (¿À¸¥ÂÊÀÌ µðÆúÆ®)
+                renderer.flipX = false;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®)
 
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 spawnPos.transform.localPosition = new Vector2(1.3f, 1.2f);
@@ -1129,12 +1129,12 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            //°¨¼Ó»óÅÂ --> ÀÏÁ¤¼Óµµ À¯Áö ¹× Á¤Áö½Ã ¹Ù·Î ¸ØÃßµµ·Ï 
-            if (axisH == 0 && rigidbody.velocity.x > 0.02f) //¿À¸¥ÂÊÀ¸·Î ÀÌµ¿ÁßÀÎ »óÅÂ¿¡¼­ ¸ØÃß¸é 
+            //ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ï¿½ --> ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù·ï¿½ ï¿½ï¿½ï¿½ßµï¿½ï¿½ï¿½ 
+            if (axisH == 0 && rigidbody.velocity.x > 0.02f) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¸ï¿½ 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
-            else if (axisH == 0 && rigidbody.velocity.x < -0.02f) //¿ÞÂÊ ÀÌµ¿ Áß Á¤Áö 
+            else if (axisH == 0 && rigidbody.velocity.x < -0.02f) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
@@ -1145,9 +1145,9 @@ public class PlayerController : MonoBehaviour
             animator.Play("Down");
         }
 
-        public override void Transition() //Æ®·£Áö¼Ç¿¡¼­ ´Þ¸®¸é¼­ ½î±â ´Þ¸®¸é¼­ Á¡ÇÁ µîµî ÀüÈ¯±¸Çö 
+        public override void Transition() //Æ®ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½Þ¸ï¿½ï¿½é¼­ ï¿½ï¿½ï¿½ ï¿½Þ¸ï¿½ï¿½é¼­ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ 
         {
-            if (axisH == 0 && axisV == 0) //¼Óµµ°¡ 0 ÀÏ ¶§ (¿òÁ÷ÀÓÀÌ ¾øÀ» ¶§ idle·Î Ã¼ÀÎÁö ÇØÁÖ±â )
+            if (axisH == 0 && axisV == 0) //ï¿½Óµï¿½ï¿½ï¿½ 0 ï¿½ï¿½ ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ idleï¿½ï¿½ Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ö±ï¿½ )
             {
                 ChangeState(State.Idle);
             }
@@ -1158,13 +1158,13 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Jump);
             }
 
-            if (Input.GetKeyDown(KeyCode.C)) //¾ÞÄ¿ »óÅÂ 
+            if (Input.GetKeyDown(KeyCode.C)) //ï¿½ï¿½Ä¿ ï¿½ï¿½ï¿½ï¿½ 
             {
                 ChangeState(State.Anchor);
             }
-            //´Þ¸®´ÂÁß ´Ù¿î »óÅÂ ±¸Çö ÇÏÁö ¸»ÀÚ ¸ØÃß°í ÇÏÀÚ..
+            //ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß°ï¿½ ï¿½ï¿½ï¿½ï¿½..
 
-            if (Input.GetKeyDown(KeyCode.LeftShift)) //·¹ÇÁÆ®½¬ÇÁÆ®·Î ´ë½Ã ±¸Çö 
+            if (Input.GetKeyDown(KeyCode.LeftShift)) //ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             {
                 ChangeState(State.Dash);
             }
@@ -1179,7 +1179,7 @@ public class PlayerController : MonoBehaviour
 
             }
 
-            //·± + ´ë°¢¼± °ø°Ý »óÅÂ --> °ø°Ý»óÅÂ°¡ ¾Æ´Ï¸é ±×³É ¾÷ Å° ´­·¯µµ ·± »óÅÂ°¡ À¯ÁöµÇµµ·Ï 
+            //ï¿½ï¿½ + ï¿½ë°¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ --> ï¿½ï¿½ï¿½Ý»ï¿½ï¿½Â°ï¿½ ï¿½Æ´Ï¸ï¿½ ï¿½×³ï¿½ ï¿½ï¿½ Å° ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½ 
             if ((axisH != 0 && axisV == 1.0f) && (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X)))
             {
                 ChangeState(State.AttackRun);
@@ -1195,48 +1195,48 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private class AttackRunState : PlayerState //·± + ´ë°¢ »ó´Ü + ½´ÆÃ 3°¡Áö »óÅÂ°¡ ¸ð¿©¾ß ¾Ö´Ï¸ÞÀÌ¼Ç + ºÒ·¿½ºÆù À§Ä¡ ÀÌµ¿ 
+    private class AttackRunState : PlayerState //ï¿½ï¿½ + ï¿½ë°¢ ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½ ï¿½ð¿©¾ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ + ï¿½Ò·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½Ìµï¿½ 
     {
         public AttackRunState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
-            Debug.Log("¾îÅÃ·±ÁøÀÔ");
-            animator.Play("RunShootDiagUp"); //¾Ö´Ï¸ÞÀÌ¼Ç ·çÇÁ ÇØµÎ°í 
+            Debug.Log("ï¿½ï¿½ï¿½Ã·ï¿½ï¿½ï¿½ï¿½ï¿½");
+            animator.Play("RunShootDiagUp"); //ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ØµÎ°ï¿½ 
         }
 
         public override void Update()
         {
             axisH = Input.GetAxisRaw("Horizontal");
-            axisV = Input.GetAxisRaw("Vertical"); //´ë°¢¼± À§·Î ´Þ¸®´Â°Å ±¸ÇöÇØÁà¾ßÇÔ 
+            axisV = Input.GetAxisRaw("Vertical"); //ï¿½ë°¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¸ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
 
-            // ÃÑ ½î±â + ºÒ·¿ ½ºÆ÷³Ê À§Ä¡ º¯°æ + ¾Ö´Ï¸ÞÀÌ¼Ç Àç»ý -->¾Ö´Ï´Â ÀÌ¹Ì loop·Î Àç»ýÁßÀÌ´Ï±î 
-            // ¾Ö´Ï ¸»°í ÃÑ ½î±â ÀÛ¾÷ + ±×¿¡ ¸Â´ÂºÒ·¿ ÀÛ¾÷¸¸ ÇÏÀÚ.
+            // ï¿½ï¿½ ï¿½ï¿½ï¿½ + ï¿½Ò·ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½ + ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ -->ï¿½Ö´Ï´ï¿½ ï¿½Ì¹ï¿½ loopï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì´Ï±ï¿½ 
+            // ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Û¾ï¿½ + ï¿½×¿ï¿½ ï¿½Â´ÂºÒ·ï¿½ ï¿½Û¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
             player.StartCoroutine(player.ShootCoroutine());
 
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //¿ÞÂÊ ÀÌµ¿
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = true;  //¿ÞÂÊÀ¸·Î ¸ð½À ¹Ù²ãÁÖ±â
+                renderer.flipX = true;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ö±ï¿½
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
                 spawnPos.transform.localPosition = new Vector2(-2.2f, 2.4f);
 
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //¿À¸¥ÂÊ ÀÌµ¿ Ç×»ó ÀÏÁ¤ÇÑ ¼Óµµ 
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½×»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Óµï¿½ 
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = false;  //¿À¸¥ÂÊÀ¸·Î (¿À¸¥ÂÊÀÌ µðÆúÆ®)
+                renderer.flipX = false;  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®)
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
                 spawnPos.transform.localPosition = new Vector2(1.6f, 2.4f);
 
             }
 
-            //°¨¼Ó ±¸Çö ÇÊ¼ö! ÀÌ°Å ¾ÈÇÏ¸é ¹Ì²ô·¯Áü ¤Ð¤Ð 
-            if (axisH == 0 && rigidbody.velocity.x > 0.02f) //¿À¸¥ÂÊÀ¸·Î ÀÌµ¿ÁßÀÎ »óÅÂ¿¡¼­ ¸ØÃß¸é 
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¼ï¿½! ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Ì²ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¤ï¿½ 
+            if (axisH == 0 && rigidbody.velocity.x > 0.02f) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¸ï¿½ 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
-            else if (axisH == 0 && rigidbody.velocity.x < -0.02f) //¿ÞÂÊ ÀÌµ¿ Áß Á¤Áö 
+            else if (axisH == 0 && rigidbody.velocity.x < -0.02f) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
@@ -1248,7 +1248,7 @@ public class PlayerController : MonoBehaviour
         }
         public override void Transition()
         {
-            if (axisH == 0) //ÀÏ´Ü yÃà °ªÀÌ +1ÀÌ ¾Æ´Ï¸é Å»ÃâÇØ¾ß ÇÏ´Ï±î ÇÏ³ª ¸¸µé°í
+            if (axisH == 0) //ï¿½Ï´ï¿½ yï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ +1ï¿½ï¿½ ï¿½Æ´Ï¸ï¿½ Å»ï¿½ï¿½ï¿½Ø¾ï¿½ ï¿½Ï´Ï±ï¿½ ï¿½Ï³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
             {
                 ChangeState(State.Idle);
             }
@@ -1293,7 +1293,7 @@ public class PlayerController : MonoBehaviour
 
     public IEnumerator ShootCoroutine()
     {
-        float coolTime = 0.12f; //ÀÌ°Å °è¼Ó ´©¸£°í ÀÖÀ¸¸é °è¼Ó ³ª°¡´Ï±î ±×°Å »ý°¢ÇØ¼­ ÄðÅ¸ÀÓ Á¤ÇØÁà¾ßÇÔ 
+        float coolTime = 0.12f; //ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½×°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 
         if (isShooting == false)
         {
             isShooting = true;

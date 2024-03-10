@@ -15,7 +15,7 @@ public class TutorialScene : BaseScene
 
     private void Update()
     {
-        
+        // 
     }
 
 
@@ -28,8 +28,6 @@ public class TutorialScene : BaseScene
         Manager.Pool.CreatePool(ExplosionPrefab, size, capacity);
         Manager.Pool.CreatePool(jumpEffectPrefab, jumpSize, jumpCapacity);
         yield return null;
-
-
 
 
     }
