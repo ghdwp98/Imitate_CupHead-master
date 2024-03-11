@@ -4,20 +4,53 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    [SerializeField] GameObject player;
-    Transform targetPos;
-    Vector3 cameraPos = new Vector3(0, 0, -10);
-    [SerializeField] float cameraSpeed = 5f;
+    [SerializeField]
+    Transform playerTransform;
+    [SerializeField]
+    Vector3 cameraPosition;
+
+    [SerializeField]
+    Vector2 center;
+    [SerializeField]
+    Vector2 mapSize;
+
+    [SerializeField]
+    float cameraMoveSpeed;
+    float height;
+    float width;
+
+
     void Start()
     {
-        targetPos = player.transform;
+        playerTransform = GameObject.Find("Player").GetComponent<Transform>();
+        height = Camera.main.orthographicSize;
+        width = height * Screen.width / Screen.height;
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, targetPos.position + cameraPos,
-                                  Time.deltaTime * cameraSpeed);
-
+        LimitCameraArea();
 
     }
+
+    void LimitCameraArea()
+    {
+        transform.position = Vector3.Lerp(transform.position,
+                                          playerTransform.position + cameraPosition,
+                                          Time.deltaTime * cameraMoveSpeed);
+        float lx = mapSize.x - width;
+        float clampX = Mathf.Clamp(transform.position.x, -lx + center.x, lx + center.x);
+
+        float ly = mapSize.y - height;
+        float clampY = Mathf.Clamp(transform.position.y, -ly + center.y, ly + center.y);
+
+        transform.position = new Vector3(clampX, clampY, -10f);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(center, mapSize * 2);
+    }
+
+
 }
