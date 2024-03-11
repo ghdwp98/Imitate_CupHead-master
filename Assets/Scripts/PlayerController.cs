@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
    
-
+    // 한글 확인 
     public enum State
     {
         Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float accelPower = 13.0f;
     [SerializeField] float decelPower = 20.0f;
     [SerializeField] float jumpSpeed = 11.0f;
-    [SerializeField] LayerMask groundCheckLayer; //���������� ���� ���� or �и� �������� �������� 
+    [SerializeField] LayerMask groundCheckLayer; 
     [SerializeField] Vector2 playerPos;
     [SerializeField] bool FootIsTrigger = false;
     [SerializeField] Vector2 bulletPos;
