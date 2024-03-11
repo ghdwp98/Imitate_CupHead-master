@@ -1,10 +1,9 @@
-
 using System.Collections;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-   
+
     // 한글 확인 
     public enum State
     {
@@ -42,7 +41,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float accelPower = 13.0f;
     [SerializeField] float decelPower = 20.0f;
     [SerializeField] float jumpSpeed = 11.0f;
-    [SerializeField] LayerMask groundCheckLayer; 
+    [SerializeField] LayerMask groundCheckLayer;
     [SerializeField] Vector2 playerPos;
     [SerializeField] bool FootIsTrigger = false;
     [SerializeField] Vector2 bulletPos;
@@ -53,7 +52,7 @@ public class PlayerController : MonoBehaviour
     private int groundCount;
     private bool isJumping;
     private bool isParried;
-
+    public bool downJump = false;
 
     private StateMachine stateMachine;
 
@@ -80,7 +79,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    
+
     private void Start()
     {
         nowAnime = "IdlePlayer";
@@ -98,6 +97,9 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         stateMachine.Update();
+
+
+
     }
 
 
@@ -116,7 +118,7 @@ public class PlayerController : MonoBehaviour
     {
         if (groundCheckLayer.Contain(collision.gameObject.layer))
         {
-            Debug.Log("����");
+
             groundCount = 1;
         }
 
@@ -129,14 +131,27 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.tag == "Player" && collision.tag == "Checking")
+        {
+            return;
+        }
         FootIsTrigger = true;
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
+        if (collision.tag == "Player" && collision.tag == "Checking")
+        {
+            return;
+        }
+
         FootIsTrigger = true;
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
+        if (collision.tag == "Player" && collision.tag == "Checking")
+        {
+            return;
+        }
         FootIsTrigger = false;
     }
 
@@ -258,22 +273,22 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
-            
+
             player.isParried = true;
             player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.81f);
             player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.3f, 1.56f);
             groundCount = 0;
-            player.isJumping = true; 
+            player.isJumping = true;
         }
 
         public override void Update()
         {
-            
+
             animator.Play("Parry");
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical");
 
-            if (renderer.flipX == true) 
+            if (renderer.flipX == true)
             {
                 if (axisV == 0)
                 {
@@ -319,13 +334,13 @@ public class PlayerController : MonoBehaviour
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
                     spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
                 }
-                else if (axisH == 1.0f && axisV == 1.0f) 
+                else if (axisH == 1.0f && axisV == 1.0f)
                 {
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
                     spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
 
                 }
-                else if (axisH == 1.0f && axisV == -1.0f)  
+                else if (axisH == 1.0f && axisV == -1.0f)
                 {
                     spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
                     spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
@@ -334,24 +349,24 @@ public class PlayerController : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
             {
-                player.StartCoroutine(player.ShootCoroutine());  
+                player.StartCoroutine(player.ShootCoroutine());
             }
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) 
+            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed)
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = true;  
+                renderer.flipX = true;
 
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) 
+            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed)
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
-                renderer.flipX = false;  
+                renderer.flipX = false;
 
             }
-            
-            if (axisH == 0 && rigidbody.velocity.x > 0.1f) 
+
+            if (axisH == 0 && rigidbody.velocity.x > 0.1f)
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
@@ -365,7 +380,7 @@ public class PlayerController : MonoBehaviour
         {
             if (onGround && groundCount == 1)
             {
-                
+
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 1.16f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.56f, 2.26f);
                 player.JumpEffectSpawn.JumpEffect();
@@ -438,7 +453,7 @@ public class PlayerController : MonoBehaviour
                     ChangeState(State.Idle);
                 }
 
-                
+
             }
         }
     }
@@ -450,7 +465,7 @@ public class PlayerController : MonoBehaviour
         public int jumpDashSpeed = 10;
         public override void Enter()
         {
-           
+
             if (renderer.flipX == false)
             {
                 animator.Play("JumpDash");
@@ -493,7 +508,7 @@ public class PlayerController : MonoBehaviour
                 }
                 else
                 {
-                    ChangeState(State.Idle); 
+                    ChangeState(State.Idle);
                 }
             }
 
@@ -574,18 +589,18 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private class DownState : PlayerState //���� ���¿����� ������ �Ұ� but �¿� ��ȯ������ 
+    private class DownState : PlayerState
     {
         public DownState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
-            Debug.Log("�ٿ��������");
+
             player.gameObject.GetComponent<BoxCollider2D>().enabled = true;
             player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
             rigidbody.velocity = Vector2.zero;
 
-            // Idle Exit���� Down �ִϸ��̼� ������� 
+
         }
         public override void Update()
         {
@@ -638,29 +653,37 @@ public class PlayerController : MonoBehaviour
                 player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
                 ChangeState(State.Idle);
             }
+
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                player.ChangeLayer();
+            }
+
+
+
         }
 
     }
 
     private class IdleState : PlayerState
     {
-        
+
         public IdleState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
-            
+
             animator.Play("Idle");
         }
 
-        public override void Update() 
+        public override void Update()
         {
-            if (renderer.flipX == true) 
+            if (renderer.flipX == true)
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
                 spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
             }
-            else 
+            else
             {
                 spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
                 spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
@@ -683,7 +706,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Transition()
         {
-            if (axisH != 0) 
+            if (axisH != 0)
             {
                 ChangeState(State.Run);
             }
@@ -699,11 +722,11 @@ public class PlayerController : MonoBehaviour
                 ChangeState(State.Down);
             }
 
-            if (Input.GetKeyDown(KeyCode.C)) 
+            if (Input.GetKeyDown(KeyCode.C))
             {
                 ChangeState(State.Anchor);
             }
-            if (Input.GetKeyDown(KeyCode.LeftShift)) 
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 ChangeState(State.Dash);
             }
@@ -714,7 +737,7 @@ public class PlayerController : MonoBehaviour
 
             if (axisV == 1.0f && axisH == 0.0f)
             {
-                animator.Play("AimUp"); 
+                animator.Play("AimUp");
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
                 ChangeState(State.Up);
             }
@@ -727,13 +750,13 @@ public class PlayerController : MonoBehaviour
     {
         public AnchorState(PlayerController player) : base(player) { }
 
-        
+
         public override void Enter()
         {
-            
+
             rigidbody.velocity = Vector2.zero;
         }
-       
+
 
         public override void Update()
         {
@@ -917,7 +940,7 @@ public class PlayerController : MonoBehaviour
 
         }
     }
-    private class JumpState : PlayerState  
+    private class JumpState : PlayerState
     {
         public bool isLongJump = false;
 
@@ -1044,7 +1067,7 @@ public class PlayerController : MonoBehaviour
         {
             if (onGround && groundCount == 1)
             {
-                
+
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 1.16f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.56f, 2.26f);
                 rigidbody.gravityScale = 1;
@@ -1073,10 +1096,10 @@ public class PlayerController : MonoBehaviour
                 animator.Play("Jump");
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.81f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.3f, 1.56f);
-                
+
                 rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
                 groundCount = 0;
-                player.isJumping = true; 
+                player.isJumping = true;
             }
 
 
@@ -1317,6 +1340,38 @@ public class PlayerController : MonoBehaviour
             yield return new WaitForSeconds(coolTime);
             isShooting = false;
         }
+
+    }
+
+    public void ChangeLayer()
+    {
+        StartCoroutine(ReturnLayer());
+    }
+
+
+    IEnumerator ReturnLayer()
+    {
+        if (downJump == false)
+
+        {
+            downJump = true;
+            Debug.Log("코루틴");
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
+                        LayerMask.NameToLayer("FlatForm"), true);
+            yield return new WaitForSeconds(2f);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
+                        LayerMask.NameToLayer("FlatForm"), false);
+            downJump = false;
+            downJump = true;
+            Debug.Log("코루틴");
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
+                        LayerMask.NameToLayer("FlatForm"), true);
+            yield return new WaitForSeconds(2f);
+            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
+                        LayerMask.NameToLayer("FlatForm"), false);
+            downJump = false;
+        }
+
 
     }
 

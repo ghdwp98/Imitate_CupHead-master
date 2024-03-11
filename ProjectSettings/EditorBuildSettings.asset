@@ -10,7 +10,7 @@ EditorBuildSettings:
     guid: bc1e584d877524f45a7628cbf1eb12a4
   - enabled: 1
     path: Assets/Scenes/TutorialScene.unity
-    guid: d5e0b2f38bac05b449ac63faca67efd7
+    guid: 4342f132f0f8288499c989d4004ef337
   - enabled: 1
     path: Assets/Scenes/ElderScene.unity
     guid: 70c76c66764a6fd4ab10e1e378741770
