@@ -105,11 +105,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //�÷��̾ ������ٵ� ���� �Ƚ��������Ʈ�� �ʿ��� ��찡 ����
+        
         stateMachine.FixedUpdate();
         onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
-
-
+        
+        
 
 
     }
@@ -118,11 +118,17 @@ public class PlayerController : MonoBehaviour
     {
         if (groundCheckLayer.Contain(collision.gameObject.layer))
         {
-
+            
             groundCount = 1;
         }
 
     }
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        
+    }
+
 
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -517,14 +523,16 @@ public class PlayerController : MonoBehaviour
 
     private class FallState : PlayerState
     {
+
+        //idle 상태전환 조건에 velocity.y 조건 달았음. 문제생기면 확인해볼것 
         public FallState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
+            Debug.Log("Fall진입");
             animator.Play("Jump");
         }
 
-        //�������� ��Ȳ������ ���� �ٸ� �ִϸ��̼��� �����Ƿ� (�����ִϸ��̼� �̹Ƿ�)
 
         public override void Update()
         {
@@ -573,7 +581,7 @@ public class PlayerController : MonoBehaviour
         }
         public override void Transition()
         {
-            if (onGround)
+            if (onGround&&rigidbody.velocity.y>-0.5)
             {
                 player.JumpEffectSpawn.JumpEffect();
                 ChangeState(State.Idle);
@@ -647,19 +655,20 @@ public class PlayerController : MonoBehaviour
 
         public override void Transition()
         {
-            if (axisV >= 0.0f)
+
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                player.ChangeLayer();
+                onGround = false;
+                ChangeState(State.Fall);
+            }
+
+            if (axisV >= 0.0f&&onGround)
             {
                 player.gameObject.GetComponent<BoxCollider2D>().enabled = false;
                 player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
                 ChangeState(State.Idle);
             }
-
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                player.ChangeLayer();
-            }
-
-
 
         }
 
@@ -672,7 +681,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
-
+            Debug.Log("idle진입");
             animator.Play("Idle");
         }
 
@@ -1346,6 +1355,7 @@ public class PlayerController : MonoBehaviour
     public void ChangeLayer()
     {
         StartCoroutine(ReturnLayer());
+
     }
 
 
@@ -1355,21 +1365,18 @@ public class PlayerController : MonoBehaviour
 
         {
             downJump = true;
-            Debug.Log("코루틴");
+            Debug.Log("플랫무시 ");
+
+            
+            //platformEffector2D.useColliderMask = false;
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
-                        LayerMask.NameToLayer("FlatForm"), true);
+                        LayerMask.NameToLayer("Flat"), true);
             yield return new WaitForSeconds(2f);
+            //platformEffector2D.useColliderMask = true;
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
-                        LayerMask.NameToLayer("FlatForm"), false);
+                        LayerMask.NameToLayer("Flat"), false);
             downJump = false;
-            downJump = true;
-            Debug.Log("코루틴");
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
-                        LayerMask.NameToLayer("FlatForm"), true);
-            yield return new WaitForSeconds(2f);
-            Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
-                        LayerMask.NameToLayer("FlatForm"), false);
-            downJump = false;
+            
         }
 
 
