@@ -22,6 +22,16 @@ public class Pyramid : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Bullet")
+        {
+            Collider2D collider = GetComponent<BoxCollider2D>();
+            collider.enabled = false;
+
+        }
+    }
+
     private void Update()
     {
         

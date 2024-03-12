@@ -11,6 +11,7 @@ TagManager:
   - Exit
   - Npc
   - Monster
+  - Parry
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Npc
   - Flat
   - Monster
-  - 
+  - Parry
   - 
   - 
   - 
@@ -62,4 +63,7 @@ TagManager:
     locked: 0
   - name: Monster
     uniqueID: 1731650097
+    locked: 0
+  - name: UI
+    uniqueID: 2199690003
     locked: 0

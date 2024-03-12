@@ -21,6 +21,7 @@ public class PlayerController : LivingEntity
     [SerializeField] float axisV;
     [SerializeField] bool parry;
     [SerializeField] bool isShooting = false;
+    [SerializeField] float parryRange = 1f;
 
     [Header("Component")]
     [SerializeField] new Rigidbody2D rigidbody;
@@ -33,6 +34,7 @@ public class PlayerController : LivingEntity
     [SerializeField] ParryCheck parryCheck;
     [SerializeField] DashEffectSpawn DashEffectSpawn;
     [SerializeField] Transform dashSpawn;
+    [SerializeField] LayerMask parryMask;
 
     PooledObject bulletPrefab;
     PooledObject bulletSparkle;
@@ -107,11 +109,11 @@ public class PlayerController : LivingEntity
 
     private void FixedUpdate()
     {
-        
+
         stateMachine.FixedUpdate();
         onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
-        
-        
+
+
 
 
     }
@@ -120,15 +122,19 @@ public class PlayerController : LivingEntity
     {
         if (groundCheckLayer.Contain(collision.gameObject.layer))
         {
-            
+
             groundCount = 1;
         }
+
+
+
+
 
     }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
-        
+
     }
 
 
@@ -139,15 +145,22 @@ public class PlayerController : LivingEntity
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player" && collision.tag == "Checking")
+        if (collision.tag == "Player" || collision.tag == "Checking"
+            || collision.tag == "Parry")
+
         {
             return;
         }
+
         FootIsTrigger = true;
+
+
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.tag == "Player" && collision.tag == "Checking")
+        if (collision.tag == "Player" || collision.tag == "Checking"
+            || collision.tag == "Parry")
+
         {
             return;
         }
@@ -156,11 +169,17 @@ public class PlayerController : LivingEntity
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.tag == "Player" && collision.tag == "Checking")
+        if (collision.tag == "Player" || collision.tag == "Checking"
+            || collision.tag == "Parry")
+
         {
             return;
         }
         FootIsTrigger = false;
+
+
+
+
     }
 
     private class PlayerState : BaseState //���̽�������Ʈ ����ؼ� ���밡 �� Ŭ���� 
@@ -205,7 +224,7 @@ public class PlayerController : LivingEntity
 
         public override void Enter()
         {
-            Debug.Log("up��������");
+
             animator.Play("AimUp");
         }
         public override void Update()
@@ -291,11 +310,9 @@ public class PlayerController : LivingEntity
 
         public override void Update()
         {
-
             animator.Play("Parry");
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical");
-
             if (renderer.flipX == true)
             {
                 if (axisV == 0)
@@ -383,6 +400,24 @@ public class PlayerController : LivingEntity
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
             }
         }
+
+        public override void FixedUpdate()
+        {
+            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position + new Vector3(0, 1, 0),
+                player.parryRange, player.parryMask);
+
+            foreach (Collider2D collider in colliders)
+            {
+                IParry iparry = collider.GetComponent<IParry>();
+                iparry?.Parried();
+                Debug.Log("포리치");
+            }
+
+
+
+        }
+
+
 
         public override void Transition()
         {
@@ -583,7 +618,7 @@ public class PlayerController : LivingEntity
         }
         public override void Transition()
         {
-            if (onGround&&rigidbody.velocity.y>-0.5)
+            if (onGround && rigidbody.velocity.y > -0.5)
             {
                 player.JumpEffectSpawn.JumpEffect();
                 ChangeState(State.Idle);
@@ -665,7 +700,7 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Fall);
             }
 
-            if (axisV >= 0.0f&&onGround)
+            if (axisV >= 0.0f && onGround)
             {
                 player.gameObject.GetComponent<BoxCollider2D>().enabled = false;
                 player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
@@ -683,7 +718,7 @@ public class PlayerController : LivingEntity
 
         public override void Enter()
         {
-            
+
             animator.Play("Idle");
         }
 
@@ -1105,8 +1140,8 @@ public class PlayerController : LivingEntity
             //if (player.isJumping == false)
             {
                 animator.Play("Jump");
-                player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 0.81f);
-                player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.3f, 1.56f);
+                player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(-0.02f, 0.87f);
+                player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.1f, 1.43f);
 
                 rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
                 groundCount = 0;
@@ -1251,7 +1286,7 @@ public class PlayerController : LivingEntity
 
         public override void Enter()
         {
-            Debug.Log("���÷�����");
+
             animator.Play("RunShootDiagUp"); //�ִϸ��̼� ���� �صΰ� 
         }
 
@@ -1367,15 +1402,15 @@ public class PlayerController : LivingEntity
 
         {
             downJump = true;
-            Debug.Log("플랫무시 ");
+
 
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
                         LayerMask.NameToLayer("Flat"), true);
-            yield return new WaitForSeconds(2f);      
+            yield return new WaitForSeconds(2f);
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
                         LayerMask.NameToLayer("Flat"), false);
             downJump = false;
-            
+
         }
 
 
@@ -1385,16 +1420,20 @@ public class PlayerController : LivingEntity
     public override void OnDamage(float damage)
     {
         //어차피 모든 몬스터는 무조건 데미지를 1을 줄거니까 
-        
-        if(!dead)
+
+        if (!dead)
         {
             //피격 효과음 재생 
             base.OnDamage(damage); // if문 내부의 사망 처리 실행 가능
-            
+
         }
         hp -= (int)damage; //자신의 hp에서 감소시키기. 
 
     }
 
-
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position + new Vector3(0, 1, 0), parryRange);
+    }
 }
