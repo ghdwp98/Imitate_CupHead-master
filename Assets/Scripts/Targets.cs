@@ -3,15 +3,20 @@ using UnityEngine;
 
 public class Targets : LivingEntity
 {
-    float hp = 10f;
+    public float hp = 10f;
     [SerializeField] GameObject parent;
-     Animator animator;
+    Animator animator;
 
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         health = hp;
+    }
+
+    private void Update()
+    {
+        
     }
 
     public override void OnDamage(float damage) //버추얼함수 상속 
@@ -28,8 +33,6 @@ public class Targets : LivingEntity
             if (collision.gameObject.tag == "Bullet")
             {
                 StartCoroutine(OnHit()); //피격 색 변경 효과
-                //피격 애니메이션 필요 
-
             }
             
         }
@@ -37,19 +40,14 @@ public class Targets : LivingEntity
     }
     public override void Die()
     {
+        Debug.Log("다이함수진입");
+        StartCoroutine(Destorys());
         base.Die();
 
-
-        if (parent != null)
-        {
-
-            parent.SetActive(false);
-        }
     }
 
     IEnumerator OnHit()
     {
-        Debug.Log("코루틴");
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
         SpriteRenderer parentSprite = transform.parent.GetComponent<SpriteRenderer>();
         parentSprite.color = new Color(87/255f, 100/255f, 100/255f); 
@@ -58,7 +56,18 @@ public class Targets : LivingEntity
         spriteRenderer.color = new Color(1, 1, 1, 1f); 
         parentSprite.color = new Color(1, 1, 1, 1f); 
 
+    }
 
+    IEnumerator Destorys()
+    {
+        Animator parentAnimator=transform.parent.GetComponent<Animator>();
+        animator.Play("Explosion"); //파괴 애니메이션 
+        parentAnimator.Play("Explosion2");
+        yield return new WaitForSeconds(1f);
+        if (parent != null)
+        {
+            parent.SetActive(false);
+        }
     }
 
 }

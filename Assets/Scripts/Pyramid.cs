@@ -4,6 +4,14 @@ using UnityEngine;
 
 public class Pyramid : MonoBehaviour
 {
+    [SerializeField] Targets targets;
+    Animator animator;
+
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag=="Bullet")
@@ -12,6 +20,11 @@ public class Pyramid : MonoBehaviour
             collider.enabled = false;
 
         }
+    }
+
+    private void Update()
+    {
+        
     }
 
 
