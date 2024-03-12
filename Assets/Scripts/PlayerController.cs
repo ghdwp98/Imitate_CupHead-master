@@ -683,7 +683,7 @@ public class PlayerController : LivingEntity
 
         public override void Enter()
         {
-            Debug.Log("아이들진입");
+            
             animator.Play("Idle");
         }
 
