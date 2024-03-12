@@ -10,6 +10,7 @@ TagManager:
   - Checking
   - Exit
   - Npc
+  - Monster
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,7 @@ TagManager:
   - Exit
   - Npc
   - Flat
-  - 
+  - Monster
   - 
   - 
   - 

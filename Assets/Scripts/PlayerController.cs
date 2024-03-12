@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : LivingEntity
 {
 
     // 한글 확인 
+    // dasdasd
+    // 한글한글
     public enum State
     {
         Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
@@ -273,7 +275,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    private class ParryingState : PlayerState  //�и� ���¶�.... ���� ���¶�... 8���� ��� �����ؾߵ�... �Ф�
+    private class ParryingState : PlayerState  //자넝ㄴ망.. 8���� ��� �����ؾߵ�... �Ф�
     {
         public ParryingState(PlayerController player) : base(player) { }
 
@@ -681,7 +683,7 @@ public class PlayerController : MonoBehaviour
 
         public override void Enter()
         {
-            Debug.Log("idle진입");
+            Debug.Log("아이들진입");
             animator.Play("Idle");
         }
 
@@ -1382,6 +1384,20 @@ public class PlayerController : MonoBehaviour
 
     }
 
+
+    public override void OnDamage(float damage)
+    {
+        //어차피 모든 몬스터는 무조건 데미지를 1을 줄거니까 
+        
+        if(!dead)
+        {
+            //피격 효과음 재생 
+            base.OnDamage(damage); // if문 내부의 사망 처리 실행 가능
+            
+        }
+        hp -= (int)damage; //자신의 hp에서 감소시키기. 
+
+    }
 
 
 }

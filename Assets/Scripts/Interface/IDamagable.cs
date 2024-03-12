@@ -4,13 +4,5 @@ using UnityEngine;
 
 public interface IDamagable
 {
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
+    void OnDamage(float damage);
 }

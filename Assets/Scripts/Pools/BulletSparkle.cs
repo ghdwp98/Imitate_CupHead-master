@@ -19,10 +19,10 @@ public class BulletSparkle : MonoBehaviour
     {
         releaseTime += Time.deltaTime;
 
-        if(releaseTime>0.3f)
+        if (releaseTime > 0.3f)
         {
             pooledObject.Release();
-            releaseTime= 0;
+            releaseTime = 0;
         }
 
 

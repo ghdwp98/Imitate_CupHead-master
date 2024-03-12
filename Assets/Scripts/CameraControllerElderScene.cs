@@ -6,6 +6,7 @@ public class CameraControllerElderScene : MonoBehaviour
 {
 
     [SerializeField] GameObject player;
+
     
 
     void Start()

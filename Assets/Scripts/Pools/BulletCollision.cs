@@ -10,7 +10,7 @@ public class BulletCollision : MonoBehaviour
 
     private void OnEnable()
     {
-        animator=GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         animator.Play("WeaponCollision");
     }
 
