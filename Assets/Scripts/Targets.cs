@@ -22,14 +22,22 @@ public class Targets : LivingEntity
     private void OnTriggerEnter2D(Collider2D collision) //타겟은 트리거를 가지자. 
     {
         if(!dead) 
-        {// 파괴 애니메이션 재생 +효과음 + 자신의 부모와 자식 들 게임 오브젝트 파괴 + 다른 게임오브젝트 활성화 
+        {
+            //피격효과음 + 피격 애니메이션 
 
-            Debug.Log(health);
+            
 
         }
 
+    }
 
+    public override void Die()
+    {
+        base.Die();
+        //파괴 애니메이션 재생 및 자신의 오브젝트파괴
+        Destroy(gameObject.transform.parent);
         
 
     }
+
 }

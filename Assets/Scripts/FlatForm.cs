@@ -22,8 +22,18 @@ public class FlatForm : MonoBehaviour
     {
         if(collision.gameObject.tag=="Player")
         {
+            
             plat.useColliderMask = false;
         }
 
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            
+
+            plat.useColliderMask = false;
+        }
     }
 }

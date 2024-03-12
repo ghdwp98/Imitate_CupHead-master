@@ -1369,12 +1369,9 @@ public class PlayerController : LivingEntity
             downJump = true;
             Debug.Log("플랫무시 ");
 
-            
-            //platformEffector2D.useColliderMask = false;
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
                         LayerMask.NameToLayer("Flat"), true);
-            yield return new WaitForSeconds(2f);
-            //platformEffector2D.useColliderMask = true;
+            yield return new WaitForSeconds(2f);      
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
                         LayerMask.NameToLayer("Flat"), false);
             downJump = false;

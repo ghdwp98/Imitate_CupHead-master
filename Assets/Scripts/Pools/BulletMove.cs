@@ -41,7 +41,7 @@ public class BulletMove : MonoBehaviour
         IDamagable target=collision.GetComponent<IDamagable>();
         if(target != null)
         { 
-            target.OnDamage(bulletDamage);
+            target.OnDamage(bulletDamage); //데미지는 불렛이 주고 
         }
 
         pooledObject.Release(); //다른 장소에 부딪히면 파괴 --> 파괴 애니메이션 출력 필요
