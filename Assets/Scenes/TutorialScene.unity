@@ -528,6 +528,7 @@ GameObject:
   - component: {fileID: 242598224}
   - component: {fileID: 242598226}
   - component: {fileID: 242598227}
+  - component: {fileID: 242598228}
   m_Layer: 0
   m_Name: tutorial_pyramid_topper
   m_TagString: Untagged
@@ -635,7 +636,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.032491684, y: -0.19494903}
+  m_Offset: {x: 0.031556606, y: -0.19494903}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -646,7 +647,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.3363, y: 2.578852}
+  m_Size: {x: 2.8745184, y: 2.578852}
   m_EdgeRadius: 0
 --- !u!114 &242598227
 MonoBehaviour:
@@ -660,6 +661,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c05ae167bd80e0848865a10452c75df9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!58 &242598228
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 242598223}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.02117157, y: -0.11644447}
+  serializedVersion: 2
+  m_Radius: 1.1093016
 --- !u!1 &251187896
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,7 +1138,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.38931894, y: -0.12082291}
+  m_Offset: {x: -0.24144459, y: -0.12082291}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1113,7 +1149,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.721362, y: 4.236987}
+  m_Size: {x: 3.098154, y: 4.236987}
   m_EdgeRadius: 0
 --- !u!1 &416673023
 GameObject:

@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class Pyramid : MonoBehaviour
 {
-    Vector2 collisionVector;
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag=="Bullet")
+        {
+            Collider2D collider = GetComponent<BoxCollider2D>();
+            collider.enabled = false;
+
+        }
+    }
 
 
 }
