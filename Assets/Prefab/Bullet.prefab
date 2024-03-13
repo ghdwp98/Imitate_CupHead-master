@@ -189,8 +189,8 @@ MonoBehaviour:
   rb: {fileID: 6868940174769955599}
   pooledObject: {fileID: 2606218724657552123}
   bulletCollision: {fileID: 7271132754538127614, guid: 97ee9ca6d11c7d5449491163932195a8, type: 3}
-  spawnPos: {fileID: 0}
   bulletDamage: 2
+  barController: {fileID: 2912096306109495113, guid: 388ca3addf0a7014783c6c016510296c, type: 3}
 --- !u!114 &2606218724657552123
 MonoBehaviour:
   m_ObjectHideFlags: 0

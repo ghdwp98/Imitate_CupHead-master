@@ -40,7 +40,7 @@ public class Targets : LivingEntity
     }
     public override void Die()
     {
-        Debug.Log("다이함수진입");
+        
         StartCoroutine(Destorys());
         base.Die();
 

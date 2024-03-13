@@ -6,6 +6,7 @@ public class ParryCheck : MonoBehaviour
 {
     public bool isParryed=false;
     Animator animator;
+    [SerializeField]GameObject parryEffectPrefab;
 
     public void Start()
     {
@@ -38,7 +39,8 @@ public class ParryCheck : MonoBehaviour
 
     public void ParryAniPlay()
     {
-        animator.Play("ParrySpark");
+        Instantiate(parryEffectPrefab,transform.position,transform.rotation);
+        
     }
 
 

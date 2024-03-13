@@ -20,22 +20,23 @@ public class BarController : MonoBehaviour
         }
     }
 
-
-    public void Update()
+    public void AttackCardCharge() //공격 시 카드 채우기. 
     {
+        //프리팹에 이 ui프리팹을 할당해도 게임오브젝트 하이어라키에 있는
+        // 게임오브젝트와 상호작용이 되지는 않는다. 
+        // 나중에 이부분 고쳐보자. 
 
-    }
 
-    public void AttackCardCharge()
-    {
         for (int i = 0; i < manaBarImage.Length; i++)
         {
+            Debug.Log("어택차지");
             if (manaBarImage[i].fillAmount != 1f)
             {
-                manaBarImage[i].fillAmount += 0.05f;
+                manaBarImage[i].fillAmount += 0.05f; 
+                // 늘어나지를 않음.. 
                 break;
             }
-            // 어차피 업데이트에서 꽉 찼는지 계속 체크중임. 
+            
         }
     }
 

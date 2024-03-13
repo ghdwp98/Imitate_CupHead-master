@@ -1107,7 +1107,6 @@ public class PlayerController : LivingEntity
 
             }
         }
-
         public override void FixedUpdate()
         {
             if (isLongJump)
@@ -1178,7 +1177,6 @@ public class PlayerController : LivingEntity
 
         }
     }
-
 
     private class RunState : PlayerState
     {
@@ -1400,16 +1398,13 @@ public class PlayerController : LivingEntity
 
     }
 
-
-
-
     public IEnumerator ShootCoroutine()
     {
         float coolTime = 0.12f; //�̰� ��� ������ ������ ��� �����ϱ� �װ� �����ؼ� ��Ÿ�� ��������� 
         if (isShooting == false)
         {
             isShooting = true;
-            bulletSpawner.ObjectSpawn();
+            bulletSpawner.ObjectSpawn(); 
             yield return new WaitForSeconds(coolTime);
             isShooting = false;
         }
@@ -1418,7 +1413,7 @@ public class PlayerController : LivingEntity
 
     private IEnumerator EXshootCoroutine()
     {
-        float coolTime = 1.5f; //바꿔나가자. 
+        float coolTime = 1.3f; //바꿔나가자. 
         if(EXshooting == false)
         {
             EXshooting = true;
@@ -1507,6 +1502,11 @@ public class PlayerController : LivingEntity
             isOverlap = false;
         }
     }
+
+
+
+
+    
 }
 
 
