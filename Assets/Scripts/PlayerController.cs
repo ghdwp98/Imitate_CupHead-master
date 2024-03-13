@@ -523,7 +523,6 @@ public class PlayerController : LivingEntity
             }
 
         }
-
         public override void FixedUpdate()
         {
             rigidbody.velocity = new Vector2(jumpDashSpeed, 0);
@@ -555,7 +554,6 @@ public class PlayerController : LivingEntity
 
         }
     }
-
     private class FallState : PlayerState
     {
 
@@ -1164,10 +1162,11 @@ public class PlayerController : LivingEntity
         public void ParryJump()
         {
             Debug.Log("패리점프 함수호출");
+            
             animator.Play("ParrySuccess");
             player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(-0.02f, 0.87f);
             player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.1f, 1.43f);
-
+            player.parryCheck.ParryAniPlay();
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
             groundCount = 0;
             player.isJumping = true;

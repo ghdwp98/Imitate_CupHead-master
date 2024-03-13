@@ -5,6 +5,12 @@ using UnityEngine;
 public class ParryCheck : MonoBehaviour
 {
     public bool isParryed=false;
+    Animator animator;
+
+    public void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -29,6 +35,12 @@ public class ParryCheck : MonoBehaviour
         isParryed = false;
 
     }
+
+    public void ParryAniPlay()
+    {
+        animator.Play("ParrySpark");
+    }
+
 
     private void Update()
     {
