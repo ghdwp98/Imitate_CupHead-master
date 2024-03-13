@@ -5,8 +5,6 @@ using UnityEngine;
 public class ParryCircle : IParry  //¿Ã∫•∆Æ? 
 {
     
-    
-
     private void Start()
     {
         

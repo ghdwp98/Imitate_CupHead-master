@@ -13,7 +13,7 @@ public class GhostSpwaner : MonoBehaviour
 
     void Update()
     {
-        StartCoroutine(GhostSpawn());
+        
         
     }
 
@@ -22,6 +22,7 @@ public class GhostSpwaner : MonoBehaviour
     {
         if(spawn==false)
         {
+            Debug.Log("코루틴 작동");
             Instantiate(ghostPrefab, transform.position, transform.rotation);
             spawn = true;
             yield return new WaitForSecondsRealtime(8f);
@@ -30,9 +31,9 @@ public class GhostSpwaner : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        
+        StartCoroutine(GhostSpawn());
     }
 
 

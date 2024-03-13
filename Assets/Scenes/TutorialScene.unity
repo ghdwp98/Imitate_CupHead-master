@@ -1457,7 +1457,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -1.5547347, y: -0.08718145}
+  m_Offset: {x: -1.5842774, y: -0.072410464}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1468,7 +1468,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.0311556, y: 4.985074}
+  m_Size: {x: 2.6175656, y: 5.014616}
   m_EdgeRadius: 0
 --- !u!61 &385592925
 BoxCollider2D:
@@ -5623,9 +5623,9 @@ GameObject:
   - component: {fileID: 1515603261}
   - component: {fileID: 1515603262}
   - component: {fileID: 1515603263}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: GhostRegen
-  m_TagString: Untagged
+  m_TagString: Checking
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5691,7 +5691,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.0032687187, y: 4.291791}
+  m_Offset: {x: 0.0032691956, y: 5.148512}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -5702,7 +5702,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 16.14608, y: 9.583582}
+  m_Size: {x: 16.14608, y: 11.297024}
   m_EdgeRadius: 0
 --- !u!1 &1518886314
 GameObject:
@@ -6938,6 +6938,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+      propertyPath: jumpSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: barController
       value: 
       objectReference: {fileID: 1622303583}
@@ -6996,7 +7000,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3805186221776128849, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1912743728}
   m_SourcePrefab: {fileID: 100100000, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
 --- !u!1 &1856839644
 GameObject:
@@ -7356,6 +7363,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1311011066}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1912743723 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3805186221776128849, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+  m_PrefabInstance: {fileID: 1842271104}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1912743728
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912743723}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1942633310
 GameObject:
   m_ObjectHideFlags: 0
@@ -7871,6 +7904,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cbeed65ab7f6da489882fbec376c4e0, type: 3}
+--- !u!1001 &4726592840187307754
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6704001665119861507, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.146427
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704001665119861507, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.905656
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704001665119861507, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704001665119861507, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704001665119861507, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704001665119861507, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704001665119861507, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704001665119861507, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704001665119861507, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6704001665119861507, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7387006428256943217, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
+      propertyPath: m_Name
+      value: ParrySpark
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b6f1513b90f63d74b89a51d0bb1d5b43, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -7895,3 +7985,4 @@ SceneRoots:
   - {fileID: 1133954820}
   - {fileID: 1870821758}
   - {fileID: 264383927}
+  - {fileID: 4726592840187307754}
