@@ -24,8 +24,6 @@ public class Coin : MonoBehaviour
             //게임매니저? 에 코인 숫자 추가..
             CoinManager();
             Destroy(gameObject, 1f);
-
-
         }
            
     }
@@ -33,7 +31,6 @@ public class Coin : MonoBehaviour
     private void CoinManager()
     {
         Manager.Game.SetScore(1);
-        Manager.Game.Test();
     }
 
 
