@@ -6,12 +6,14 @@ public class GhostMove : IParry
 {
     Rigidbody2D rb;
     Animator animator;
+    CapsuleCollider2D capsuleCollider;
 
     void Start()
     {
         rb= GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         Destroy(gameObject, 8f);
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
     }
 
     void Update()
@@ -24,9 +26,6 @@ public class GhostMove : IParry
         {
             rb.velocity = Vector2.zero;
         }
-            
-        
-
     }
 
     public override void Parried()
@@ -34,6 +33,7 @@ public class GhostMove : IParry
         Debug.Log("ÆÐ¸®µå ");
         base.Parried();
         animator.Play("Revive");
+        capsuleCollider.enabled = false;
         Destroy(gameObject, 1.2f);
 
     }

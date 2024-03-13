@@ -182,8 +182,12 @@ MonoBehaviour:
   bulletPrefab: {fileID: 2606218724657552123, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
   SparklePrefab: {fileID: 8300197511154724832, guid: d7ee7e85c80184941935ba3809213f07, type: 3}
   ExplosionPrefab: {fileID: 7271132754538127614, guid: 97ee9ca6d11c7d5449491163932195a8, type: 3}
+  ExBulletCollision: {fileID: 0}
+  EXbulletPrefab: {fileID: 0}
   size: 20
   capacity: 30
+  ExSize: 5
+  ExCapacity: 5
 --- !u!1 &3805186221776128849
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,6 +443,7 @@ MonoBehaviour:
   isShooting: 0
   parryRange: 1
   parrySucess: 0
+  EXshooting: 0
   rigidbody: {fileID: 1594991495771574696}
   renderer: {fileID: 8175090067730579671}
   animator: {fileID: 4207917155024812343}
@@ -451,6 +456,8 @@ MonoBehaviour:
   parryMask:
     serializedVersion: 2
     m_Bits: 16384
+  superBar: {fileID: 0}
+  barController: {fileID: 0}
   maxSpeed: 8
   accelPower: 5
   decelPower: 20

@@ -28,4 +28,13 @@ public class GhostSpwaner : MonoBehaviour
             spawn = false;
         }
     }
+
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        
+    }
+
+
+
 }
