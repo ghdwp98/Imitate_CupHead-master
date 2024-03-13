@@ -134,8 +134,8 @@ Canvas:
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 0
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: -2095277293
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &4724946494766040924
 MonoBehaviour:
@@ -464,6 +464,9 @@ MonoBehaviour:
   - {fileID: 8669720071734424909}
   - {fileID: 4277960541166700366}
   cardPrefab: {fileID: 8785213157716761921, guid: 57f1b2f810a002b409a2c3b5771fd868, type: 3}
+  fullCard: {fileID: 21300000, guid: ccafea541846b0f4f996c49e9bd81bb2, type: 3}
+  EmptyCard: {fileID: 21300000, guid: ca210bc6361a2f941bd3747dcf3bf14a, type: 3}
+  manaRegen: 0
 --- !u!1 &3327107847097854461
 GameObject:
   m_ObjectHideFlags: 0

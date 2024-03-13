@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TBarController : MonoBehaviour
+public class BarController : MonoBehaviour
 {
     //자기 자식 5개를 리스트
 
@@ -21,20 +21,12 @@ public class TBarController : MonoBehaviour
     }
 
 
-    public void Update()  //플레이어에서 호출할 함수 들 
+    public void Update()
     {
-        if (Input.GetKey(KeyCode.Space))
-        {
-            CardCharge();
-        }
 
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            EXshoot();
-        }
     }
 
-    public void CardCharge()
+    public void AttackCardCharge()
     {
         for (int i = 0; i < manaBarImage.Length; i++)
         {
@@ -43,29 +35,50 @@ public class TBarController : MonoBehaviour
                 manaBarImage[i].fillAmount += 0.05f;
                 break;
             }
-            else
-            {
-                manaBarImage[i].sprite = fullCard;
-            }
+            // 어차피 업데이트에서 꽉 찼는지 계속 체크중임. 
         }
     }
 
-    public void EXshoot()
+
+    public void ParryCardCharge() //패리 시 1칸 채워야함. 
+    {
+        for (int i = 0; i < manaBarImage.Length; i++)
+        {
+            if (manaBarImage[i].fillAmount < 1f)
+            {
+                float fill = manaBarImage[i].fillAmount; //자신의 필 어마운트만큼 다음 놈한테 ++ 
+                manaBarImage[i].fillAmount = 1f;
+                if(i+1< manaBarImage.Length)
+                {
+                    manaBarImage[i + 1].fillAmount = fill;
+                }  
+                break;
+            }
+
+        }
+    }
+
+    public void EXshoot()  //필살기 시전 시 exshoot 발동 --> 1칸씩 빠짐. 
     {
         for (int i = 4; i >= 1; i--) //4번 부터 빼줘야 하니까 스프라이트도 원래 자기껄로 돌려주면 됨. 
         {
+            if (manaBarImage[i].fillAmount < 1f)
+            {
+                break; // 필살기 안나가도록 break; 
+            }
+
             if (manaBarImage[i].fillAmount == 1f)
             {
                 manaBarImage[i].fillAmount = 0f;
                 manaBarImage[i].sprite = EmptyCard;
                 break;
             }
-            else if (manaBarImage[i].fillAmount>=0.01f) //꽉 차 있지 않으면 
+            else if (manaBarImage[i].fillAmount >= 0.01f) //꽉 차 있지 않으면 
             {
                 float fill = 1f - manaBarImage[i].fillAmount; //이 만큼으로 그 전꺼도 변경해줘야함
                 manaBarImage[i].fillAmount = 0f;
                 manaBarImage[i].sprite = EmptyCard;
-                manaBarImage[i - 1].fillAmount -=fill;
+                manaBarImage[i - 1].fillAmount -= fill;
                 manaBarImage[i - 1].sprite = EmptyCard;
                 break;
 

@@ -4,9 +4,7 @@ using UnityEngine;
 public class PlayerController : LivingEntity
 {
 
-    // 한글 확인 
-    // dasdasd
-    // 한글한글
+    
     public enum State
     {
         Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
@@ -37,6 +35,7 @@ public class PlayerController : LivingEntity
     [SerializeField] Transform dashSpawn;
     [SerializeField] LayerMask parryMask;
     [SerializeField] GameObject superBar;
+    [SerializeField] BarController barController;
 
     PooledObject bulletPrefab;
     PooledObject bulletSparkle;
@@ -215,7 +214,7 @@ public class PlayerController : LivingEntity
         protected BulletSpawner bulletSpawner => player.bulletSpawner;
         protected GameObject superBar { get { return player.superBar; } set { player.superBar = value; } }
 
-
+        protected BarController barController { get { return player.barController; } set { player.barController = value; } }
         public PlayerState(PlayerController player)
         {
             this.player = player;
@@ -408,19 +407,8 @@ public class PlayerController : LivingEntity
 
         public override void FixedUpdate()
         {
-           // player.StartCoroutine(player.ParryCheckCoroutine());
-            Collider2D colliders = Physics2D.OverlapCircle(transform.position + new Vector3(0, 1, 0),
-               player.parryRange, player.parryMask);
-            if (colliders != null)
-            {
-                IParry iparry = colliders.GetComponent<IParry>();
-                if (iparry != null)
-                {
-                    iparry.Parried();
-                }
-                rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
-                parrySucess = true;
-            }
+            player.StartCoroutine(player.ParryCheckCoroutine());
+            
 
         }
         public override void Transition()
@@ -1166,14 +1154,20 @@ public class PlayerController : LivingEntity
 
         public void ParryJump()
         {
+            Debug.Log("패리점프 함수호출");
             animator.Play("ParrySuccess");
             player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(-0.02f, 0.87f);
             player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.1f, 1.43f);
+
             rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
             groundCount = 0;
             player.isJumping = true;
             parrySucess = false;
-            //이제 패리점프 실행되면 그 때 필살기도 한 칸 채우는거 여기서 실행하면 될듯. 
+
+            barController.ParryCardCharge();
+
+
+
         }
     }
 
@@ -1462,14 +1456,14 @@ public class PlayerController : LivingEntity
         Gizmos.DrawWireSphere(transform.position + new Vector3(0, 1, 0), parryRange);
     }
 
-    /*IEnumerator ParryCheckCoroutine()
+    IEnumerator ParryCheckCoroutine()
     {
-        if(isOverlap==false) //폴스일 때만 실행되도록 
+        if (isOverlap == false) //폴스일 때만 실행되도록 
         {
-            Debug.Log("코루틴 발동");
+            float overLapCollTime = 0.2f;
             isOverlap = true;
             Collider2D colliders = Physics2D.OverlapCircle(transform.position + new Vector3(0, 1, 0),
-               parryRange,parryMask);
+               parryRange, parryMask);
             if (colliders != null)
             {
                 IParry iparry = colliders.GetComponent<IParry>();
@@ -1480,10 +1474,10 @@ public class PlayerController : LivingEntity
                 rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
                 parrySucess = true;
             }
-            yield return new WaitForSecondsRealtime(0.1f);
+            yield return new WaitForSecondsRealtime(overLapCollTime);
             isOverlap = false;
         }
-    }*/
+    }
 }
 
 

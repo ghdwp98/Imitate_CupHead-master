@@ -988,14 +988,6 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1406606473}
-    - target: {fileID: 6823700282132448035, guid: 14bcc79d2b6f56a448253614bab40a7d, type: 3}
-      propertyPath: fullCard
-      value: 
-      objectReference: {fileID: 21300000, guid: ccafea541846b0f4f996c49e9bd81bb2, type: 3}
-    - target: {fileID: 6823700282132448035, guid: 14bcc79d2b6f56a448253614bab40a7d, type: 3}
-      propertyPath: EmptyCard
-      value: 
-      objectReference: {fileID: 21300000, guid: ca210bc6361a2f941bd3747dcf3bf14a, type: 3}
     - target: {fileID: 8189585142393968532, guid: 14bcc79d2b6f56a448253614bab40a7d, type: 3}
       propertyPath: m_Pivot.x
       value: 0

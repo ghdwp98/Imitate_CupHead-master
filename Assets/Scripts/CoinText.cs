@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Temp : MonoBehaviour
+public class CoinText : MonoBehaviour
 {
     Text text;
     void Start()
