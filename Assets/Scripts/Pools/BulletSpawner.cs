@@ -6,12 +6,19 @@ public class BulletSpawner : MonoBehaviour
     //그래도 render 같은 상태는 여기서 판단하는게?? 
 
     [SerializeField] PlayerController player;
+
     [SerializeField] PooledObject bulletPrefab;
     [SerializeField] PooledObject SparklePrefab;
     [SerializeField] PooledObject ExplosionPrefab;
 
+    [SerializeField] PooledObject ExBulletCollision;
+    [SerializeField] PooledObject EXbulletPrefab;
+    
+
     [SerializeField] int size = 20;
     [SerializeField] int capacity = 30;
+    [SerializeField] int ExSize = 5;
+    [SerializeField] int ExCapacity = 5;
 
 
     void Start()
@@ -19,6 +26,8 @@ public class BulletSpawner : MonoBehaviour
         Manager.Pool.CreatePool(bulletPrefab, size, capacity);
         Manager.Pool.CreatePool(SparklePrefab, size, capacity);
         Manager.Pool.CreatePool(ExplosionPrefab, size, capacity);
+        Manager.Pool.CreatePool(EXbulletPrefab, ExSize, ExCapacity);
+        Manager.Pool.CreatePool(ExBulletCollision,ExSize, ExCapacity);
     }
     void Update()
     {
@@ -28,6 +37,12 @@ public class BulletSpawner : MonoBehaviour
     public void ObjectSpawn() //소환하는 위치가 자신의 위치니까 플레이어의 상태에 따라서 그 위치를 바꿔주자.
     {
         Manager.Pool.GetPool(bulletPrefab, transform.position, transform.rotation);
+        Manager.Pool.GetPool(SparklePrefab, transform.position, transform.rotation);
+    }
+
+    public void EXShootSpawn()
+    {
+        Manager.Pool.GetPool(EXbulletPrefab, transform.position, transform.rotation);
         Manager.Pool.GetPool(SparklePrefab, transform.position, transform.rotation);
     }
 

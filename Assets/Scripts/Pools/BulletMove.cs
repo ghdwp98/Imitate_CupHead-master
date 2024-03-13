@@ -13,9 +13,6 @@ public class BulletMove : MonoBehaviour
     [SerializeField] float bulletDamage = 2f;
 
     
-   
-    
-
     private void OnEnable()
     {
 

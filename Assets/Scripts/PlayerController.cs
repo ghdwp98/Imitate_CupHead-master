@@ -21,6 +21,7 @@ public class PlayerController : LivingEntity
     [SerializeField] bool isShooting = false;
     [SerializeField] float parryRange = 1f;
     [SerializeField] bool parrySucess = false;
+    [SerializeField] bool EXshooting = false;
 
     [Header("Component")]
     [SerializeField] new Rigidbody2D rigidbody;
@@ -58,6 +59,7 @@ public class PlayerController : LivingEntity
     private bool isJumping;
     private bool isParried;
     public bool downJump = false;
+
 
     private StateMachine stateMachine;
 
@@ -744,6 +746,13 @@ public class PlayerController : LivingEntity
             {
                 animator.SetBool("ShootStraight", false);
             }
+
+            if(Input.GetKeyDown(KeyCode.V))
+            {
+                player.ExShoot();
+            }
+
+
         }
 
         public override void Transition()
@@ -1407,6 +1416,27 @@ public class PlayerController : LivingEntity
         }
 
     }
+
+    private IEnumerator EXshootCoroutine()
+    {
+        float coolTime = 1.5f; //바꿔나가자. 
+        if(EXshooting == false)
+        {
+            EXshooting = true;
+            bulletSpawner.EXShootSpawn();
+            yield return new WaitForSeconds(coolTime);
+            EXshooting=false;
+        }
+       
+
+    }
+
+    public void ExShoot()
+    {
+        StartCoroutine(EXshootCoroutine());
+    }
+
+
 
     public void ChangeLayer()
     {
