@@ -69,8 +69,11 @@ public class BarController : MonoBehaviour
     {
         for (int i = 4; i >= 1; i--) //4번 부터 빼줘야 하니까 스프라이트도 원래 자기껄로 돌려주면 됨. 
         {
-           
-
+            /*if (manaBarImage[0].fillAmount<1f)
+            {
+                return;
+            }
+*/
             if (manaBarImage[i].fillAmount == 1f)
             {
                 manaBarImage[i].fillAmount = 0f;

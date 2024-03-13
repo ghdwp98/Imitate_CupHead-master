@@ -739,15 +739,23 @@ public class PlayerController : LivingEntity
                 animator.SetBool("ShootStraight", true);
                 player.StartCoroutine(player.ShootCoroutine());
             }
+
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("ShootStraight") &&
             animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 animator.SetBool("ShootStraight", false);
             }
+            //필살기 쓰는 동안 일반공격이 안나가야 하는데 어떡하지? bool로 input을 묶어줘야하나..?
 
             if(Input.GetKeyDown(KeyCode.V))
             {
+                animator.SetBool("ExStraight", true);
                 player.ExShoot();
+            }
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExStraight") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                animator.SetBool("ExStraight", false);
             }
 
 
