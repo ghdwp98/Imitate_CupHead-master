@@ -143,6 +143,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3879527064749344411}
+  - component: {fileID: 7916512936479786408}
   m_Layer: 3
   m_Name: BulletSpawn
   m_TagString: Player
@@ -165,6 +166,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 9089441795785061620}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7916512936479786408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2337720102170059540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f215ee7895d7f6c488bf6f16b36a2fa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 4779257412819213586}
+  bulletPrefab: {fileID: 2606218724657552123, guid: 7fcb4046bbdbe4141a53c8816283fa90, type: 3}
+  SparklePrefab: {fileID: 8300197511154724832, guid: d7ee7e85c80184941935ba3809213f07, type: 3}
+  ExplosionPrefab: {fileID: 7271132754538127614, guid: 97ee9ca6d11c7d5449491163932195a8, type: 3}
+  size: 20
+  capacity: 30
 --- !u!1 &3805186221776128849
 GameObject:
   m_ObjectHideFlags: 0
@@ -411,32 +430,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65c750a616f4db2418bbe4251fecf476, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingHealth: 100
   hp: 0
   mp: 0
   axisH: 0
   axisV: 0
   parry: 0
   isShooting: 0
+  parryRange: 1
+  parrySucess: 0
   rigidbody: {fileID: 1594991495771574696}
   renderer: {fileID: 8175090067730579671}
   animator: {fileID: 4207917155024812343}
-  bulletSpawner: {fileID: 0}
+  bulletSpawner: {fileID: 7916512936479786408}
   FootBoxCollider: {fileID: 7404011098452842406}
   JumpEffectSpawn: {fileID: 6131803793254209839}
   parryCheck: {fileID: 196528665759092534}
   DashEffectSpawn: {fileID: 6291806971035729946}
   dashSpawn: {fileID: 5757559139272835490}
+  parryMask:
+    serializedVersion: 2
+    m_Bits: 16384
   maxSpeed: 8
   accelPower: 5
   decelPower: 20
-  jumpSpeed: 16
+  jumpSpeed: 14
   groundCheckLayer:
     serializedVersion: 2
     m_Bits: 4160
   playerPos: {x: 0, y: 0}
   FootIsTrigger: 0
   bulletPos: {x: 0, y: 0}
-  downJump: 1
+  isOverlap: 0
+  downJump: 0
 --- !u!70 &5152341032728945138
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -608,7 +634,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.015835047, y: 0.3601122}
+  m_Offset: {x: -0.000102996826, y: 0.3601122}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -619,5 +645,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.3483739, y: 0.4505825}
+  m_Size: {x: 1.4440079, y: 0.4505825}
   m_EdgeRadius: 0

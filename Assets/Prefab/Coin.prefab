@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 745412957759702202}
   - component: {fileID: 2882704740894789762}
   - component: {fileID: -6438360732678304397}
+  - component: {fileID: 2326007691841815716}
   m_Layer: 0
   m_Name: Coin
   m_TagString: Untagged
@@ -74,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: ea530ae5c8e172b409b46ebcacd75c82, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -119,3 +120,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8643b6882bd93447ba2641e06cf8a02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!70 &2326007691841815716
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 193241914426571194}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -0.0370636, y: -0.07829094}
+  m_Size: {x: 1.6350021, y: 3.4586086}
+  m_Direction: 0

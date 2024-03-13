@@ -36,6 +36,7 @@ public class PlayerController : LivingEntity
     [SerializeField] DashEffectSpawn DashEffectSpawn;
     [SerializeField] Transform dashSpawn;
     [SerializeField] LayerMask parryMask;
+    [SerializeField] GameObject superBar;
 
     PooledObject bulletPrefab;
     PooledObject bulletSparkle;
@@ -212,6 +213,7 @@ public class PlayerController : LivingEntity
         protected PooledObject bulletPrefab => player.bulletPrefab;
         protected PooledObject bulletSparkle => player.bulletSparkle;
         protected BulletSpawner bulletSpawner => player.bulletSpawner;
+        protected GameObject superBar { get { return player.superBar; } set { player.superBar = value; } }
 
 
         public PlayerState(PlayerController player)
