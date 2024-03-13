@@ -22,6 +22,7 @@ public class PlayerController : LivingEntity
     [SerializeField] bool parry;
     [SerializeField] bool isShooting = false;
     [SerializeField] float parryRange = 1f;
+    [SerializeField] bool parrySucess = false;
 
     [Header("Component")]
     [SerializeField] new Rigidbody2D rigidbody;
@@ -49,7 +50,7 @@ public class PlayerController : LivingEntity
     [SerializeField] Vector2 playerPos;
     [SerializeField] bool FootIsTrigger = false;
     [SerializeField] Vector2 bulletPos;
-
+    [SerializeField] bool isOverlap = false;
 
     private Vector2 inputDir;
     private bool onGround;
@@ -205,6 +206,8 @@ public class PlayerController : LivingEntity
 
         protected bool parry { get { return player.parry; } set { player.parry = value; } }
         protected Transform spawnPos { get { return player.spawnPos; } set { player.spawnPos = value; } }
+
+        protected bool parrySucess { get { return player.parrySucess; } set { player.parrySucess = value; } }
 
         protected PooledObject bulletPrefab => player.bulletPrefab;
         protected PooledObject bulletSparkle => player.bulletSparkle;
@@ -403,27 +406,25 @@ public class PlayerController : LivingEntity
 
         public override void FixedUpdate()
         {
-            Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position + new Vector3(0, 1, 0),
-                player.parryRange, player.parryMask);
-
-            foreach (Collider2D collider in colliders)
+           // player.StartCoroutine(player.ParryCheckCoroutine());
+            Collider2D colliders = Physics2D.OverlapCircle(transform.position + new Vector3(0, 1, 0),
+               player.parryRange, player.parryMask);
+            if (colliders != null)
             {
-                IParry iparry = collider.GetComponent<IParry>();
-                iparry?.Parried();
-                Debug.Log("포리치");
+                IParry iparry = colliders.GetComponent<IParry>();
+                if (iparry != null)
+                {
+                    iparry.Parried();
+                }
+                rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
+                parrySucess = true;
             }
 
-
-
         }
-
-
-
         public override void Transition()
         {
             if (onGround && groundCount == 1)
             {
-
                 player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(0, 1.16f);
                 player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.56f, 2.26f);
                 player.JumpEffectSpawn.JumpEffect();
@@ -438,6 +439,11 @@ public class PlayerController : LivingEntity
             {
                 ChangeState(State.Dash);
             }
+            if (parrySucess == true)
+            {
+                ChangeState(State.Jump);
+            }
+
 
 
         }
@@ -994,7 +1000,14 @@ public class PlayerController : LivingEntity
 
         public override void Enter()
         {
-            Jump();
+            if (parrySucess == true)
+            {
+                ParryJump();
+            }
+            else
+            {
+                Jump();
+            }
         }
 
         public override void Update()
@@ -1147,8 +1160,18 @@ public class PlayerController : LivingEntity
                 groundCount = 0;
                 player.isJumping = true;
             }
+        }
 
-
+        public void ParryJump()
+        {
+            animator.Play("ParrySuccess");
+            player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(-0.02f, 0.87f);
+            player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.1f, 1.43f);
+            rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
+            groundCount = 0;
+            player.isJumping = true;
+            parrySucess = false;
+            //이제 패리점프 실행되면 그 때 필살기도 한 칸 채우는거 여기서 실행하면 될듯. 
         }
     }
 
@@ -1436,4 +1459,29 @@ public class PlayerController : LivingEntity
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position + new Vector3(0, 1, 0), parryRange);
     }
+
+    /*IEnumerator ParryCheckCoroutine()
+    {
+        if(isOverlap==false) //폴스일 때만 실행되도록 
+        {
+            Debug.Log("코루틴 발동");
+            isOverlap = true;
+            Collider2D colliders = Physics2D.OverlapCircle(transform.position + new Vector3(0, 1, 0),
+               parryRange,parryMask);
+            if (colliders != null)
+            {
+                IParry iparry = colliders.GetComponent<IParry>();
+                if (iparry != null)
+                {
+                    iparry.Parried();
+                }
+                rigidbody.velocity = new Vector2(rigidbody.velocity.x, jumpSpeed);
+                parrySucess = true;
+            }
+            yield return new WaitForSecondsRealtime(0.1f);
+            isOverlap = false;
+        }
+    }*/
 }
+
+
