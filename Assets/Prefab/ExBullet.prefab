@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 958158057798979656}
   - component: {fileID: 1919048530221964684}
   - component: {fileID: 4360107403969034616}
-  - component: {fileID: 5253516518640783736}
+  - component: {fileID: 371462692592830390}
   m_Layer: 8
   m_Name: ExBullet
   m_TagString: Bullet
@@ -167,8 +167,8 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &5253516518640783736
-CircleCollider2D:
+--- !u!70 &371462692592830390
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -199,6 +199,6 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.08876991, y: 0.08383846}
-  serializedVersion: 2
-  m_Radius: 1.1293435
+  m_Offset: {x: 0.022189138, y: -0.038831122}
+  m_Size: {x: 3.2006297, y: 1.8138044}
+  m_Direction: 1

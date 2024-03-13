@@ -28,7 +28,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ch_charm_parry_attack_spark_0001
+  m_Name: ParrySpark
   serializedVersion: 5
   m_AnimatorParameters: []
   m_AnimatorLayers:
