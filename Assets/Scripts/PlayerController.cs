@@ -190,8 +190,7 @@ public class PlayerController : LivingEntity
         protected PlayerController player; //Player�� �̸� ����ϴ� stateŬ�����鿡��
         // player.hp ������ �÷��̾��� ������ �̿��� �� �ֵ��� �Ѵ�. 
         protected Transform transform => player.transform;
-        protected int hp { get { return player.hp; } set { player.hp = value; } }
-        protected int mp { get { return player.mp; } set { player.mp = value; } }
+        protected int hp { get { return player.hp; } set { player.hp = value; } }  
         protected float axisH { get { return player.axisH; } set { player.axisH = value; } }
         protected float axisV { get { return player.axisV; } set { player.axisV = value; } }
         protected Rigidbody2D rigidbody => player.rigidbody;

@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class DoorExit : MonoBehaviour
 {
-    
+    GameObject DoorKeyPrefab;
+    GameObject player;
+
+
+    private void Start()
+    {
+        
+    }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
         
         if (collision.gameObject.tag == "Player")
         {
-            //나가기 팝업창 띄워주고
+            Instantiate(DoorKeyPrefab);
             
             if (Input.GetKeyDown(KeyCode.A))
             {
