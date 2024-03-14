@@ -17,13 +17,13 @@ public class StateMachine :MonoBehaviour
     public void Start()
     {
         curState.Enter();
+        
     }
 
     public void Update() //이 업데이트나 start등 에서 죽음을 확인하려면? 
     {
         curState.Update();
-        curState.Transition();
-        
+        curState.Transition();  
     }
 
     public void LateUpdate()

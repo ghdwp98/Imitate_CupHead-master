@@ -26,6 +26,7 @@ public class PlayerController : LivingEntity
     [SerializeField] new Rigidbody2D rigidbody;
     [SerializeField] new SpriteRenderer renderer;
     [SerializeField] Animator animator;
+    [SerializeField] GameObject GhostPrefab;
 
     [SerializeField] BulletSpawner bulletSpawner;
     [SerializeField] GameObject FootBoxCollider;
@@ -53,7 +54,7 @@ public class PlayerController : LivingEntity
     [SerializeField] Vector2 bulletPos;
     [SerializeField] bool isOverlap = false;
     [SerializeField] bool takeHit = false;
-    [SerializeField] float invincibleTime = 1.5f;
+    [SerializeField] bool invincible = false;
 
     private Vector2 inputDir;
     private bool onGround;
@@ -107,7 +108,7 @@ public class PlayerController : LivingEntity
 
     private void Update()
     {
-        stateMachine.Update();  
+        stateMachine.Update();
     }
 
 
@@ -154,6 +155,7 @@ public class PlayerController : LivingEntity
         if (collision.gameObject.tag == "Monster") //몬스터에 피격되면. 
         {
             TakeHit();
+
         }
     }
     private void OnTriggerStay2D(Collider2D collision)
@@ -223,6 +225,8 @@ public class PlayerController : LivingEntity
         {
             this.player = player;
         }
+
+
 
     }
 
@@ -597,7 +601,6 @@ public class PlayerController : LivingEntity
 
         }
 
-
         public override void Transition()
         {
             if (ExitEx == true)  // 필살기 시전이 끝나면 true로 전환해서 상태 변경 해주기. 
@@ -611,13 +614,11 @@ public class PlayerController : LivingEntity
                     ChangeState(State.Idle);
                 }
             }
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
+            }
         }
-
-
-
-
-
-
     }
 
     private class DeadState : PlayerState //피격 상태 만들고 그냥 피격 상태에서만 dead로 진입할 수 있도록하자. 
@@ -627,39 +628,40 @@ public class PlayerController : LivingEntity
         public override void Enter()
         {
             Debug.Log("사망상태 진입");
+            Instantiate(player.GhostPrefab, transform.position, Quaternion.identity);
 
+            // 그리고 팝업도 띄워줘야함. --> 다시 하기 팝업 + 머그샷
         }
 
     }
 
     private class HitState : PlayerState
     {
+
+        //이거 아예 못들어오게 해야되는데 어떡하지?? 
+        // 
         public HitState(PlayerController player) : base(player) { }
 
         public override void Enter()
         {
-            //살짝 반대쪽으로 밀어주는 상황 만들어주기. 
-
-            Debug.Log("히트 상태");
 
             if (onGround == true) //땅 일때 
             {
                 animator.Play("Hit");
+                rigidbody.velocity = Vector2.left * 3f;
             }
             else // 땅이 아닐 때 false 일때 
             {
                 animator.Play("HitAir");
+                rigidbody.velocity = Vector2.left * 3f;
             }
-        }
-        public override void Update()
-        {
 
         }
-
         public override void Transition()
         {
+
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("Hit") &&
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 if (hp > 0)
                 {
@@ -671,7 +673,8 @@ public class PlayerController : LivingEntity
                     ChangeState(State.Dead);
                 }
             }
-            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("HitAir") &&
+
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("HitAir") &&
                 animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 if (hp > 0)
@@ -684,9 +687,9 @@ public class PlayerController : LivingEntity
                     ChangeState(State.Dead);
                 }
             }
+
         }
     }
-
     private class UpState : PlayerState
     {
         public UpState(PlayerController player) : base(player) { }
@@ -728,7 +731,12 @@ public class PlayerController : LivingEntity
         }
         public override void Transition()
         {
-            if (Input.GetKeyUp(KeyCode.UpArrow))
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
+            }
+
+            else if (Input.GetKeyUp(KeyCode.UpArrow))
             {
                 ChangeState(State.Idle);
             }
@@ -895,7 +903,12 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Idle);
             }
 
-            if (Input.GetKeyDown(KeyCode.LeftShift))
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
+            }
+
+            else if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 ChangeState(State.Dash);
             }
@@ -976,6 +989,11 @@ public class PlayerController : LivingEntity
 
 
             }
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
+            }
+
         }
     }
 
@@ -1038,6 +1056,11 @@ public class PlayerController : LivingEntity
                 {
                     ChangeState(State.Idle);
                 }
+            }
+
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
             }
 
         }
@@ -1118,6 +1141,12 @@ public class PlayerController : LivingEntity
             {
                 ChangeState(State.Ex);
             }
+
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
+            }
+
         }
 
     }
@@ -1194,6 +1223,13 @@ public class PlayerController : LivingEntity
                 player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
                 ChangeState(State.Idle);
             }
+
+
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
+            }
+
 
         }
 
@@ -1283,6 +1319,11 @@ public class PlayerController : LivingEntity
                 animator.Play("AimUp");
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
                 ChangeState(State.Up);
+            }
+
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
             }
 
 
@@ -1487,6 +1528,12 @@ public class PlayerController : LivingEntity
             }
 
 
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
+            }
+
+
         }
     }
     private class JumpState : PlayerState
@@ -1649,6 +1696,10 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Ex);
             }
 
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
+            }
 
         }
 
@@ -1765,6 +1816,12 @@ public class PlayerController : LivingEntity
 
         public override void Transition() //Ʈ�����ǿ��� �޸��鼭 ��� �޸��鼭 ���� ��� ��ȯ���� 
         {
+
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
+            }
+
             if (axisH == 0 && axisV == 0) //�ӵ��� 0 �� �� (�������� ���� �� idle�� ü���� ���ֱ� )
             {
                 ChangeState(State.Idle);
@@ -1775,12 +1832,11 @@ public class PlayerController : LivingEntity
 
                 ChangeState(State.Jump);
             }
-
-            if (Input.GetKeyDown(KeyCode.C)) //��Ŀ ���� 
+            else if (Input.GetKeyDown(KeyCode.C)) //��Ŀ ���� 
             {
                 ChangeState(State.Anchor);
             }
-            //�޸����� �ٿ� ���� ���� ���� ���� ���߰� ����..
+
 
             if (Input.GetKeyDown(KeyCode.LeftShift)) //����Ʈ����Ʈ�� ��� ���� 
             {
@@ -1914,6 +1970,12 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Ex);
             }
 
+            if (player.takeHit == true)
+            {
+                ChangeState(State.Hit);
+            }
+
+
         }
 
     }
@@ -2035,9 +2097,10 @@ public class PlayerController : LivingEntity
             takeHit = true;
             hpui.HpChange();
             hp -= 1;
-            yield return StartCoroutine(Twinkle());          
+            yield return StartCoroutine(Twinkle());
             renderer.color = new Color(1, 1, 1, 1);
             takeHit = false;
+            invincible = false;
         }
     }
 
@@ -2045,8 +2108,7 @@ public class PlayerController : LivingEntity
     {
         for (int i = 0; i < 7; i++)
         {
-
-            Debug.Log("코루틴 발동");
+            invincible = true;
             renderer.color = new Color(1, 1, 1, 0.4f);
             yield return new WaitForSeconds(0.2f);
             renderer.color = new Color(1, 1, 1, 1);
