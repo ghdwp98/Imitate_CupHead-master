@@ -5,7 +5,7 @@ public class BarController : MonoBehaviour
 {
     //자기 자식 5개를 리스트
 
-    [SerializeField] Image[] manaBarImage; //배열 아기 5개 0~4 
+    [SerializeField] public Image[] manaBarImage; //배열 아기 5개 0~4 
     [SerializeField] GameObject cardPrefab;
     [SerializeField] Sprite fullCard;
     [SerializeField] Sprite EmptyCard;
@@ -22,10 +22,17 @@ public class BarController : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space)) 
+        if(Input.GetKeyDown(KeyCode.T))
+        {
+            ParryCardCharge();
+        }
+
+        if (Input.GetKeyDown (KeyCode.Space))
         {
             EXshoot();
         }
+        
+
     }
 
 
@@ -43,6 +50,8 @@ public class BarController : MonoBehaviour
                 
                 break;
             }
+
+           
             
         }
     }
@@ -69,12 +78,11 @@ public class BarController : MonoBehaviour
     {
         for (int i = 4; i >= 1; i--) //4번 부터 빼줘야 하니까 스프라이트도 원래 자기껄로 돌려주면 됨. 
         {
-            /*if (manaBarImage[0].fillAmount<1f)
+            if (manaBarImage[0].fillAmount < 1f)  //0번째가 안차 있으면 안나가야 하는데 어째서?? 
             {
-                return;
+                break; 
             }
-*/
-            if (manaBarImage[i].fillAmount == 1f)
+            else if (manaBarImage[i].fillAmount == 1f)
             {
                 manaBarImage[i].fillAmount = 0f;
                 manaBarImage[i].sprite = EmptyCard;

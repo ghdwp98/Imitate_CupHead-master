@@ -38,6 +38,7 @@ public class BulletMove : MonoBehaviour
         {
             return;
         }
+       
 
         IDamagable target=collision.GetComponent<IDamagable>();
         if(target != null)
@@ -47,13 +48,16 @@ public class BulletMove : MonoBehaviour
             {
                 barCard.AttackCardCharge();
             }
+
+            pooledObject.Release(); //다른 장소에 부딪히면 파괴 --> 파괴 애니메이션 출력 필요
+            Manager.Pool.GetPool(bulletCollision, transform.position, transform.rotation);
+
         }
 
         
 
 
-        pooledObject.Release(); //다른 장소에 부딪히면 파괴 --> 파괴 애니메이션 출력 필요
-        Manager.Pool.GetPool(bulletCollision, transform.position, transform.rotation);
+        
     }
 
 }

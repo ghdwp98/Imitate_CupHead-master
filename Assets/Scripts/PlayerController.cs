@@ -4,17 +4,16 @@ using UnityEngine;
 public class PlayerController : LivingEntity
 {
 
-    
+
     public enum State
     {
         Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
-        , Fall, Parrying, Up
+        , Fall, Parrying, Up, Ex
     }
 
 
     [Header("Player")]
     [SerializeField] int hp = 3;
-    [SerializeField] int mp = 0;
     [SerializeField] float axisH;
     [SerializeField] float axisV;
     [SerializeField] bool parry;
@@ -81,8 +80,9 @@ public class PlayerController : LivingEntity
         stateMachine.AddState(State.Fall, new FallState(this));
         stateMachine.AddState(State.Parrying, new ParryingState(this));
         stateMachine.AddState(State.Up, new UpState(this));
+        stateMachine.AddState(State.Ex, new ExState(this));
 
-        stateMachine.InitState(State.Idle); //���� ���¸� Idle ���·� ���� 
+        stateMachine.InitState(State.Idle);
 
     }
 
@@ -224,6 +224,407 @@ public class PlayerController : LivingEntity
 
     }
 
+
+    private class ExState : PlayerState
+    {
+        public ExState(PlayerController player) : base(player) { }
+        public bool ExitEx;
+        public bool animPlaying;
+        public override void Enter()
+        {
+            Debug.Log("ex상태진입");
+            ExitEx = false;
+            animPlaying = false;
+        }
+
+        public override void Update()
+        {
+            axisH = Input.GetAxisRaw("Horizontal");
+            axisV = Input.GetAxisRaw("Vertical");
+
+            rigidbody.velocity = Vector2.zero;
+
+            if (onGround == false) //공중 상태 일 때 . 
+            {
+                if (renderer.flipX == true)  //왼쪽 보는중
+                {
+                    renderer.flipX = true; //애니메이션 추가 하지 말고 그냥 왼쪽으로 돌려주자. 
+
+                    if (axisV == 0 || (axisH == -1f && axisV == 0)) //왼쪽 공중 스트레이트. 
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                        spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
+                        //각자 애니메이션 재생 후 --> exitex를 true로 만들어줘서 탈출시켜주자. 
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExStraightAir");
+                            player.ExShoot();
+                        }
+                    }
+                    else if ((axisH == 0.0f && axisV == +1.0f))  // 왼쪽 공중 up
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                        spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExUpAir");
+                            player.ExShoot();
+                        }
+
+
+                    }
+                    else if (axisH == 0.0f && axisV == -1.0f) //down 
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                        spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDownAir");
+                            player.ExShoot();
+                        }
+
+
+                    }
+                    else if (axisH == -1.0f && axisV == 1.0f)  //공중 왼쪽 diag up  
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
+                        spawnPos.transform.localPosition = new Vector2(-1.5f, 2.1f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDiagUpAir");
+                            player.ExShoot();
+                        }
+
+
+                    }
+                    else if (axisH == -1.0f && axisV == -1.0f) //공중 오른쪽 diag down
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 225);
+                        spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDiagDownAir");
+                            player.ExShoot();
+                        }
+                    }
+                }
+                else //오른쪽 보는 중 
+                {
+                    renderer.flipX = false;
+                    if (axisV == 0)
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                        spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExStraightAir");
+                            player.ExShoot();
+                        }
+
+                    }
+                    else if ((axisH == 0.0f && axisV == +1.0f))  //up
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                        spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExUpAir");
+                            player.ExShoot();
+                        }
+
+                    }
+                    else if (axisH == 0.0f && axisV == -1.0f) //down 
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                        spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDownAir");
+                            player.ExShoot();
+                        }
+
+                    }
+                    else if (axisH == 1.0f && axisV == 1.0f)
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
+                        spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDiagUpAir");
+                            player.ExShoot();
+                        }
+                    }
+                    else if (axisH == 1.0f && axisV == -1.0f)
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
+                        spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDiagDownAir");
+                            player.ExShoot();
+                        }
+                    }
+                }
+            }
+
+            else //땅 일 때 애니메이션 재생 
+            {
+                if (renderer.flipX == true)  //왼쪽 보는중
+                {
+                    if (axisV == 0 || (axisV == 0 && axisH == 1))
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                        spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExStraight");
+                            player.ExShoot();
+                        }
+
+                    }
+                    else if ((axisH == 0.0f && axisV == +1.0f))  //up
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                        spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExUp");
+                            player.ExShoot();
+                        }
+
+                    }
+                    else if (axisH == 0.0f && axisV == -1.0f) //down 
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                        spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDown");
+                            player.ExShoot();
+                        }
+
+                    }
+                    else if (axisH == -1.0f && axisV == 1.0f) //diagup
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
+                        spawnPos.transform.localPosition = new Vector2(-1.5f, 2.1f);
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDiagUp");
+                            player.ExShoot();
+                        }
+
+                    }
+                    else if (axisH == -1.0f && axisV == -1.0f) //diagdown
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 225);
+                        spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDiagDown");
+                            player.ExShoot();
+                        }
+                    }
+
+                }
+                else
+                {
+                    if (axisV == 0)
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                        spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExStraight");
+                            player.ExShoot();
+                        }
+
+
+                    }
+                    else if ((axisH == 0.0f && axisV == +1.0f))  //up
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                        spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExUp");
+                            player.ExShoot();
+                        }
+                    }
+                    else if (axisH == 0.0f && axisV == -1.0f) //down 
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                        spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDown");
+                            player.ExShoot();
+                        }
+                    }
+                    else if (axisH == 1.0f && axisV == 1.0f)
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
+                        spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDiagUp");
+                            player.ExShoot();
+                        }
+
+                    }
+                    else if (axisH == 1.0f && axisV == -1.0f)
+                    {
+                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
+                        spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
+
+                        if (animPlaying == false)
+                        {
+                            animPlaying = true;
+                            animator.Play("ExDiagDown");
+                            player.ExShoot();
+                        }
+
+                    }
+                }
+
+            }
+        }
+
+        public override void LateUpdate()
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExStraightAir") &&
+                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ExitEx = true;
+                animPlaying = false;
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExUpAir") &&
+                   animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ExitEx = true;
+                animPlaying = false;
+
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExDownAir") &&
+                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ExitEx = true;
+                animPlaying = false;
+
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExDiagUpAir") &&
+                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ExitEx = true;
+                animPlaying = false;
+
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExDiagDownAir") &&
+                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ExitEx = true;
+                animPlaying = false;
+
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExStraight") &&
+                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ExitEx = true;
+                animPlaying = false;
+
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExDown") &&
+                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ExitEx = true;
+                animPlaying = false;
+
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExUp") &&
+                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ExitEx = true;
+                animPlaying = false;
+
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExDiagUp") &&
+                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ExitEx = true;
+                animPlaying = false;
+
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExDiagDown") &&
+                        animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ExitEx = true;
+                animPlaying = false;
+
+            }
+
+
+
+
+        }
+
+
+        public override void Transition()
+        {
+            if (ExitEx == true)  // 필살기 시전이 끝나면 true로 전환해서 상태 변경 해주기. 
+            {
+                if (onGround == true) //공중에서 쓰고 나면 떨어지게 
+                {
+                    ChangeState(State.Fall);
+                }
+                else
+                {
+                    ChangeState(State.Idle);
+                }
+            }
+        }
+
+
+
+
+
+
+    }
     private class UpState : PlayerState
     {
         public UpState(PlayerController player) : base(player) { }
@@ -288,6 +689,11 @@ public class PlayerController : LivingEntity
             if (Input.GetKeyDown(KeyCode.C))
             {
                 ChangeState(State.Anchor);
+            }
+            else if (Input.GetKeyDown(KeyCode.V) && barController.manaBarImage[0].fillAmount == 1f
+                && player.EXshooting == false)
+            {
+                ChangeState(State.Ex);
             }
         }
     }
@@ -410,7 +816,7 @@ public class PlayerController : LivingEntity
         public override void FixedUpdate()
         {
             player.StartCoroutine(player.ParryCheckCoroutine());
-            
+
 
         }
         public override void Transition()
@@ -431,11 +837,16 @@ public class PlayerController : LivingEntity
             {
                 ChangeState(State.Dash);
             }
+
             if (parrySucess == true)
             {
                 ChangeState(State.Jump);
             }
-
+            else if (Input.GetKeyDown(KeyCode.V) && barController.manaBarImage[0].fillAmount == 1f
+                && player.EXshooting == false)
+            {
+                ChangeState(State.Ex);
+            }
 
 
         }
@@ -448,6 +859,8 @@ public class PlayerController : LivingEntity
         public int dashSpeed = 10;
         public override void Enter()
         {
+            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+
 
             if (renderer.flipX == false)
             {
@@ -475,6 +888,11 @@ public class PlayerController : LivingEntity
                 rigidbody.velocity = new Vector2(-dashSpeed, 0);
 
             }
+        }
+
+        public override void Exit()
+        {
+            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
         }
 
         public override void Transition()
@@ -506,6 +924,7 @@ public class PlayerController : LivingEntity
         public int jumpDashSpeed = 10;
         public override void Enter()
         {
+            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
 
             if (renderer.flipX == false)
             {
@@ -532,6 +951,13 @@ public class PlayerController : LivingEntity
                 rigidbody.velocity = new Vector2(-jumpDashSpeed, 0);
 
             }
+        }
+
+        public override void Exit()
+        {
+
+            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+
         }
 
         public override void Transition()
@@ -614,7 +1040,7 @@ public class PlayerController : LivingEntity
         }
         public override void Transition()
         {
-            if (onGround && rigidbody.velocity.y > -0.5)
+            if (onGround && rigidbody.velocity.y > -0.3)
             {
                 player.JumpEffectSpawn.JumpEffect();
                 ChangeState(State.Idle);
@@ -625,7 +1051,11 @@ public class PlayerController : LivingEntity
             {
                 ChangeState(State.Parrying);
             }
-
+            else if (Input.GetKeyDown(KeyCode.V) && barController.manaBarImage[0].fillAmount == 1f
+                && player.EXshooting == false)
+            {
+                ChangeState(State.Ex);
+            }
         }
 
     }
@@ -745,18 +1175,6 @@ public class PlayerController : LivingEntity
             {
                 animator.SetBool("ShootStraight", false);
             }
-            //필살기 쓰는 동안 일반공격이 안나가야 하는데 어떡하지? bool로 input을 묶어줘야하나..?
-
-            if(Input.GetKeyDown(KeyCode.V))
-            {
-                animator.SetBool("ExStraight", true);
-                player.ExShoot();
-            }
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExStraight") &&
-            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
-            {
-                animator.SetBool("ExStraight", false);
-            }
 
 
         }
@@ -787,6 +1205,12 @@ public class PlayerController : LivingEntity
             {
                 ChangeState(State.Dash);
             }
+            else if (Input.GetKeyDown(KeyCode.V) && barController.manaBarImage[0].fillAmount == 1f
+                && player.EXshooting == false)
+            {
+                ChangeState(State.Ex);
+            }
+
             if (!onGround && player.FootIsTrigger == false)
             {
                 ChangeState(State.Fall);
@@ -798,6 +1222,7 @@ public class PlayerController : LivingEntity
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
                 ChangeState(State.Up);
             }
+
 
         }
 
@@ -980,7 +1405,7 @@ public class PlayerController : LivingEntity
 
         public override void Transition()
         {
-            // c Ű�� ������ ���� ������ idle�� Ż�� 
+
 
             if (Input.GetKeyUp(KeyCode.C))
             {
@@ -993,6 +1418,11 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Up);
             }
 
+            if (Input.GetKeyDown(KeyCode.V) && barController.manaBarImage[0].fillAmount == 1f
+                && player.EXshooting == false)
+            {
+                ChangeState(State.Ex);
+            }
 
 
         }
@@ -1150,6 +1580,14 @@ public class PlayerController : LivingEntity
             {
                 ChangeState(State.Parrying);
             }
+
+            if (Input.GetKeyDown(KeyCode.V) && barController.manaBarImage[0].fillAmount == 1f
+                && player.EXshooting == false)
+            {
+                ChangeState(State.Ex);
+            }
+
+
         }
 
         public void Jump()
@@ -1169,7 +1607,7 @@ public class PlayerController : LivingEntity
         public void ParryJump()
         {
             Debug.Log("패리점프 함수호출");
-            
+
             animator.Play("ParrySuccess");
             player.gameObject.GetComponent<CapsuleCollider2D>().offset = new Vector2(-0.02f, 0.87f);
             player.gameObject.GetComponent<CapsuleCollider2D>().size = new Vector2(1.1f, 1.43f);
@@ -1308,6 +1746,11 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Up);
             }
 
+            if (Input.GetKeyDown(KeyCode.V) && barController.manaBarImage[0].fillAmount == 1f
+                && player.EXshooting == false)
+            {
+                ChangeState(State.Ex);
+            }
 
         }
 
@@ -1402,6 +1845,13 @@ public class PlayerController : LivingEntity
             {
                 ChangeState(State.Anchor);
             }
+
+            if (Input.GetKeyDown(KeyCode.V) && barController.manaBarImage[0].fillAmount == 1f
+                && player.EXshooting == false)
+            {
+                ChangeState(State.Ex);
+            }
+
         }
 
     }
@@ -1412,7 +1862,7 @@ public class PlayerController : LivingEntity
         if (isShooting == false)
         {
             isShooting = true;
-            bulletSpawner.ObjectSpawn(); 
+            bulletSpawner.ObjectSpawn();
             yield return new WaitForSeconds(coolTime);
             isShooting = false;
         }
@@ -1421,16 +1871,18 @@ public class PlayerController : LivingEntity
 
     private IEnumerator EXshootCoroutine()
     {
-        float coolTime = 1.3f; //바꿔나가자. 
-        if(EXshooting == false)
+        float coolTime = 0.4f; //바꿔나가자. 
+        if (EXshooting == false)
         {
             EXshooting = true;
-            bulletSpawner.EXShootSpawn();
-            barController.EXshoot();
             yield return new WaitForSeconds(coolTime);
-            EXshooting=false;
+            bulletSpawner.EXShootSpawn();
+            yield return new WaitForSeconds(coolTime);
+            barController.EXshoot();
+         
+            EXshooting = false;
         }
-       
+
 
     }
 
@@ -1515,7 +1967,7 @@ public class PlayerController : LivingEntity
 
 
 
-    
+
 }
 
 

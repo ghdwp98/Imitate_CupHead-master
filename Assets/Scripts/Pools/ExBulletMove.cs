@@ -36,10 +36,13 @@ public class ExBulletMove : MonoBehaviour
         {
             return;
         }
+        
 
         IDamagable target=collision.GetComponent<IDamagable>();
         if(target != null) 
         {
+            pooledObject.Release();
+            Manager.Pool.GetPool(ExBulletCollision, transform.position, transform.rotation);
             target.OnDamage(bulletDamage); //데미지는 불렛이 주고 
             if (barCard != null)
             {
@@ -50,7 +53,6 @@ public class ExBulletMove : MonoBehaviour
      
 
 
-        pooledObject.Release();
-        Manager.Pool.GetPool(ExBulletCollision,transform.position,transform.rotation);
+        
     }
 }

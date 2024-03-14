@@ -75,8 +75,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1410328109
-  m_SortingLayer: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 9a0e12d8182c4a34eacd0ec6cf1b4fbf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -190,7 +190,6 @@ MonoBehaviour:
   pooledObject: {fileID: 2606218724657552123}
   bulletCollision: {fileID: 7271132754538127614, guid: 97ee9ca6d11c7d5449491163932195a8, type: 3}
   bulletDamage: 2
-  barController: {fileID: 2912096306109495113, guid: 388ca3addf0a7014783c6c016510296c, type: 3}
 --- !u!114 &2606218724657552123
 MonoBehaviour:
   m_ObjectHideFlags: 0
