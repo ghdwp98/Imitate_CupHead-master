@@ -1868,7 +1868,7 @@ public class PlayerController : LivingEntity
             yield return new WaitForSecondsRealtime(0.1f);
             bulletSpawner.EXShootSpawn();
             yield return new WaitForSeconds(coolTime);
-            barController.EXshoot();
+            barController.EXshoot();          
             EXshooting = false;
         }
 

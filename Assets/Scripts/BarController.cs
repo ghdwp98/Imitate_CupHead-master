@@ -22,16 +22,16 @@ public class BarController : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.T))
         {
             ParryCardCharge();
         }
 
-        if (Input.GetKeyDown (KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             EXshoot();
         }
-        
+
 
     }
 
@@ -43,16 +43,16 @@ public class BarController : MonoBehaviour
         // 나중에 이부분 고쳐보자. 
         for (int i = 0; i < manaBarImage.Length; i++)
         {
-            Debug.Log("어택차지");
+
             if (manaBarImage[i].fillAmount != 1f)
             {
-                manaBarImage[i].fillAmount += 0.05f; 
-                
+                manaBarImage[i].fillAmount += 0.05f;
+
                 break;
             }
 
-           
-            
+
+
         }
     }
 
@@ -64,10 +64,10 @@ public class BarController : MonoBehaviour
             {
                 float fill = manaBarImage[i].fillAmount; //자신의 필 어마운트만큼 다음 놈한테 ++ 
                 manaBarImage[i].fillAmount = 1f;
-                if(i+1< manaBarImage.Length)
+                if (i + 1 < manaBarImage.Length)
                 {
                     manaBarImage[i + 1].fillAmount = fill;
-                }  
+                }
                 break;
             }
 
@@ -80,7 +80,7 @@ public class BarController : MonoBehaviour
         {
             if (manaBarImage[0].fillAmount < 1f)  //0번째가 안차 있으면 안나가야 하는데 어째서?? 
             {
-                break; 
+                break;
             }
             else if (manaBarImage[i].fillAmount == 1f)
             {
@@ -117,11 +117,11 @@ public class BarController : MonoBehaviour
 
 
 
-           
+
         }
 
 
-        
+
     }
 
 

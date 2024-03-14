@@ -61,7 +61,9 @@ public class SceneManager : Singleton<SceneManager>
         Manager.UI.EnsureEventSystem();
 
         BaseScene curScene = GetCurScene();
-        yield return curScene.LoadingRoutine();
+        yield return curScene.LoadingRoutine(); //현재씬의 로딩 루틴 실행 하는 위치.
+
+        
 
         loadingAnim.gameObject.SetActive(false);
         Time.timeScale = 1f;
