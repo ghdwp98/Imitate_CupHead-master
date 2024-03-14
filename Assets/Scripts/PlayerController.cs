@@ -8,7 +8,7 @@ public class PlayerController : LivingEntity
     public enum State
     {
         Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
-        , Fall, Parrying, Up, Ex
+        , Fall, Parrying, Up, Ex, Dead, Hit
     }
 
 
@@ -53,6 +53,7 @@ public class PlayerController : LivingEntity
     [SerializeField] Vector2 bulletPos;
     [SerializeField] bool isOverlap = false;
     [SerializeField] bool takeHit = false;
+    [SerializeField] float invincibleTime = 1.5f;
 
     private Vector2 inputDir;
     private bool onGround;
@@ -83,11 +84,12 @@ public class PlayerController : LivingEntity
         stateMachine.AddState(State.Parrying, new ParryingState(this));
         stateMachine.AddState(State.Up, new UpState(this));
         stateMachine.AddState(State.Ex, new ExState(this));
+        stateMachine.AddState(State.Dead, new DeadState(this));
+        stateMachine.AddState(State.Hit, new HitState(this));
 
         stateMachine.InitState(State.Idle);
 
     }
-
 
     private void Start()
     {
@@ -105,10 +107,7 @@ public class PlayerController : LivingEntity
 
     private void Update()
     {
-        stateMachine.Update();
-
-
-
+        stateMachine.Update();  
     }
 
 
@@ -170,7 +169,7 @@ public class PlayerController : LivingEntity
 
         if (collision.gameObject.tag == "Monster") //몬스터에 피격되면. 
         {
-            TakeHit();          
+            TakeHit();
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -188,10 +187,10 @@ public class PlayerController : LivingEntity
 
     }
 
-    private class PlayerState : BaseState 
+    private class PlayerState : BaseState
     {
-        protected PlayerController player; 
-        
+        protected PlayerController player;
+
         protected Transform transform => player.transform;
         protected int hp { get { return player.hp; } set { player.hp = value; } }
         protected float axisH { get { return player.axisH; } set { player.axisH = value; } }
@@ -219,13 +218,15 @@ public class PlayerController : LivingEntity
         protected GameObject superBar { get { return player.superBar; } set { player.superBar = value; } }
 
         protected BarController barController { get { return player.barController; } set { player.barController = value; } }
-        protected HPui hpUI { get { return player.hpui; } set { player.hpui= value; } }
+        protected HPui hpUI { get { return player.hpui; } set { player.hpui = value; } }
         public PlayerState(PlayerController player)
         {
             this.player = player;
         }
+
     }
 
+    //takehit가 true가 되면 맞는 상태로 이동할까? 
 
     private class ExState : PlayerState
     {
@@ -618,6 +619,74 @@ public class PlayerController : LivingEntity
 
 
     }
+
+    private class DeadState : PlayerState //피격 상태 만들고 그냥 피격 상태에서만 dead로 진입할 수 있도록하자. 
+    {
+        public DeadState(PlayerController player) : base(player) { }
+
+        public override void Enter()
+        {
+            Debug.Log("사망상태 진입");
+
+        }
+
+    }
+
+    private class HitState : PlayerState
+    {
+        public HitState(PlayerController player) : base(player) { }
+
+        public override void Enter()
+        {
+            //살짝 반대쪽으로 밀어주는 상황 만들어주기. 
+
+            Debug.Log("히트 상태");
+
+            if (onGround == true) //땅 일때 
+            {
+                animator.Play("Hit");
+            }
+            else // 땅이 아닐 때 false 일때 
+            {
+                animator.Play("HitAir");
+            }
+        }
+        public override void Update()
+        {
+
+        }
+
+        public override void Transition()
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Hit") &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                if (hp > 0)
+                {
+                    ChangeState(State.Idle);
+                }
+                else if (hp <= 0)
+                {
+                    Debug.Log("데드 상태 진입");
+                    ChangeState(State.Dead);
+                }
+            }
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("HitAir") &&
+                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                if (hp > 0)
+                {
+                    ChangeState(State.Fall);
+                }
+                else if (hp <= 0)
+                {
+                    Debug.Log("데드 상태 진입");
+                    ChangeState(State.Dead);
+                }
+            }
+        }
+    }
+
     private class UpState : PlayerState
     {
         public UpState(PlayerController player) : base(player) { }
@@ -852,7 +921,7 @@ public class PlayerController : LivingEntity
         public int dashSpeed = 10;
         public override void Enter()
         {
-            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+
 
 
             if (renderer.flipX == false)
@@ -885,7 +954,7 @@ public class PlayerController : LivingEntity
 
         public override void Exit()
         {
-            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+
         }
 
         public override void Transition()
@@ -917,7 +986,7 @@ public class PlayerController : LivingEntity
         public int jumpDashSpeed = 10;
         public override void Enter()
         {
-            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = false;
+
 
             if (renderer.flipX == false)
             {
@@ -949,7 +1018,7 @@ public class PlayerController : LivingEntity
         public override void Exit()
         {
 
-            player.gameObject.GetComponent<CapsuleCollider2D>().enabled = true;
+
 
         }
 
@@ -1871,7 +1940,7 @@ public class PlayerController : LivingEntity
             yield return new WaitForSecondsRealtime(0.1f);
             bulletSpawner.EXShootSpawn();
             yield return new WaitForSeconds(coolTime);
-            barController.EXshoot();          
+            barController.EXshoot();
             EXshooting = false;
         }
 
@@ -1882,8 +1951,6 @@ public class PlayerController : LivingEntity
     {
         StartCoroutine(EXshootCoroutine());
     }
-
-
 
     public void ChangeLayer()
     {
@@ -1898,8 +1965,6 @@ public class PlayerController : LivingEntity
 
         {
             downJump = true;
-
-
             Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"),
                         LayerMask.NameToLayer("Flat"), true);
             yield return new WaitForSeconds(2f);
@@ -1965,21 +2030,30 @@ public class PlayerController : LivingEntity
     private IEnumerator TakeHitCoroutine() //여기서 일정시간 데미지 안 받도록 해주고
                                            // + 로 유닛 흐리게 해주기. 한 2초? 
     {
-        if (takeHit == false)
+        if (takeHit == false && hp > 0)
         {
-            Debug.Log(hp);
             takeHit = true;
             hpui.HpChange();
             hp -= 1;
-            renderer.color = new Color(1, 1, 1, 0.4f);
-            yield return new WaitForSeconds(2f);
-            takeHit = false;
+            yield return StartCoroutine(Twinkle());          
             renderer.color = new Color(1, 1, 1, 1);
+            takeHit = false;
         }
-
-
-
     }
+
+    private IEnumerator Twinkle()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+
+            Debug.Log("코루틴 발동");
+            renderer.color = new Color(1, 1, 1, 0.4f);
+            yield return new WaitForSeconds(0.2f);
+            renderer.color = new Color(1, 1, 1, 1);
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
+
 
 
 }
