@@ -34,7 +34,7 @@ public class BulletMove : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Bullet" ||
-            collision.gameObject.tag == "Checking")
+            collision.gameObject.tag == "Checking"||collision.gameObject.tag=="Exit")
         {
             return;
         }
@@ -48,16 +48,13 @@ public class BulletMove : MonoBehaviour
             {
                 barCard.AttackCardCharge();
             }
-
-            pooledObject.Release(); //다른 장소에 부딪히면 파괴 --> 파괴 애니메이션 출력 필요
-            Manager.Pool.GetPool(bulletCollision, transform.position, transform.rotation);
-
         }
 
-        
+        pooledObject.Release(); //다른 장소에 부딪히면 파괴 --> 파괴 애니메이션 출력 필요
+        Manager.Pool.GetPool(bulletCollision, transform.position, transform.rotation);
 
 
-        
+
     }
 
 }

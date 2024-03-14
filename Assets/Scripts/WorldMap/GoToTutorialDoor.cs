@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DoorExit : MonoBehaviour
+public class GoToTutorialDoor : MonoBehaviour
 {
     [SerializeField] GameObject DoorKeyPrefab;
     GameObject popUp;
@@ -12,7 +12,7 @@ public class DoorExit : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
 
-            popUp = Instantiate(DoorKeyPrefab,pos.transform.position,Quaternion.identity);
+            popUp = Instantiate(DoorKeyPrefab, pos.transform.position, Quaternion.identity);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -24,9 +24,10 @@ public class DoorExit : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Manager.Scene.LoadScene("WorldMapScene");
+            Manager.Scene.LoadScene("TutorialScene");
         }
     }
 
+    
 
 }

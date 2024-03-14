@@ -190,7 +190,7 @@ public class PlayerController : LivingEntity
         protected PlayerController player; //Player�� �̸� ����ϴ� stateŬ�����鿡��
         // player.hp ������ �÷��̾��� ������ �̿��� �� �ֵ��� �Ѵ�. 
         protected Transform transform => player.transform;
-        protected int hp { get { return player.hp; } set { player.hp = value; } }  
+        protected int hp { get { return player.hp; } set { player.hp = value; } }
         protected float axisH { get { return player.axisH; } set { player.axisH = value; } }
         protected float axisV { get { return player.axisV; } set { player.axisV = value; } }
         protected Rigidbody2D rigidbody => player.rigidbody;
@@ -251,12 +251,10 @@ public class PlayerController : LivingEntity
 
                     if (axisV == 0 || (axisH == -1f && axisV == 0)) //왼쪽 공중 스트레이트. 
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
-                        spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
-                        //각자 애니메이션 재생 후 --> exitex를 true로 만들어줘서 탈출시켜주자. 
-
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                            spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
                             animPlaying = true;
                             animator.Play("ExStraightAir");
                             player.ExShoot();
@@ -264,11 +262,10 @@ public class PlayerController : LivingEntity
                     }
                     else if ((axisH == 0.0f && axisV == +1.0f))  // 왼쪽 공중 up
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                        spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
-
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                            spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
                             animPlaying = true;
                             animator.Play("ExUpAir");
                             player.ExShoot();
@@ -278,11 +275,10 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == 0.0f && axisV == -1.0f) //down 
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
-                        spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
-
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                            spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
                             animPlaying = true;
                             animator.Play("ExDownAir");
                             player.ExShoot();
@@ -292,11 +288,10 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == -1.0f && axisV == 1.0f)  //공중 왼쪽 diag up  
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
-                        spawnPos.transform.localPosition = new Vector2(-1.5f, 2.1f);
-
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
+                            spawnPos.transform.localPosition = new Vector2(-1.5f, 2.1f);
                             animPlaying = true;
                             animator.Play("ExDiagUpAir");
                             player.ExShoot();
@@ -306,11 +301,10 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == -1.0f && axisV == -1.0f) //공중 오른쪽 diag down
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 225);
-                        spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
-
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 225);
+                            spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
                             animPlaying = true;
                             animator.Play("ExDiagDownAir");
                             player.ExShoot();
@@ -322,11 +316,11 @@ public class PlayerController : LivingEntity
                     renderer.flipX = false;
                     if (axisV == 0)
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                        spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
 
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                            spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
                             animPlaying = true;
                             animator.Play("ExStraightAir");
                             player.ExShoot();
@@ -335,11 +329,12 @@ public class PlayerController : LivingEntity
                     }
                     else if ((axisH == 0.0f && axisV == +1.0f))  //up
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                        spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
+
 
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                            spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
                             animPlaying = true;
                             animator.Play("ExUpAir");
                             player.ExShoot();
@@ -348,11 +343,10 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == 0.0f && axisV == -1.0f) //down 
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
-                        spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
-
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                            spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
                             animPlaying = true;
                             animator.Play("ExDownAir");
                             player.ExShoot();
@@ -361,11 +355,11 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == 1.0f && axisV == 1.0f)
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
-                        spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
 
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
+                            spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
                             animPlaying = true;
                             animator.Play("ExDiagUpAir");
                             player.ExShoot();
@@ -373,11 +367,11 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == 1.0f && axisV == -1.0f)
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
-                        spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
 
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
+                            spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
                             animPlaying = true;
                             animator.Play("ExDiagDownAir");
                             player.ExShoot();
@@ -385,18 +379,16 @@ public class PlayerController : LivingEntity
                     }
                 }
             }
-
             else //땅 일 때 애니메이션 재생 
             {
                 if (renderer.flipX == true)  //왼쪽 보는중
                 {
                     if (axisV == 0 || (axisV == 0 && axisH == 1))
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
-                        spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
-
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 180);
+                            spawnPos.transform.localPosition = new Vector2(-1.5f, 1.2f);
                             animPlaying = true;
                             animator.Play("ExStraight");
                             player.ExShoot();
@@ -405,11 +397,12 @@ public class PlayerController : LivingEntity
                     }
                     else if ((axisH == 0.0f && axisV == +1.0f))  //up
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                        spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
+
 
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                            spawnPos.transform.localPosition = new Vector2(-0.4f, 2.7f);
                             animPlaying = true;
                             animator.Play("ExUp");
                             player.ExShoot();
@@ -418,10 +411,11 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == 0.0f && axisV == -1.0f) //down 
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
-                        spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                            spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
                             animPlaying = true;
                             animator.Play("ExDown");
                             player.ExShoot();
@@ -430,10 +424,11 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == -1.0f && axisV == 1.0f) //diagup
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
-                        spawnPos.transform.localPosition = new Vector2(-1.5f, 2.1f);
+
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 135);
+                            spawnPos.transform.localPosition = new Vector2(-1.5f, 2.1f);
                             animPlaying = true;
                             animator.Play("ExDiagUp");
                             player.ExShoot();
@@ -442,11 +437,11 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == -1.0f && axisV == -1.0f) //diagdown
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 225);
-                        spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
 
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 225);
+                            spawnPos.transform.localPosition = new Vector2(-0.64f, 0.8f);
                             animPlaying = true;
                             animator.Play("ExDiagDown");
                             player.ExShoot();
@@ -458,11 +453,10 @@ public class PlayerController : LivingEntity
                 {
                     if (axisV == 0)
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                        spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
-
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                            spawnPos.transform.localPosition = new Vector2(0.9f, 1.2f);
                             animPlaying = true;
                             animator.Play("ExStraight");
                             player.ExShoot();
@@ -472,11 +466,12 @@ public class PlayerController : LivingEntity
                     }
                     else if ((axisH == 0.0f && axisV == +1.0f))  //up
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                        spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
+
 
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                            spawnPos.transform.localPosition = new Vector2(0.4f, 2.7f);
                             animPlaying = true;
                             animator.Play("ExUp");
                             player.ExShoot();
@@ -484,11 +479,12 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == 0.0f && axisV == -1.0f) //down 
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
-                        spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
+
 
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -90);
+                            spawnPos.transform.localPosition = new Vector2(0.16f, 0.25f);
                             animPlaying = true;
                             animator.Play("ExDown");
                             player.ExShoot();
@@ -496,11 +492,11 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == 1.0f && axisV == 1.0f)
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
-                        spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
 
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, 45);
+                            spawnPos.transform.localPosition = new Vector2(1.5f, 2.1f);
                             animPlaying = true;
                             animator.Play("ExDiagUp");
                             player.ExShoot();
@@ -509,11 +505,10 @@ public class PlayerController : LivingEntity
                     }
                     else if (axisH == 1.0f && axisV == -1.0f)
                     {
-                        spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
-                        spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
-
                         if (animPlaying == false)
                         {
+                            spawnPos.transform.localRotation = Quaternion.Euler(0, 0, -45);
+                            spawnPos.transform.localPosition = new Vector2(0.57f, 0.7f);
                             animPlaying = true;
                             animator.Play("ExDiagDown");
                             player.ExShoot();
@@ -524,7 +519,6 @@ public class PlayerController : LivingEntity
 
             }
         }
-
         public override void LateUpdate()
         {
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("ExStraightAir") &&
@@ -596,9 +590,6 @@ public class PlayerController : LivingEntity
                 animPlaying = false;
 
             }
-
-
-
 
         }
 
@@ -1870,15 +1861,14 @@ public class PlayerController : LivingEntity
 
     private IEnumerator EXshootCoroutine()
     {
-        float coolTime = 0.4f; //바꿔나가자. 
+        float coolTime = 0.8f; //바꿔나가자. 
         if (EXshooting == false)
         {
             EXshooting = true;
-            yield return new WaitForSeconds(coolTime);
+            yield return new WaitForSecondsRealtime(0.1f);
             bulletSpawner.EXShootSpawn();
             yield return new WaitForSeconds(coolTime);
             barController.EXshoot();
-         
             EXshooting = false;
         }
 
