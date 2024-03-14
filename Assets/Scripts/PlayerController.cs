@@ -13,7 +13,7 @@ public class PlayerController : LivingEntity
 
 
     [Header("Player")]
-    [SerializeField] int hp = 3;
+    [SerializeField] public int hp = 3;
     [SerializeField] float axisH;
     [SerializeField] float axisV;
     [SerializeField] bool parry;
@@ -36,6 +36,7 @@ public class PlayerController : LivingEntity
     [SerializeField] LayerMask parryMask;
     [SerializeField] GameObject superBar;
     [SerializeField] BarController barController;
+    [SerializeField] HPui hpui;
 
     PooledObject bulletPrefab;
     PooledObject bulletSparkle;
@@ -51,6 +52,7 @@ public class PlayerController : LivingEntity
     [SerializeField] bool FootIsTrigger = false;
     [SerializeField] Vector2 bulletPos;
     [SerializeField] bool isOverlap = false;
+    [SerializeField] bool takeHit = false;
 
     private Vector2 inputDir;
     private bool onGround;
@@ -128,11 +130,6 @@ public class PlayerController : LivingEntity
 
             groundCount = 1;
         }
-
-
-
-
-
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -150,14 +147,15 @@ public class PlayerController : LivingEntity
     {
         if (collision.tag == "Player" || collision.tag == "Checking"
             || collision.tag == "Parry")
-
         {
             return;
         }
-
         FootIsTrigger = true;
 
-
+        if (collision.gameObject.tag == "Monster") //몬스터에 피격되면. 
+        {
+            TakeHit();
+        }
     }
     private void OnTriggerStay2D(Collider2D collision)
     {
@@ -169,6 +167,11 @@ public class PlayerController : LivingEntity
         }
 
         FootIsTrigger = true;
+
+        if (collision.gameObject.tag == "Monster") //몬스터에 피격되면. 
+        {
+            TakeHit();          
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -185,10 +188,10 @@ public class PlayerController : LivingEntity
 
     }
 
-    private class PlayerState : BaseState //���̽�������Ʈ ����ؼ� ���밡 �� Ŭ���� 
+    private class PlayerState : BaseState 
     {
-        protected PlayerController player; //Player�� �̸� ����ϴ� stateŬ�����鿡��
-        // player.hp ������ �÷��̾��� ������ �̿��� �� �ֵ��� �Ѵ�. 
+        protected PlayerController player; 
+        
         protected Transform transform => player.transform;
         protected int hp { get { return player.hp; } set { player.hp = value; } }
         protected float axisH { get { return player.axisH; } set { player.axisH = value; } }
@@ -216,11 +219,11 @@ public class PlayerController : LivingEntity
         protected GameObject superBar { get { return player.superBar; } set { player.superBar = value; } }
 
         protected BarController barController { get { return player.barController; } set { player.barController = value; } }
+        protected HPui hpUI { get { return player.hpui; } set { player.hpui= value; } }
         public PlayerState(PlayerController player)
         {
             this.player = player;
         }
-
     }
 
 
@@ -1954,7 +1957,29 @@ public class PlayerController : LivingEntity
     }
 
 
+    public void TakeHit()
+    {
+        StartCoroutine(TakeHitCoroutine());
+    }
 
+    private IEnumerator TakeHitCoroutine() //여기서 일정시간 데미지 안 받도록 해주고
+                                           // + 로 유닛 흐리게 해주기. 한 2초? 
+    {
+        if (takeHit == false)
+        {
+            Debug.Log(hp);
+            takeHit = true;
+            hpui.HpChange();
+            hp -= 1;
+            renderer.color = new Color(1, 1, 1, 0.4f);
+            yield return new WaitForSeconds(2f);
+            takeHit = false;
+            renderer.color = new Color(1, 1, 1, 1);
+        }
+
+
+
+    }
 
 
 }

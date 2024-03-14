@@ -92,7 +92,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &19594771181743591
 RectTransform:
   m_ObjectHideFlags: 0
@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 541174314950248172}
   - component: {fileID: 4990738637203369399}
   - component: {fileID: 2872087040780012099}
+  - component: {fileID: 6482206451440939097}
   m_Layer: 5
   m_Name: UIHP
   m_TagString: Untagged
@@ -181,10 +182,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6724274114119631445}
-  - {fileID: 19594771181743591}
-  - {fileID: 6481852309860598358}
   - {fileID: 7424102993756648330}
+  - {fileID: 6481852309860598358}
+  - {fileID: 19594771181743591}
+  - {fileID: 6724274114119631445}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -255,6 +256,24 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &6482206451440939097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3059303945567115496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e56350ac79a11b245a6c75290312bf78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp3: {fileID: 515882363460420828}
+  hp2: {fileID: 1997267140074827877}
+  hp1: {fileID: 8808476512164759636}
+  dead: {fileID: 2359894960254647111}
+  playerController: {fileID: 0}
+  takeHit: 0
 --- !u!1 &7576166329805865696
 GameObject:
   m_ObjectHideFlags: 0
@@ -272,7 +291,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6481852309860598358
 RectTransform:
   m_ObjectHideFlags: 0
@@ -347,7 +366,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7424102993756648330
 RectTransform:
   m_ObjectHideFlags: 0

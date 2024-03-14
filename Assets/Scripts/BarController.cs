@@ -20,20 +20,6 @@ public class BarController : MonoBehaviour
         }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            ParryCardCharge();
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            EXshoot();
-        }
-
-
-    }
 
 
     public void AttackCardCharge() //공격 시 카드 채우기. 

@@ -9,6 +9,8 @@ public class StateMachine :MonoBehaviour
     private Dictionary<string, BaseState> stateDic = new Dictionary<string, BaseState>();
     private BaseState curState;
 
+    
+
     //AddState 함수를 통해 딕셔너리에 상태를 삽입해주고
     // curState를 통해 그 딕셔너리의 상태들을 가져다 쓴다. 
 
@@ -17,10 +19,11 @@ public class StateMachine :MonoBehaviour
         curState.Enter();
     }
 
-    public void Update()
+    public void Update() //이 업데이트나 start등 에서 죽음을 확인하려면? 
     {
         curState.Update();
         curState.Transition();
+        
     }
 
     public void LateUpdate()
