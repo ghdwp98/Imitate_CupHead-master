@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlimeBoss : LivingEntity
@@ -8,12 +9,6 @@ public class SlimeBoss : LivingEntity
         Intro, Punch, Jump, Dead
     }
 
-
-
-
-
-
-
     [Header("Slime")]
     [SerializeField] float hp = 300;
     [SerializeField] LayerMask TargetLayer;
@@ -22,6 +17,7 @@ public class SlimeBoss : LivingEntity
     [SerializeField] float v_y;
     [SerializeField] float v_x;
     [SerializeField] Vector2 lastVelocity;
+    
 
     Rigidbody2D slimeRb;
     SpriteRenderer spriteRenderer;
@@ -139,6 +135,7 @@ public class SlimeBoss : LivingEntity
         lastVelocity = slimeRb.velocity;
 
         
+        
 
     }
     
@@ -192,17 +189,21 @@ public class SlimeBoss : LivingEntity
     {
         public JumpState(SlimeBoss slime) : base(slime) { }
 
+        public int rand;
+        public int count = 0;
+        
         public override void Enter()
         {
-           
+            rand = Random.Range(4, 6);
+            Debug.Log(rand);
 
         }
         public override void FixedUpdate()
         {
-            // 여기서 몇 번 뛸지 정한다음에 그 횟수 채우면 펀치로 변경 
-            if(onGround==true) //공중에서 또 뛰면 안되니까 
+            if(onGround==true) 
             {
                 slime.StartCoroutine(slime.JumpRoutine());
+                count++; 
 
             }
             else //온그라운드가 아닐 때 (공중 ) 
@@ -222,16 +223,17 @@ public class SlimeBoss : LivingEntity
             }
 
         }
-
         public override void Exit()
         {
 
         }
 
-
         public override void Transition()
         {
-
+            if(count==rand)
+            {
+                ChangeState(State.Punch);
+            }
         }
 
     }
@@ -243,8 +245,8 @@ public class SlimeBoss : LivingEntity
 
         public override void Enter()
         {
-
-
+            animator.Play("SlimePunch");
+            
         }
 
         public override void Update()
@@ -309,9 +311,10 @@ public class SlimeBoss : LivingEntity
     {
         if (jumpRoutineEnd == false)
         {
+
             jumpRoutineEnd = true;
-            int randX = Random.Range(2, 4);
-            int randY = Random.Range(5, 8);
+            int randX = Random.Range(3, 5);
+            int randY = Random.Range(5, 7);
             animator.Play("SlimeJumpReady"); 
             yield return new WaitForSeconds(1f);  //update라 addforece 계속 들어감 
             
