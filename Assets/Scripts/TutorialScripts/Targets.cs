@@ -41,7 +41,7 @@ public class Targets : LivingEntity
     public override void Die()
     {
         
-        StartCoroutine(Destorys());
+        StartCoroutine(Destorys()); 
         base.Die();
 
     }

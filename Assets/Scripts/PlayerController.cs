@@ -230,7 +230,7 @@ public class PlayerController : LivingEntity
 
     }
 
-    //takehit가 true가 되면 맞는 상태로 이동할까? 
+    
 
     private class ExState : PlayerState
     {
@@ -629,7 +629,9 @@ public class PlayerController : LivingEntity
 
         public override void Enter()
         {
+            Instantiate(player.GhostPrefab, transform.position, Quaternion.identity);
             Debug.Log("게임오버"); //팝업창 열어주는 이벤트를 여기서 실행해주자. 
+            player.gameObject.SetActive(false);
         }
     }
 
@@ -639,8 +641,7 @@ public class PlayerController : LivingEntity
 
         public override void Enter()
         {
-            Debug.Log("사망상태 진입");
-            Instantiate(player.GhostPrefab, transform.position, Quaternion.identity);
+            Debug.Log("사망상태 진입");         
             animator.Play("Death");
 
 
@@ -652,8 +653,7 @@ public class PlayerController : LivingEntity
             rigidbody.velocity = Vector2.zero;
         }
         public override void Exit()
-        {
-            Instantiate(player.GhostPrefab, transform.position, Quaternion.identity);
+        {           
         }
 
         public override void Transition()
