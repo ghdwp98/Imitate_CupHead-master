@@ -127,31 +127,31 @@ AnimatorStateMachine:
     m_Position: {x: 690, y: -80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3169578918524052896}
-    m_Position: {x: 260, y: 100, z: 0}
+    m_Position: {x: 260, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3238624214770692872}
-    m_Position: {x: 260, y: 150, z: 0}
+    m_Position: {x: 260, y: 300, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1441536194122897953}
-    m_Position: {x: 470, y: 100, z: 0}
+    m_Position: {x: 260, y: 90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5213770730606374639}
-    m_Position: {x: 470, y: 150, z: 0}
+    m_Position: {x: 470, y: 90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8777779687352891360}
-    m_Position: {x: 470, y: 200, z: 0}
+    m_Position: {x: 470, y: 140, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4153726767512263753}
     m_Position: {x: 470, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2022637888887103092}
-    m_Position: {x: 260, y: 40, z: 0}
+    m_Position: {x: 470, y: 300, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 9062556698830757719}
     m_Position: {x: 50, y: -80, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -8631498609375041179}
-    m_Position: {x: 260, y: 200, z: 0}
+    m_Position: {x: 260, y: 140, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3141411170126397557}
     m_Position: {x: 30, y: 170, z: 0}
@@ -402,7 +402,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SlimeJump
+  m_Name: SlimeJumpReady
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []

@@ -5,7 +5,7 @@ public class SlimeBoss : LivingEntity
 {
     public enum State //이거 애기 슬라임이니까 phase가 아니라 각 공격 모션들로 나눠주자. 
     {
-        Intro, Punch,Jump, Dead
+        Intro, Punch, Jump, Dead
     }
 
 
@@ -17,8 +17,12 @@ public class SlimeBoss : LivingEntity
     [Header("Slime")]
     [SerializeField] float hp = 300;
     [SerializeField] LayerMask TargetLayer;
+    [SerializeField] GameObject target;
+    [SerializeField] Vector2 dir;
+
     Rigidbody2D slimeRb;
     SpriteRenderer spriteRenderer;
+    bool jumpRoutineEnd = false;
     [SerializeField] bool onGround;
     [SerializeField] LayerMask groundCheckLayer;
 
@@ -32,6 +36,7 @@ public class SlimeBoss : LivingEntity
 
 
     private StateMachine stateMachine;
+
     private void Awake()
     {
         animator = GetComponent<Animator>();
@@ -50,9 +55,6 @@ public class SlimeBoss : LivingEntity
 
         stateMachine.InitState(State.Intro);
     }
-
-    //양 옆 벽에 닿으면 반대로 뛰어야함 Wall로 check; 
-
     void Start()
     {
 
@@ -61,6 +63,9 @@ public class SlimeBoss : LivingEntity
     void Update()
     {
         stateMachine.Update();
+        StartCoroutine(TargetCoroutine());
+
+
     }
 
 
@@ -69,6 +74,8 @@ public class SlimeBoss : LivingEntity
         stateMachine.FixedUpdate();
         onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
     }
+    //양 옆 벽에 닿으면 반대로 뛰어야함 Wall로 check; 
+
     private class SlimeState : BaseState
     {
         protected SlimeBoss slime;
@@ -84,11 +91,15 @@ public class SlimeBoss : LivingEntity
 
         protected LayerMask groundCheckLayer => slime.groundCheckLayer;
 
+        protected GameObject target => slime.target;
+        protected Vector2 dir { get { return slime.dir; } set { slime.dir = value; } }
+
         public SlimeState(SlimeBoss slime)
         {
             this.slime = slime;
         }
     }
+
 
     private class IntroState : SlimeState
     {
@@ -104,9 +115,8 @@ public class SlimeBoss : LivingEntity
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("SlimeIntro") &&
             animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
-                //ChangeState(State.Jump);
-                //일단 펀치로 바꿔서 확인 해보기. 
-                ChangeState(State.Punch);
+
+                ChangeState(State.Jump);
             }
         }
     }
@@ -118,11 +128,12 @@ public class SlimeBoss : LivingEntity
         public override void Enter()
         {
             Debug.Log("점프 스테이트");
+            
         }
 
         public override void FixedUpdate()
         {
-            
+            slime.StartCoroutine(slime.JumpRoutine());
         }
 
         public override void Exit()
@@ -133,7 +144,7 @@ public class SlimeBoss : LivingEntity
 
         public override void Transition()
         {
-            
+
         }
 
     }
@@ -142,20 +153,21 @@ public class SlimeBoss : LivingEntity
     {
         public PunchState(SlimeBoss slime) : base(slime) { }
 
+
         public override void Enter()
         {
-            animator.Play("SlimePunch");
+
+            
         }
 
+        public override void Update()
+        {
+            
 
 
-
-
+        }
 
     }
-
-    
-
 
     private class DeadState : SlimeState
     {
@@ -168,15 +180,11 @@ public class SlimeBoss : LivingEntity
 
 
 
-
-
-
     public override void OnDamage(float damage)
     {
         base.OnDamage(damage);
         health -= (float)damage;
     }
-
 
 
     public override void Die() //이벤트 구현 필요 
@@ -194,6 +202,11 @@ public class SlimeBoss : LivingEntity
             {
                 StartCoroutine(OnHit()); //피격 색 변경 효과
             }
+            else if(collision.gameObject.tag =="Wall") //벽에 부딪히면
+            {
+                slimeRb.AddForce(new Vector2(-7, 0));
+            }
+
 
         }
 
@@ -208,7 +221,56 @@ public class SlimeBoss : LivingEntity
         yield return new WaitForSeconds(0.1f);
         spriteRenderer.color = new Color(1, 1, 1, 1f);
 
+    }
 
+
+    IEnumerator TargetCoroutine()
+    {
+        if (!dead)
+        {
+            dir = (target.transform.position - transform.position).normalized;
+
+            yield return new WaitForSecondsRealtime(0.2f);
+        }
+       
+    }
+
+    // 일단 한쪽 방향으로 점프 시작하면 벾에 닿을 때 까지 진행하고
+    // 벽에 닿는 순간 flip을 바꿔줘서 반대로 진행할 수 있도록 하자. 
+
+    IEnumerator JumpRoutine()
+    {
+        if(jumpRoutineEnd==false)
+        {
+            jumpRoutineEnd = true;
+
+            var rand = Random.Range(0, 3); // --> 벽 만나면 반대로 움직여줘야하는데
+
+            if (rand == 0)  //각 랜덤에 따라서 뛰는 높이가 다름. 
+            {
+                slimeRb.velocity = new Vector2(3, 5);
+                yield return new WaitForSeconds(1f);
+
+            }
+            else if(rand==1)
+            {
+                slimeRb.velocity = new Vector2(2,7);
+                yield return new WaitForSeconds(1f);
+
+
+            }
+            else if(rand==2)
+            {
+                slimeRb.velocity = new Vector2(1,4);
+                yield return new WaitForSeconds(1f);
+
+
+            }
+
+            yield return new WaitForSeconds(1f);
+            jumpRoutineEnd=false;
+        }
+       
     }
 
 
