@@ -104,7 +104,9 @@ public class SlimeBoss : LivingEntity
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("SlimeIntro") &&
             animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
-                
+                //ChangeState(State.Jump);
+                //일단 펀치로 바꿔서 확인 해보기. 
+                ChangeState(State.Punch);
             }
         }
     }
@@ -140,6 +142,10 @@ public class SlimeBoss : LivingEntity
     {
         public PunchState(SlimeBoss slime) : base(slime) { }
 
+        public override void Enter()
+        {
+            animator.Play("SlimePunch");
+        }
 
 
 

@@ -143,9 +143,9 @@ CircleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.068359375, y: 2.8906248}
+  m_Offset: {x: 0.068359256, y: 1.5921786}
   serializedVersion: 2
-  m_Radius: 2.9316409
+  m_Radius: 1.6331947
 --- !u!114 &6264667661307240857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -162,7 +162,11 @@ MonoBehaviour:
   hp: 300
   TargetLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
+  onGround: 0
+  groundCheckLayer:
+    serializedVersion: 2
+    m_Bits: 64
   red: 233
   green: 233
   blue: 217
@@ -226,7 +230,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.13085198, y: 0.14340353}
+  m_Offset: {x: 0.04441595, y: 0.050572872}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -237,7 +241,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2.196794, y: 0.28680706}
+  m_Size: {x: 0.75619984, y: 0.12911892}
   m_EdgeRadius: 0
 --- !u!82 &4846584836435734136
 AudioSource:
