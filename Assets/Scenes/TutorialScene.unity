@@ -6890,6 +6890,10 @@ PrefabInstance:
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+      propertyPath: GhostPrefab
+      value: 
+      objectReference: {fileID: 2202916277829296522, guid: bed9b1004c9297a43bcdb1eb6e360c94, type: 3}
+    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: barController
       value: 
       objectReference: {fileID: 1325441444}

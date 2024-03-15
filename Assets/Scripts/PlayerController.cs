@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : LivingEntity
@@ -8,7 +9,7 @@ public class PlayerController : LivingEntity
     public enum State
     {
         Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
-        , Fall, Parrying, Up, Ex, Dead, Hit
+        , Fall, Parrying, Up, Ex, Dead, Hit, GameOver
     }
 
 
@@ -21,12 +22,14 @@ public class PlayerController : LivingEntity
     [SerializeField] float parryRange = 1f;
     [SerializeField] bool parrySucess = false;
     [SerializeField] bool EXshooting = false;
+    [SerializeField] GameObject GhostPrefab;
 
     [Header("Component")]
     [SerializeField] new Rigidbody2D rigidbody;
     [SerializeField] new SpriteRenderer renderer;
     [SerializeField] Animator animator;
-    [SerializeField] GameObject GhostPrefab;
+    [SerializeField] AudioSource playerAudio;
+
 
     [SerializeField] BulletSpawner bulletSpawner;
     [SerializeField] GameObject FootBoxCollider;
@@ -63,11 +66,7 @@ public class PlayerController : LivingEntity
     private bool isParried;
     public bool downJump = false;
 
-
     private StateMachine stateMachine;
-
-    string nowAnime = "";
-    string oldAnime = "";
 
     void Awake()
     {
@@ -87,17 +86,18 @@ public class PlayerController : LivingEntity
         stateMachine.AddState(State.Ex, new ExState(this));
         stateMachine.AddState(State.Dead, new DeadState(this));
         stateMachine.AddState(State.Hit, new HitState(this));
+        stateMachine.AddState(State.GameOver, new GameOverState(this));
+
 
         stateMachine.InitState(State.Idle);
 
     }
 
     private void Start()
-    {
-        nowAnime = "IdlePlayer";
-        oldAnime = "IdlePlayer";
+    {      
         rigidbody = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        playerAudio= GetComponent<AudioSource>();
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
 
         spawnPos = transform.Find("BulletSpawn");
@@ -242,6 +242,7 @@ public class PlayerController : LivingEntity
             Debug.Log("ex상태진입");
             ExitEx = false;
             animPlaying = false;
+
         }
 
         public override void Update()
@@ -614,10 +615,21 @@ public class PlayerController : LivingEntity
                     ChangeState(State.Idle);
                 }
             }
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
                 ChangeState(State.Hit);
             }
+        }
+    }
+
+
+    private class GameOverState : PlayerState
+    {
+        public GameOverState(PlayerController player) : base(player) { }
+
+        public override void Enter()
+        {
+            Debug.Log("게임오버"); //팝업창 열어주는 이벤트를 여기서 실행해주자. 
         }
     }
 
@@ -629,9 +641,31 @@ public class PlayerController : LivingEntity
         {
             Debug.Log("사망상태 진입");
             Instantiate(player.GhostPrefab, transform.position, Quaternion.identity);
+            animator.Play("Death");
+
 
             // 그리고 팝업도 띄워줘야함. --> 다시 하기 팝업 + 머그샷
         }
+
+        public override void Update()
+        {
+            rigidbody.velocity = Vector2.zero;
+        }
+        public override void Exit()
+        {
+            Instantiate(player.GhostPrefab, transform.position, Quaternion.identity);
+        }
+
+        public override void Transition()
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Death") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ChangeState(State.GameOver);
+            }
+
+        }
+
 
     }
 
@@ -644,18 +678,25 @@ public class PlayerController : LivingEntity
 
         public override void Enter()
         {
-
+            player.invincible = true;
             if (onGround == true) //땅 일때 
             {
                 animator.Play("Hit");
-                rigidbody.velocity = Vector2.left * 3f;
+                rigidbody.velocity = Vector2.left*2;
+
             }
             else // 땅이 아닐 때 false 일때 
             {
                 animator.Play("HitAir");
-                rigidbody.velocity = Vector2.left * 3f;
-            }
+                rigidbody.velocity = Vector2.left*2;
+                rigidbody.velocity = Vector2.down * 7;
 
+            }
+        }
+
+        public override void Exit()
+        {
+            rigidbody.velocity = Vector2.zero;
         }
         public override void Transition()
         {
@@ -673,9 +714,8 @@ public class PlayerController : LivingEntity
                     ChangeState(State.Dead);
                 }
             }
-
-            if (animator.GetCurrentAnimatorStateInfo(0).IsName("HitAir") &&
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            else if (animator.GetCurrentAnimatorStateInfo(0).IsName("HitAir") &&
+                    animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
             {
                 if (hp > 0)
                 {
@@ -731,7 +771,7 @@ public class PlayerController : LivingEntity
         }
         public override void Transition()
         {
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
                 ChangeState(State.Hit);
             }
@@ -903,7 +943,7 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Idle);
             }
 
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
                 ChangeState(State.Hit);
             }
@@ -934,9 +974,6 @@ public class PlayerController : LivingEntity
         public int dashSpeed = 10;
         public override void Enter()
         {
-
-
-
             if (renderer.flipX == false)
             {
                 animator.Play("Dash");
@@ -986,11 +1023,10 @@ public class PlayerController : LivingEntity
                     rigidbody.velocity = Vector2.zero;
                     ChangeState(State.Idle);
                 }
-
-
             }
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
+                rigidbody.velocity = Vector2.zero;
                 ChangeState(State.Hit);
             }
 
@@ -1032,14 +1068,12 @@ public class PlayerController : LivingEntity
 
             }
         }
-
         public override void Exit()
         {
 
 
 
         }
-
         public override void Transition()
         {
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("JumpDash") &&
@@ -1058,8 +1092,9 @@ public class PlayerController : LivingEntity
                 }
             }
 
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
+                rigidbody.velocity = Vector2.zero;
                 ChangeState(State.Hit);
             }
 
@@ -1142,7 +1177,7 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Ex);
             }
 
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
                 ChangeState(State.Hit);
             }
@@ -1225,7 +1260,7 @@ public class PlayerController : LivingEntity
             }
 
 
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
                 ChangeState(State.Hit);
             }
@@ -1321,7 +1356,7 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Up);
             }
 
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
                 ChangeState(State.Hit);
             }
@@ -1528,7 +1563,7 @@ public class PlayerController : LivingEntity
             }
 
 
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
                 ChangeState(State.Hit);
             }
@@ -1696,7 +1731,7 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Ex);
             }
 
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
                 ChangeState(State.Hit);
             }
@@ -1817,7 +1852,7 @@ public class PlayerController : LivingEntity
         public override void Transition() //Ʈ�����ǿ��� �޸��鼭 ��� �޸��鼭 ���� ��� ��ȯ���� 
         {
 
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
                 ChangeState(State.Hit);
             }
@@ -1970,7 +2005,7 @@ public class PlayerController : LivingEntity
                 ChangeState(State.Ex);
             }
 
-            if (player.takeHit == true)
+            if (player.takeHit == true && player.invincible == false)
             {
                 ChangeState(State.Hit);
             }
@@ -2108,7 +2143,7 @@ public class PlayerController : LivingEntity
     {
         for (int i = 0; i < 7; i++)
         {
-            invincible = true;
+
             renderer.color = new Color(1, 1, 1, 0.4f);
             yield return new WaitForSeconds(0.2f);
             renderer.color = new Color(1, 1, 1, 1);
