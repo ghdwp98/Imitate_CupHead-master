@@ -204,7 +204,7 @@ public class SlimeBoss : LivingEntity
             }
             else if(collision.gameObject.tag =="Wall") //벽에 부딪히면
             {
-                slimeRb.AddForce(new Vector2(-7, 0));
+                
             }
 
 
@@ -243,25 +243,25 @@ public class SlimeBoss : LivingEntity
         if(jumpRoutineEnd==false)
         {
             jumpRoutineEnd = true;
-
+            
             var rand = Random.Range(0, 3); // --> 벽 만나면 반대로 움직여줘야하는데
-
+            Debug.Log(rand);
             if (rand == 0)  //각 랜덤에 따라서 뛰는 높이가 다름. 
             {
-                slimeRb.velocity = new Vector2(3, 5);
+                slimeRb.AddForce(new Vector2(100,100));
                 yield return new WaitForSeconds(1f);
 
             }
             else if(rand==1)
             {
-                slimeRb.velocity = new Vector2(2,7);
+                slimeRb.AddForce(new Vector2(200,200));
                 yield return new WaitForSeconds(1f);
 
 
             }
             else if(rand==2)
             {
-                slimeRb.velocity = new Vector2(1,4);
+                slimeRb.AddForce(new Vector2(300,300));
                 yield return new WaitForSeconds(1f);
 
 
