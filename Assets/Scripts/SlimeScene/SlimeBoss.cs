@@ -79,14 +79,38 @@ public class SlimeBoss : LivingEntity
             var dir = Vector2.Reflect(lastVelocity.normalized, collision.contacts[0].normal);
 
             slimeRb.velocity = dir * 8;
-            //turn around 애니 여기서 재생 가능? 
+            
             if (spriteRenderer.flipX == true)  //플립 상태에 따라서 랜덤 함수의 범위를 다시 지정해줘서 - + 로 달리도록 하자. 
             {
                 spriteRenderer.flipX = false;
+
+                if(slimeRb.velocity.y<-0.5) //하강 중 이면 
+                {
+                    
+                    animator.Play("SlimeAirDownTurn");
+                }
+                else if(slimeRb.velocity.y>0.5) //상승 중이면 
+                {
+                   
+                    animator.Play("SlimeAirUpTurn");
+                }
             }
             else
             {
                 spriteRenderer.flipX = true;
+                if (slimeRb.velocity.y < -0.5) //하강 중 이면 
+                {
+                   
+                    animator.Play("SlimeAirDownTurn");
+                }
+                else if (slimeRb.velocity.y > 0.5) //상승 중이면 
+                {
+                    
+
+                    animator.Play("SlimeAirUpTurn");
+
+                }
+
             }
         }
 
@@ -114,7 +138,7 @@ public class SlimeBoss : LivingEntity
 
         lastVelocity = slimeRb.velocity;
 
-        Debug.Log(slimeRb.velocity);
+        
 
     }
     
@@ -170,7 +194,7 @@ public class SlimeBoss : LivingEntity
 
         public override void Enter()
         {
-            Debug.Log("점프상태 ");
+           
 
         }
         public override void FixedUpdate()
@@ -181,8 +205,21 @@ public class SlimeBoss : LivingEntity
                 slime.StartCoroutine(slime.JumpRoutine());
 
             }
-
-            
+            else //온그라운드가 아닐 때 (공중 ) 
+            {
+                if (slimeRb.velocity.y > 1) //상승 애니 
+                {
+                    animator.Play("SlimeAirUp");
+                }
+                else if (slimeRb.velocity.y < 1 && slimeRb.velocity.y > -1) //정점 애니 
+                {
+                    animator.Play("SlimeUpDownTrans");
+                }
+                else if (slimeRb.velocity.y < -1) //하강 애니 
+                {
+                    animator.Play("SlimeAirDown");
+                }
+            }
 
         }
 
@@ -282,34 +319,11 @@ public class SlimeBoss : LivingEntity
             {                
                 JumpForce(new Vector2(randX, randY));
 
-                if(slimeRb.velocity.y>0.5) //상승 애니 
-                {
-                    animator.Play("SlimeAirUp");
-                }
-                /*else if (slimeRb.velocity.y < 0.5 && slimeRb.velocity.y > -0.5) //정점 애니 
-                {
-                    animator.Play("SlimeUpDownTrans");
-                }*/
-                else if(slimeRb.velocity.y<-0.5) //하강 애니 
-                {
-                    animator.Play("SlimeAirDown");
-                }
             }
-            else // x축 플러스 이동 필요 
+            else 
             {
                 JumpForce(new Vector2(-randX, randY));
-                if (slimeRb.velocity.y > 0.5) //상승 애니 
-                {
-                    animator.Play("SlimeAirUp");
-                }
-                else if (slimeRb.velocity.y < 0.5 && slimeRb.velocity.y > -0.5) //정점 애니 
-                {
-                    animator.Play("SlimeUpDownTrans");
-                }
-                else if (slimeRb.velocity.y < -0.5) //하강 애니 
-                {
-                    animator.Play("SlimeAirDown");
-                }
+               
             }
             yield return new WaitForSeconds(1f);
 

@@ -584,6 +584,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1961520626}
     - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+      propertyPath: jumpSpeed
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: barController
       value: 
       objectReference: {fileID: 718711098}
@@ -685,7 +689,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -2.144579, y: -3.8031945}
+  m_Offset: {x: -2.144579, y: -3.8749719}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -696,7 +700,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 39.40334, y: 2.6512423}
+  m_Size: {x: 39.40334, y: 2.5076873}
   m_EdgeRadius: 0
 --- !u!4 &601714487
 Transform:
