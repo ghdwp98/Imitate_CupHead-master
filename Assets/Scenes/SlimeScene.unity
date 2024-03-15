@@ -579,26 +579,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2337720102170059540, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      propertyPath: m_Layer
-      value: 9
-      objectReference: {fileID: 0}
-    - target: {fileID: 2337720102170059540, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      propertyPath: m_TagString
-      value: Checking
-      objectReference: {fileID: 0}
-    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      propertyPath: hp
-      value: 3
-      objectReference: {fileID: 0}
     - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: hpui
       value: 
       objectReference: {fileID: 1961520626}
-    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      propertyPath: GhostPrefab
-      value: 
-      objectReference: {fileID: 2202916277829296522, guid: bed9b1004c9297a43bcdb1eb6e360c94, type: 3}
     - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: barController
       value: 
@@ -606,18 +590,6 @@ PrefabInstance:
     - target: {fileID: 5287111981818179436, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 7916512936479786408, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      propertyPath: EXbulletPrefab
-      value: 
-      objectReference: {fileID: 1919048530221964684, guid: a608a21fe1f2be743ab1b5fc8cde33c7, type: 3}
-    - target: {fileID: 7916512936479786408, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      propertyPath: ExBulletCollision
-      value: 
-      objectReference: {fileID: -8232682200496236792, guid: 54e810c4e9fe4af4c97829b4963aa920, type: 3}
-    - target: {fileID: 7962370294698519770, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      propertyPath: m_BodyType
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9089441795785061620, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -662,10 +634,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2337720102170059540, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1163798228}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
 --- !u!1 &601714485
 GameObject:
@@ -1390,107 +1359,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 480069116}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1163798225 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2337720102170059540, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-  m_PrefabInstance: {fileID: 593140605}
-  m_PrefabAsset: {fileID: 0}
---- !u!82 &1163798228
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1163798225}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &1201334568
 GameObject:
   m_ObjectHideFlags: 0
@@ -1794,7 +1662,7 @@ GameObject:
   - component: {fileID: 1616643824}
   m_Layer: 6
   m_Name: WALL
-  m_TagString: Ground
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2163,6 +2031,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
+      propertyPath: TargetLayer.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
+      propertyPath: groundCheckLayer.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 6365308483107302922, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.432043

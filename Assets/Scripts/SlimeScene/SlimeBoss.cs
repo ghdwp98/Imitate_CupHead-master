@@ -1,15 +1,14 @@
-using UnityEngine;
 using System.Collections;
-using UnityEngine.UIElements;
+using UnityEngine;
 
 public class SlimeBoss : LivingEntity
 {
-    public enum State
+    public enum State //이거 애기 슬라임이니까 phase가 아니라 각 공격 모션들로 나눠주자. 
     {
-        Intro,Phase1,Phase2,Phase3,Dead
+        Intro, Punch,Jump, Dead
     }
 
-    
+
 
 
 
@@ -20,14 +19,16 @@ public class SlimeBoss : LivingEntity
     [SerializeField] LayerMask TargetLayer;
     Rigidbody2D slimeRb;
     SpriteRenderer spriteRenderer;
+    [SerializeField] bool onGround;
+    [SerializeField] LayerMask groundCheckLayer;
 
     AudioSource SlimeAudio;
     Animator animator;
-    [SerializeField] byte red = 233 ;
+    [SerializeField] byte red = 233;
     [SerializeField] byte green = 233;
     [SerializeField] byte blue = 217;
     [SerializeField] byte alpha = 255;
-    
+
 
 
     private StateMachine stateMachine;
@@ -40,17 +41,17 @@ public class SlimeBoss : LivingEntity
         spriteRenderer = GetComponent<SpriteRenderer>();
 
 
-        stateMachine=gameObject.AddComponent<StateMachine>();
+        stateMachine = gameObject.AddComponent<StateMachine>();
         stateMachine.AddState(State.Intro, new IntroState(this));
-        stateMachine.AddState(State.Phase1, new Phase1State(this));
-        stateMachine.AddState(State.Phase2, new Phase2State(this));
-        stateMachine.AddState(State.Phase3, new Phase3State(this));
+        stateMachine.AddState(State.Jump, new JumpState(this));
+        stateMachine.AddState(State.Punch, new PunchState(this));
         stateMachine.AddState(State.Dead, new DeadState(this));
 
 
         stateMachine.InitState(State.Intro);
     }
 
+    //양 옆 벽에 닿으면 반대로 뛰어야함 Wall로 check; 
 
     void Start()
     {
@@ -59,20 +60,29 @@ public class SlimeBoss : LivingEntity
 
     void Update()
     {
-
+        stateMachine.Update();
     }
 
+
+    private void FixedUpdate()
+    {
+        stateMachine.FixedUpdate();
+        onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
+    }
     private class SlimeState : BaseState
     {
         protected SlimeBoss slime;
 
 
         protected Transform transform => slime.transform;
-        protected float hp { get { return slime.hp; }set { slime.hp = value; } }
+        protected float hp { get { return slime.hp; } set { slime.hp = value; } }
         protected Rigidbody2D slimeRb => slime.slimeRb;
         protected SpriteRenderer renderer => slime.spriteRenderer;
         protected Animator animator => slime.animator;
 
+        protected bool onGround { get { return slime.onGround; } set { slime.onGround = value; } }
+
+        protected LayerMask groundCheckLayer => slime.groundCheckLayer;
 
         public SlimeState(SlimeBoss slime)
         {
@@ -84,35 +94,69 @@ public class SlimeBoss : LivingEntity
     {
         public IntroState(SlimeBoss slime) : base(slime) { }
 
+        public override void Enter()
+        {
+            animator.Play("SlimeIntro");
+        }
 
-
+        public override void Transition()
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("SlimeIntro") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                
+            }
+        }
     }
 
-    private class Phase1State : SlimeState
+    private class JumpState : SlimeState
     {
-        public Phase1State(SlimeBoss slime) : base(slime) { }
+        public JumpState(SlimeBoss slime) : base(slime) { }
 
+        public override void Enter()
+        {
+            Debug.Log("점프 스테이트");
+        }
+
+        public override void FixedUpdate()
+        {
+            
+        }
+
+        public override void Exit()
+        {
+
+        }
+
+
+        public override void Transition()
+        {
+            
+        }
 
     }
 
-    private class Phase2State : SlimeState
+    private class PunchState : SlimeState
     {
-        public Phase2State(SlimeBoss slime) : base(slime) { }
+        public PunchState(SlimeBoss slime) : base(slime) { }
+
+
+
 
 
 
 
     }
 
-    private class Phase3State :SlimeState
-    {
-        public Phase3State(SlimeBoss slime) : base(slime) { }
+    
 
-    }
 
     private class DeadState : SlimeState
     {
         public DeadState(SlimeBoss slime) : base(slime) { }
+
+
+
 
     }
 
@@ -154,12 +198,12 @@ public class SlimeBoss : LivingEntity
     {
 
         SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.color = new Color32(red,green,blue,alpha);
+        spriteRenderer.color = new Color32(red, green, blue, alpha);
         yield return new WaitForSeconds(0.1f);
         spriteRenderer.color = new Color(1, 1, 1, 1f);
-        
+
 
     }
-    
+
 
 }

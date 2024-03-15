@@ -12,6 +12,7 @@ TagManager:
   - Npc
   - Monster
   - Parry
+  - Wall
   layers:
   - Default
   - TransparentFX
