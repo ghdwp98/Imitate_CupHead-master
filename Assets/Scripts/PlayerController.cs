@@ -671,7 +671,7 @@ public class PlayerController : LivingEntity
 
     private class HitState : PlayerState
     {
-
+        
         //이거 아예 못들어오게 해야되는데 어떡하지?? 
         // 
         public HitState(PlayerController player) : base(player) { }
@@ -679,6 +679,7 @@ public class PlayerController : LivingEntity
         public override void Enter()
         {
             player.invincible = true;
+            
             if (onGround == true) //땅 일때 
             {
                 animator.Play("Hit");
@@ -2129,6 +2130,7 @@ public class PlayerController : LivingEntity
     {
         if (takeHit == false && hp > 0)
         {
+            this.gameObject.layer = 15; //인빈시블 상태로 전환 
             takeHit = true;
             hpui.HpChange();
             hp -= 1;
@@ -2136,6 +2138,7 @@ public class PlayerController : LivingEntity
             renderer.color = new Color(1, 1, 1, 1);
             takeHit = false;
             invincible = false;
+            this.gameObject.layer = 3;
         }
     }
 

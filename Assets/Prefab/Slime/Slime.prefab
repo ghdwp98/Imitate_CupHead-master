@@ -163,6 +163,11 @@ MonoBehaviour:
   TargetLayer:
     serializedVersion: 2
     m_Bits: 8
+  target: {fileID: 0}
+  dir: {x: 0, y: 0}
+  v_y: 0
+  v_x: 0
+  lastVelocity: {x: 0, y: 0}
   onGround: 0
   groundCheckLayer:
     serializedVersion: 2
@@ -230,7 +235,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.04441595, y: 0.050572872}
+  m_Offset: {x: 0.004664466, y: 0.050572872}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -241,7 +246,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.75619984, y: 0.12911892}
+  m_Size: {x: 0.07414797, y: 0.12911892}
   m_EdgeRadius: 0
 --- !u!82 &4846584836435734136
 AudioSource:
