@@ -134,7 +134,7 @@ public class SlimeBoss : LivingEntity
 
         lastVelocity = slimeRb.velocity;
 
-        Debug.Log(hp);
+        Debug.Log(health);
     }
     
 
@@ -281,7 +281,7 @@ public class SlimeBoss : LivingEntity
 
     }
 
-
+    
 
     public override void OnDamage(float damage)
     {
