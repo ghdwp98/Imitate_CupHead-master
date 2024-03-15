@@ -561,7 +561,7 @@ MonoBehaviour:
   maxSpeed: 8
   accelPower: 5
   decelPower: 20
-  jumpSpeed: 14
+  jumpSpeed: 16
   groundCheckLayer:
     serializedVersion: 2
     m_Bits: 4160

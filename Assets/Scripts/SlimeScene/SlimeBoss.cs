@@ -9,6 +9,7 @@ public class SlimeBoss : LivingEntity
         Intro, Punch, Jump, Dead
     }
 
+    //health가 체력인듯? 
     [Header("Slime")]
     [SerializeField] float hp = 300;
     [SerializeField] LayerMask TargetLayer;
@@ -17,6 +18,7 @@ public class SlimeBoss : LivingEntity
     [SerializeField] float v_y;
     [SerializeField] float v_x;
     [SerializeField] Vector2 lastVelocity;
+    [SerializeField] int jumpCount = 0;
     
 
     Rigidbody2D slimeRb;
@@ -125,8 +127,6 @@ public class SlimeBoss : LivingEntity
         
     }
 
-
-
     private void FixedUpdate()
     {
         stateMachine.FixedUpdate();
@@ -134,9 +134,7 @@ public class SlimeBoss : LivingEntity
 
         lastVelocity = slimeRb.velocity;
 
-        
-        
-
+        Debug.Log(hp);
     }
     
 
@@ -190,20 +188,18 @@ public class SlimeBoss : LivingEntity
         public JumpState(SlimeBoss slime) : base(slime) { }
 
         public int rand;
-        public int count = 0;
+        
         
         public override void Enter()
         {
-            rand = Random.Range(4, 6);
-            Debug.Log(rand);
-
+            rand = Random.Range(3,6);
         }
         public override void FixedUpdate()
         {
-            if(onGround==true) 
+            
+            if (onGround==true) 
             {
                 slime.StartCoroutine(slime.JumpRoutine());
-                count++; 
 
             }
             else //온그라운드가 아닐 때 (공중 ) 
@@ -225,12 +221,12 @@ public class SlimeBoss : LivingEntity
         }
         public override void Exit()
         {
-
+            slime.jumpCount = 0;
         }
 
         public override void Transition()
         {
-            if(count==rand)
+            if(slime.jumpCount==rand&&onGround==true)
             {
                 ChangeState(State.Punch);
             }
@@ -245,14 +241,32 @@ public class SlimeBoss : LivingEntity
 
         public override void Enter()
         {
-            animator.Play("SlimePunch");
-            
+            if(dir.x<0)
+            {
+                renderer.flipX = false;
+            }
+            else if(dir.x>=0)
+            {
+                renderer.flipX = true; //오른쪽 보기 
+
+            }
+
+            animator.Play("SlimePunch");         
         }
 
         public override void Update()
         {
+            slimeRb.velocity = Vector2.zero; //펀치 동안 가만히 있어야함. 
+            // 타겟 위치로 돌아줘야 하는데 회전 시키는 건 안될 것 같은데.. 
 
-
+        }
+        public override void Transition()
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("SlimePunch") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ChangeState(State.Jump);
+            }
 
         }
 
@@ -311,8 +325,9 @@ public class SlimeBoss : LivingEntity
     {
         if (jumpRoutineEnd == false)
         {
-
+            
             jumpRoutineEnd = true;
+            jumpCount++;
             int randX = Random.Range(3, 5);
             int randY = Random.Range(5, 7);
             animator.Play("SlimeJumpReady"); 
@@ -329,7 +344,7 @@ public class SlimeBoss : LivingEntity
                
             }
             yield return new WaitForSeconds(1f);
-
+            
             jumpRoutineEnd = false;
         }
 
