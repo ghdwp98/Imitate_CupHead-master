@@ -41,6 +41,7 @@ public class PlayerController : LivingEntity
     [SerializeField] GameObject superBar;
     [SerializeField] BarController barController;
     [SerializeField] HPui hpui;
+    
 
     PooledObject bulletPrefab;
     PooledObject bulletSparkle;
@@ -99,6 +100,7 @@ public class PlayerController : LivingEntity
         animator = GetComponent<Animator>();
         playerAudio= GetComponent<AudioSource>();
         SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+        
 
         spawnPos = transform.Find("BulletSpawn");
 
@@ -1767,8 +1769,6 @@ public class PlayerController : LivingEntity
             parrySucess = false;
 
             barController.ParryCardCharge();
-
-
 
         }
     }

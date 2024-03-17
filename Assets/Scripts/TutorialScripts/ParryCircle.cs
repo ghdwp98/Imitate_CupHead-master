@@ -19,8 +19,7 @@ public class ParryCircle : IParry  //¿Ã∫•∆Æ?
     public override void Parried()
     {
         base.Parried();
-        Debug.Log(transform.position);
-
+        
         if (transform.localPosition.x == -4.5f)
         {
            Transform sphere = GameObject.Find("pink2").transform.Find("tutorial_pink_sphere_2");

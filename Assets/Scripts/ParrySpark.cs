@@ -7,7 +7,7 @@ public class ParrySpark : MonoBehaviour
     
     void Start()
     {
-        Destroy(gameObject,0.2f);
+        Destroy(gameObject,0.25f);
     }
 
     
