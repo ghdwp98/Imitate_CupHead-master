@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7589306278826883353}
   - component: {fileID: 644325925584972847}
   - component: {fileID: 322903250788326095}
-  m_Layer: 13
+  m_Layer: 9
   m_Name: Mark3
-  m_TagString: Untagged
+  m_TagString: Checking
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 844226905074796030}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.09, y: 3.68, z: 0}
+  m_LocalPosition: {x: 2.37, y: 4.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -129,6 +129,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3117486742788627588}
+  - component: {fileID: 2184183885599128476}
   m_Layer: 13
   m_Name: Dust
   m_TagString: Untagged
@@ -151,6 +152,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6365308483107302922}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2184183885599128476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4527801539992966162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56b069d8b7207734ea0e4c7346c58358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dustPrefab: {fileID: 6529270875762832685, guid: 3bcefb58835e7064bb4db2db04b16262, type: 3}
+  size: 3
+  capacity: 3
 --- !u!1 &7291195054464829171
 GameObject:
   m_ObjectHideFlags: 0
@@ -163,9 +179,9 @@ GameObject:
   - component: {fileID: 8050200272680841475}
   - component: {fileID: 6774528386912388230}
   - component: {fileID: 1732203676392975480}
-  m_Layer: 13
+  m_Layer: 9
   m_Name: Mark2
-  m_TagString: Untagged
+  m_TagString: Checking
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -179,7 +195,7 @@ Transform:
   m_GameObject: {fileID: 7291195054464829171}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.09, y: 4.65, z: 0}
+  m_LocalPosition: {x: -0.06, y: 4.87, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -445,9 +461,11 @@ MonoBehaviour:
   v_x: 0
   lastVelocity: {x: 0, y: 0}
   jumpCount: 0
+  bigJumpCount: 0
   questionPrefab1: {fileID: 3460122353794184909, guid: 8a891df6b0c6bfb439630a37a49f8006, type: 3}
   questionPrefab2: {fileID: 3460122353794184909, guid: 50ecec85219bafb49a38f7a4d54a4e38, type: 3}
   questionPrefab3: {fileID: 3460122353794184909, guid: 230f6efa019c66c46b40c187d470532a, type: 3}
+  spawner: {fileID: 2184183885599128476}
   SmallcircleCollider: {fileID: 6776870781757114118}
   BigcircleCollider: {fileID: 4969558235042276484}
   BigSlime: {fileID: 21300000, guid: 92bee1e325264314f844fa0ca76ee182, type: 3}
@@ -678,9 +696,9 @@ GameObject:
   - component: {fileID: 4024151332855398109}
   - component: {fileID: 1597074625921073085}
   - component: {fileID: 3997856433044901366}
-  m_Layer: 13
+  m_Layer: 9
   m_Name: Mark1
-  m_TagString: Untagged
+  m_TagString: Checking
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -694,7 +712,7 @@ Transform:
   m_GameObject: {fileID: 8461682839588466875}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.39, y: 3.49, z: 0}
+  m_LocalPosition: {x: -2.33, y: 3.71, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

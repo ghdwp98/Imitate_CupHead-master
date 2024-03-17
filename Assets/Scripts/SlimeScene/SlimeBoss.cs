@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlimeBoss : LivingEntity
@@ -26,6 +25,7 @@ public class SlimeBoss : LivingEntity
     [SerializeField] GameObject questionPrefab1;
     [SerializeField] GameObject questionPrefab2;
     [SerializeField] GameObject questionPrefab3;
+    [SerializeField] SlimeDustSpawner spawner;
 
     [SerializeField] CircleCollider2D SmallcircleCollider;
     [SerializeField] CircleCollider2D BigcircleCollider;
@@ -64,7 +64,7 @@ public class SlimeBoss : LivingEntity
         health = hp;
         slimeRb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        
+
         stateMachine = gameObject.AddComponent<StateMachine>();
         stateMachine.AddState(State.Intro, new IntroState(this));
         stateMachine.AddState(State.Jump, new JumpState(this));
@@ -80,6 +80,8 @@ public class SlimeBoss : LivingEntity
     }
     void Start()
     {
+        SmallcircleCollider.enabled = true;
+        BigcircleCollider.enabled = false;
 
     }
 
@@ -141,7 +143,7 @@ public class SlimeBoss : LivingEntity
         protected SlimeBoss slime;
 
         protected Transform transform => slime.transform;
-        
+
         protected float hp { get { return slime.hp; } set { slime.hp = value; } }
         protected Rigidbody2D slimeRb => slime.slimeRb;
         protected SpriteRenderer renderer => slime.spriteRenderer;
@@ -169,7 +171,7 @@ public class SlimeBoss : LivingEntity
         public float idle = 0f;
         public override void Enter()
         {
-            
+
             renderer.sprite = slime.BigSlime;
             slime.SmallcircleCollider.enabled = false;
             slime.BigcircleCollider.enabled = true;
@@ -181,13 +183,13 @@ public class SlimeBoss : LivingEntity
 
         public override void Update()
         {
-           
+
             idle += Time.deltaTime;
         }
 
         public override void Transition()
         {
-            if(idle>3)
+            if (idle > 3)
             {
                 Destroy(slime.Mark1.gameObject);
                 Destroy(slime.Mark2.gameObject);
@@ -215,7 +217,10 @@ public class SlimeBoss : LivingEntity
             if (onGround == true)
             {
                 slime.StartCoroutine(slime.BigJumpRoutine());
-
+                if(slimeRb.velocity.y<-5)
+                {
+                    slime.spawner.BigSlimeDustSpawn();
+                }
             }
             else //온그라운드가 아닐 때 (공중 ) 
             {
@@ -229,7 +234,7 @@ public class SlimeBoss : LivingEntity
                 }
                 else if (slimeRb.velocity.y < -1) //하강 애니 
                 {
-                    animator.Play("BigSlimeAirDown");
+                    animator.Play("BigSlimeAirDown");                  
                 }
             }
 
@@ -253,7 +258,7 @@ public class SlimeBoss : LivingEntity
         }
     }
 
-    private class BigPunchState : SlimeState
+    private class BigPunchState : SlimeState //펀치 애니메이션 위치 맞춰줘야함... 
     {
         public BigPunchState(SlimeBoss slime) : base(slime) { }
 
@@ -274,7 +279,7 @@ public class SlimeBoss : LivingEntity
 
         public override void Update()
         {
-            slimeRb.velocity = Vector2.zero; 
+            slimeRb.velocity = Vector2.zero;
 
         }
         public override void Transition()
@@ -298,6 +303,7 @@ public class SlimeBoss : LivingEntity
 
         public override void Enter()
         {
+            Debug.Log("빅데드 상태 진입");
 
         }
 
@@ -421,7 +427,7 @@ public class SlimeBoss : LivingEntity
             {
                 ChangeState(State.Jump);
             }
-            if (health <= 400&&(transform.position.x<=6&&transform.position.x>=-6))
+            if (health <= 400 && (transform.position.x <= 6 && transform.position.x >= -6))
             {
                 ChangeState(State.Dead);
             }
@@ -447,7 +453,7 @@ public class SlimeBoss : LivingEntity
         {
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("SlimeToBigSlime") &&
             animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
-            {                
+            {
                 ChangeState(State.BigIdle);
 
             }
@@ -515,6 +521,7 @@ public class SlimeBoss : LivingEntity
                 JumpForce(new Vector2(-randX, randY));
 
             }
+
             yield return new WaitForSeconds(1f);
 
             jumpRoutineEnd = false;
@@ -543,14 +550,13 @@ public class SlimeBoss : LivingEntity
             {
                 JumpForce(new Vector2(-randX, randY));
 
-            }
+            }           
             yield return new WaitForSeconds(1f);
+            
 
             bigJumpRoutineEnd = false;
         }
     }
-
-
 
     private void JumpForce(Vector2 maxHeightDisplacement)
     {
@@ -572,7 +578,7 @@ public class SlimeBoss : LivingEntity
     }
 
 
-    
-    
+
+
 
 }
