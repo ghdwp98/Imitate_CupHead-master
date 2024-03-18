@@ -14,7 +14,7 @@ public class GoSlime : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
 
-            popUp = Instantiate(DoorKeyPrefab, pos.transform.position, Quaternion.identity);
+            popUp = Instantiate(DoorKeyPrefab, new Vector2(-0.4f,9.37f), Quaternion.identity);
         }
     }
     private void OnTriggerExit2D(Collider2D collision)

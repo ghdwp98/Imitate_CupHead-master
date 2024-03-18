@@ -100,7 +100,7 @@ public class SlimeBoss : LivingEntity
 
 
 
-        stateMachine.InitState(State.BigDead); // 코딩용으로 잠시 시작 상태 변경 
+        stateMachine.InitState(State.Intro); // 코딩용으로 잠시 시작 상태 변경 
     }
     void Start()
     {
@@ -670,7 +670,8 @@ public class SlimeBoss : LivingEntity
                 ChangeState(State.Punch);
             }
 
-            if (health <= 400 && (transform.position.x <= 6 && transform.position.x >= -6))
+            if (health <= 400 && (transform.position.x <= 6 && transform.position.x >= -6)
+                &&onGround==true)
             {
                 ChangeState(State.Dead);
             }
@@ -710,7 +711,8 @@ public class SlimeBoss : LivingEntity
             {
                 ChangeState(State.Jump);
             }
-            if (health <= 400 && (transform.position.x <= 6 && transform.position.x >= -6))
+            if (health <= 400 && (transform.position.x <= 6 && transform.position.x >= -6)
+                &&onGround==true)
             {
                 ChangeState(State.Dead);
             }
@@ -725,12 +727,13 @@ public class SlimeBoss : LivingEntity
 
         public override void Enter()
         {
+            slimeRb.velocity= Vector2.zero;
             animator.Play("SlimeToBigSlime");
         }
 
         public override void Update()
         {
-
+            slimeRb.velocity = Vector2.zero;
         }
         public override void Transition()  //여기서 이거 변화시켜주고 animator를 교환해줄 수 있나? 
         {
