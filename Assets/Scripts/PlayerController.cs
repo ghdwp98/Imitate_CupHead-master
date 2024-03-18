@@ -94,6 +94,10 @@ public class PlayerController : LivingEntity
 
     }
 
+
+    //공격 불가능 + 이동 불가능한 intro 상태를 만들어줘서 씬로딩 중에서 bool변수나 함수 같은거를 가져와서
+    // 실행시켜주고 update 자체에서 그거를 받아들이면 intro 씬에서 애니메이션을 재생해주고
+    // 애니메이션이 끝나면 idel 상태로 전환 init을 인트로 상태로 둬 줘 야함. 
     private void Start()
     {      
         rigidbody = GetComponent<Rigidbody2D>();
@@ -154,7 +158,7 @@ public class PlayerController : LivingEntity
         }
         FootIsTrigger = true;
 
-        if (collision.gameObject.tag == "Monster") //몬스터에 피격되면. 
+        if (collision.gameObject.layer == 13) //몬스터에 피격되면. 13번 레이어 몬스터 
         {
             TakeHit();
 
@@ -171,7 +175,7 @@ public class PlayerController : LivingEntity
 
         FootIsTrigger = true;
 
-        if (collision.gameObject.tag == "Monster") //몬스터에 피격되면. 
+        if (collision.gameObject.layer==13) //몬스터에 피격되면. 
         {
             TakeHit();
         }

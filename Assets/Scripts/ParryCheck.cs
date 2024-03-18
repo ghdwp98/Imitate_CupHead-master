@@ -16,7 +16,7 @@ public class ParryCheck : MonoBehaviour
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.tag == "Player" || collision.tag == "Checking" ||
-            collision.tag == "Parry")
+            collision.tag == "Parry"||collision.tag=="Monster")
         {
             return; //do nothing
         }
@@ -28,7 +28,7 @@ public class ParryCheck : MonoBehaviour
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.tag == "Player" || collision.tag == "Checking"
-            || collision.tag == "Parry")
+            || collision.tag == "Parry" || collision.tag == "Monster")
         {
             return; //do nothing
         }
