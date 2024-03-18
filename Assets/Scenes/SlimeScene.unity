@@ -584,6 +584,18 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1961520626}
     - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+      propertyPath: takeHit
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+      propertyPath: maxSpeed
+      value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
+      propertyPath: accelPower
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: barController
       value: 
       objectReference: {fileID: 718711098}
@@ -2278,7 +2290,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1.65625}
+  m_Offset: {x: 0.12, y: 3.54}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -2289,7 +2301,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 3.03125, y: 3.3125}
+  m_Size: {x: 5, y: 7}
   m_EdgeRadius: 0
 --- !u!1001 &7728139397931344939
 PrefabInstance:
@@ -2309,7 +2321,7 @@ PrefabInstance:
       objectReference: {fileID: 192884078658411767, guid: 5fb2ce32d7aa6384ca3c4e6600fea381, type: 3}
     - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: hp
-      value: 150
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: target
@@ -2327,6 +2339,10 @@ PrefabInstance:
       propertyPath: TombBoxCollider
       value: 
       objectReference: {fileID: 2058784561}
+    - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
+      propertyPath: TombTarget.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: TombCircleCollider
       value: 

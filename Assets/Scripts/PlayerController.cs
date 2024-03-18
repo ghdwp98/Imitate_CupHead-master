@@ -48,7 +48,7 @@ public class PlayerController : LivingEntity
     Transform spawnPos;
 
     [Header("Spec")]
-    [SerializeField] float maxSpeed = 10.0f;
+    [SerializeField] float maxSpeed = 13.0f;
     [SerializeField] float accelPower = 13.0f;
     [SerializeField] float decelPower = 20.0f;
     [SerializeField] float jumpSpeed = 11.0f;

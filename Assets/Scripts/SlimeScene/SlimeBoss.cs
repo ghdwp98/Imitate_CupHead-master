@@ -1,7 +1,5 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.XR;
 
 public class SlimeBoss : LivingEntity
 {
@@ -10,8 +8,8 @@ public class SlimeBoss : LivingEntity
 
     public enum State //이거 애기 슬라임이니까 phase가 아니라 각 공격 모션들로 나눠주자. 
     {
-        Intro, Punch, Jump, Dead, BigIdle, BigJump, BigPunch, BigDead,TombIdle,TombMove,TombDead
-            ,TombAttack
+        Intro, Punch, Jump, Dead, BigIdle, BigJump, BigPunch, BigDead, TombIdle, TombMove, TombDead
+            , TombAttack
     }
 
     //health가 체력인듯? 
@@ -54,7 +52,13 @@ public class SlimeBoss : LivingEntity
     SpriteRenderer spriteRenderer;
     bool jumpRoutineEnd = false;
     bool bigJumpRoutineEnd = false;
-    bool tombMoveRoutineEnd=false;
+    bool tombMoveRoutineEnd = false;
+    bool isOverLap = false;
+    float overLapCollTime;
+    float targetRange = 3f;
+    bool isAttack = false;
+
+    [SerializeField] LayerMask TombTarget;
 
     [SerializeField] bool onGround;
     [SerializeField] LayerMask groundCheckLayer;
@@ -156,6 +160,8 @@ public class SlimeBoss : LivingEntity
         lastVelocity = slimeRb.velocity;
 
 
+
+
     }
 
     private class SlimeState : BaseState
@@ -237,7 +243,7 @@ public class SlimeBoss : LivingEntity
             if (onGround == true)
             {
                 slime.StartCoroutine(slime.BigJumpRoutine());
-                if(slimeRb.velocity.y<-5)
+                if (slimeRb.velocity.y < -5)
                 {
                     slime.spawner.BigSlimeDustSpawn();
                 }
@@ -254,7 +260,7 @@ public class SlimeBoss : LivingEntity
                 }
                 else if (slimeRb.velocity.y < -1) //하강 애니 
                 {
-                    animator.Play("BigSlimeAirDown");                  
+                    animator.Play("BigSlimeAirDown");
                 }
             }
 
@@ -272,7 +278,7 @@ public class SlimeBoss : LivingEntity
             }
 
             if (health <= 150 && (transform.position.x <= 6 && transform.position.x >= -6)
-                &&(onGround==true))
+                && (onGround == true))
             {
                 ChangeState(State.BigDead);
             }
@@ -316,8 +322,8 @@ public class SlimeBoss : LivingEntity
             {
                 ChangeState(State.BigJump);
             }
-            if (health <= 150 && (transform.position.x <= 6 && transform.position.x >= -6)&&
-                (onGround==true))
+            if (health <= 150 && (transform.position.x <= 6 && transform.position.x >= -6) &&
+                (onGround == true))
             {
                 ChangeState(State.BigDead);
             }
@@ -336,32 +342,32 @@ public class SlimeBoss : LivingEntity
         public override void Enter()
         {
             animator.Play("BigSlimeDeath");
-            Vector2 pos=new Vector2(transform.position.x,transform.position.y+100);
-            slime.tombInstance= Instantiate(slime.tombPrefab, pos, Quaternion.identity);
-          
+            Vector2 pos = new Vector2(transform.position.x, transform.position.y + 100);
+            slime.tombInstance = Instantiate(slime.tombPrefab, pos, Quaternion.identity);
+
         }
 
         public override void Update()
         {
-            
+
 
             slimeRb.velocity = Vector2.zero;
 
-            if(slime.TombCollid==true) //충돌 했으면. 
+            if (slime.TombCollid == true) //충돌 했으면. 
             {
                 //익스플로드 애니메이션 출력하고 잠시 콜라이더 전부 꺼준 다음에. 
                 // 비석 상태로 이동하고 콜라이더 재 조정 
-                
+
                 slime.SmallcircleCollider.enabled = false;
                 slime.BigcircleCollider.enabled = false;
                 animator.Play("BigSlimeExplode");
-                
-                if(count==0)
+
+                if (count == 0)
                 {
                     slime.spawner.TombFallSpawn();
                     count = 1;
                 }
-                
+
 
             }
 
@@ -423,14 +429,18 @@ public class SlimeBoss : LivingEntity
     {
         public TombMoveState(SlimeBoss slime) : base(slime) { }
 
-        public int rand;
+        public float rand; //time하고 비교해야 할 것 같은데 랜덤생성 해서.. ?
+
+        public float wallTime;
+        public float dealyTime;
 
         public override void Enter()
         {
 
-            Debug.Log("move진입");
+
             slimeRb.velocity = Vector2.zero;
-            rand = Random.Range(3, 5);
+            rand = Random.Range(10, 15); //이 사이로 랜덤값 가지고 time이 이 값을 넘어버리면
+            // 그 때 공격으로 전환 // + 플레이어 근처일 때. 
 
             //slime.TombCollid 이거 재활용하자. wall이랑 부딪히면 wall이 slime한테 이거 넘겨주고
             // 그러면 이제 방향 바꾸는 거임. 
@@ -438,25 +448,80 @@ public class SlimeBoss : LivingEntity
 
         public override void Update()
         {
-            slime.StartCoroutine(slime.TombMoveRoutine());
+
+            dealyTime += Time.deltaTime;
+
+            if (renderer.flipX == true) //오른쪽 보고 있는 경우 오른쪽이동 
+            {
+                if (transform.position.x < 7.5)  // 이하이므로 이동 해야함. 
+                {
+                    animator.Play("TombLeftMove");
+                    slimeRb.velocity = new Vector2(15, slimeRb.velocity.y);
+                }
+                else if (transform.position.x >= 7.5) //우측 벽에 닿으면. 
+                {
+                    animator.Play("TombLeftMove");
+                    slimeRb.velocity = Vector2.zero;
+                    wallTime += Time.deltaTime;
+                    if (wallTime >= 2f)
+                    {
+                        renderer.flipX = false;
+                        wallTime = 0f;
+                    }
+
+                }
+            }
+            else //왼쪽 보고 있는 경우 왼쪽 이동 
+            {
+                if (transform.position.x <= -7.8)
+                {
+                    animator.Play("TombLeftMove");
+                    slimeRb.velocity = Vector2.zero;
+                    wallTime += Time.deltaTime;
+                    if (wallTime >= 2f)
+                    {
+                        renderer.flipX = true;
+                        wallTime = 0f;
+                    }
+                }
+                else if (transform.position.x > -7.8)
+                {
+                    animator.Play("TombLeftMove");
+
+                    slimeRb.velocity = new Vector2(-15, slimeRb.velocity.y);
+                }
+            }
+        }
+
+        public override void FixedUpdate()
+        {
+            slime.StartCoroutine(slime.TargetTombCoroutine());
+
         }
 
         public override void Exit()
         {
-            slime.tombMoveCount = 0;
+            dealyTime = 0f;
+
+            if (renderer.flipX == true)
+            {
+                renderer.flipX = false;
+            }
+            else
+            {
+                renderer.flipX = true;
+            }
         }
 
         public override void Transition()
         {
-            //일정 랜덤 숫자를  왔다갔다 한 이후에 플레이어와 가까이 있으면 그 순간에 
-            // 공격으로 전환해주기 + 콜라이더 변경 
 
-            if(rand==slime.tombMoveCount)
+            if (rand <= dealyTime && slime.isAttack == true)
             {
                 ChangeState(State.TombAttack);
             }
 
-            if(hp<=0)
+            if (hp <= 0)
             {
                 ChangeState(State.TombDead);
             }
@@ -468,30 +533,40 @@ public class SlimeBoss : LivingEntity
     {
         public TombAttackState(SlimeBoss slime) : base(slime) { }
 
+       
+
         public override void Enter()
         {
-            Debug.Log("공격진입");
-
+            
+            slimeRb.velocity = Vector2.zero;
+            animator.Play("TombAttack");
         }
 
         public override void Update()
         {
+           
 
+            
+        }
+
+        public override void Exit()
+        {
+            
         }
 
         public override void Transition()
         {
-
-
-            if(hp<=0)
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("TombAttack") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ChangeState(State.TombMove);
+            }
+            if (hp <= 0)
             {
                 ChangeState(State.TombDead);
             }
         }
     }
-
-
-
     private class TombDeadState : SlimeState
     {
         public TombDeadState(SlimeBoss slime) : base(slime) { }
@@ -513,7 +588,6 @@ public class SlimeBoss : LivingEntity
         }
 
     }
-
 
 
     private class IntroState : SlimeState
@@ -546,7 +620,7 @@ public class SlimeBoss : LivingEntity
         public override void Enter()
         {
             rand = Random.Range(3, 6);
-            
+
         }
         public override void FixedUpdate()
         {
@@ -748,9 +822,9 @@ public class SlimeBoss : LivingEntity
             {
                 JumpForce(new Vector2(-randX, randY));
 
-            }           
+            }
             yield return new WaitForSeconds(1f);
-            
+
 
             bigJumpRoutineEnd = false;
         }
@@ -758,45 +832,37 @@ public class SlimeBoss : LivingEntity
 
     IEnumerator TombMoveRoutine()
     {
-        if(tombMoveRoutineEnd == false)
+        if (tombMoveRoutineEnd == false)
         {
             tombMoveRoutineEnd = true;
             tombMoveCount++;
 
-            if(spriteRenderer.flipX == true) //오른쪽 보고 있는 경우 오른쪽이동 
+            if (spriteRenderer.flipX == true) //오른쪽 보고 있는 경우 오른쪽이동 
             {
                 animator.Play("TombRightMove");
-                slimeRb.velocity=new Vector2(5,slimeRb.velocity.y);
+                slimeRb.velocity = new Vector2(5, slimeRb.velocity.y);
 
-                if(transform.position.x<=-7.95)
+                if (transform.position.x >= 7.5)
                 {
-                    spriteRenderer.flipX = false;
-                    {
-                        animator.Play("TombLeftMove");
-                    }
+                    slimeRb.velocity = Vector2.zero;
                 }
+
             }
             else //왼쪽 보고 있는 경우 왼쪽 이동 
             {
                 animator.Play("TombLeftMove");
                 slimeRb.velocity = new Vector2(-5, slimeRb.velocity.y);
-                if (transform.position.x >=7.5)
-                {
-                    spriteRenderer.flipX = true;
-                    {
-                        animator.Play("TombRightMove");
-                    }
-                }
 
+                if (transform.position.x <= -7.8)
+                {
+                    slimeRb.velocity = Vector2.zero;
+                }
             }
             yield return new WaitForSeconds(0.5f);
-            tombMoveRoutineEnd= false;
+            tombMoveRoutineEnd = false;
 
         }
     }
-
-
-
 
 
     private void JumpForce(Vector2 maxHeightDisplacement)
@@ -820,12 +886,69 @@ public class SlimeBoss : LivingEntity
 
 
     public void PunchCollider() //주먹 콜라이더 켜주고 
-    {       
+    {
         PunchArm.SetActive(true);
         punchFist.SetActive(true);
     }
 
+    IEnumerator TargetTombCoroutine()
+    {
+        if (isOverLap == false)
+        {
+            isOverLap = true;
+            Collider2D collider = Physics2D.OverlapCircle(transform.position
+                + new Vector3(0, 2, 0), targetRange, TombTarget);
 
+            if (collider != null)
+            {
+                if (collider.gameObject.tag == "Player")
+                {
+                    isAttack = true;
+                }
+            }
+            else
+            {
+                isAttack = false;
+            }
+            yield return new WaitForSecondsRealtime(0.1f);
+            isOverLap = false;
 
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position + new Vector3(0, 2, 0), targetRange);
+    }
+
+    // slime.gameObject.layer = 0; //일단 디폴트로 해볼까? 
+
+    public void ChangeMonsterLayer() //이벤트 등록해주기. 
+    {
+        Debug.Log("몬스터레이어");
+        gameObject.layer = 13; //몬스터 레이어. 
+        TombBoxCollider.enabled = true; //박스 콜라이더 켜주기.       
+        TombCircleCollider.enabled = false; // 원콜라이더 꺼주기.
+    }
+
+    public void ChangeZeroLayer()
+    {
+        Debug.Log("원래레이어");
+        gameObject.layer = 0;
+        TombBoxCollider.enabled = false;
+        TombCircleCollider.enabled = true;
+    }
+
+    IEnumerator TombDelay()
+    {
+        yield return new WaitForSeconds(0.1f);
+    }
+
+    public void DelayTomb()
+    {
+        Debug.Log("코루틴함수실행");
+        StartCoroutine(TombDelay());
+    }
 
 }

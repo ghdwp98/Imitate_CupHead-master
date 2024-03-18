@@ -16,7 +16,6 @@ public class TombPrefab : MonoBehaviour
     void Start()
     {
         rb=GetComponent<Rigidbody2D>();
-        Debug.Log(transform.position);
         isCollid = false;
         slime = GameObject.Find("Slime");
     }
