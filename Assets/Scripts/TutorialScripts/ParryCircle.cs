@@ -25,6 +25,7 @@ public class ParryCircle : IParry  //이벤트?
            Transform sphere = GameObject.Find("pink2").transform.Find("tutorial_pink_sphere_2");
            sphere.gameObject.SetActive(true);
            gameObject.SetActive(false);
+           Time.timeScale = 1.0f;
 
         }
 
@@ -33,6 +34,7 @@ public class ParryCircle : IParry  //이벤트?
             Transform sphere = GameObject.Find("pink3").transform.Find("tutorial_pink_sphere_3");
             sphere.gameObject.SetActive(true);
             gameObject.SetActive(false);
+            Time.timeScale = 1.0f;
 
         }
 
@@ -41,6 +43,7 @@ public class ParryCircle : IParry  //이벤트?
             Transform sphere = GameObject.Find("pink1").transform.Find("tutorial_pink_sphere_1");
             sphere.gameObject.SetActive(true);
             gameObject.SetActive(false);
+            Time.timeScale = 1.0f;
 
         }
     }

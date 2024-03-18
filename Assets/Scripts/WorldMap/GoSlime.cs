@@ -4,18 +4,29 @@ using UnityEngine;
 
 public class GoSlime : MonoBehaviour
 {
-    
-    private void OnTriggerStay2D(Collider2D collision)
+    [SerializeField] GameObject DoorKeyPrefab;
+    GameObject popUp;
+    [SerializeField] GameObject pos;
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Ãæµ¹Áß");
+
         if (collision.gameObject.tag == "Player")
         {
-            //³ª°¡±â ÆË¾÷Ã¢ ¶ç¿öÁÖ°í
 
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                Manager.Scene.LoadScene("SlimeScene");
-            }
+            popUp = Instantiate(DoorKeyPrefab, pos.transform.position, Quaternion.identity);
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        Destroy(popUp);
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            Debug.Log("ÆË¾÷Ã¢ ¶ç¿ì±â");
         }
     }
 }

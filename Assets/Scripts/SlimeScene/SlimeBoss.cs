@@ -30,6 +30,7 @@ public class SlimeBoss : LivingEntity
     [SerializeField] GameObject questionPrefab3;
     [SerializeField] GameObject tombPrefab;
     [SerializeField] SlimeDustSpawner spawner;
+    [SerializeField] Sprite DeadTomb;
     public bool TombCollid;
 
     [SerializeField] CircleCollider2D SmallcircleCollider;
@@ -574,15 +575,17 @@ public class SlimeBoss : LivingEntity
 
         public override void Enter()
         {
-            //살짝 시간 멈추고 --> 넉아웃 나오고
+            //살짝 시간 멈추고 --> 넉아웃(승리문구)  나오고
             // 죽는 애니메이션 반복 + 파괴되는 폭발 애니메이션 재생 (둘 다 반복)
             // 반복되면서 점점 페이드 아웃 됨 --> 페이드 아웃 되면서 씬 전환 하면 될듯
 
-
+            slime.spriteRenderer.sprite = slime.DeadTomb;
+            //Time.timeScale = 0f; //이거 플레이어 입력 들어옴
+            // 이거 플레이어랑 연계해서 클리어 단계 state를 플레이어에도 만들어줘야함. 
             slimeRb.velocity = Vector2.zero;
             animator.Play("TombDeath"); //죽는 애니메이션 재생 및 클리어 애니메이션 
+            //폭발 애니메이션도 재생해줘야함.. 
             
-
         }
 
         public override void Update()

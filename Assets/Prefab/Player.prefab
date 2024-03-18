@@ -559,9 +559,9 @@ MonoBehaviour:
   barController: {fileID: 0}
   hpui: {fileID: 0}
   maxSpeed: 8
-  accelPower: 5
+  accelPower: 8
   decelPower: 20
-  jumpSpeed: 16
+  jumpSpeed: 15
   groundCheckLayer:
     serializedVersion: 2
     m_Bits: 4160
@@ -623,7 +623,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 6e1e89b7e240fb14683238f579f4de9d, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

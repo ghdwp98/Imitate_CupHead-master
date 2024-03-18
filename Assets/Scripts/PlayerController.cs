@@ -1140,13 +1140,13 @@ public class PlayerController : LivingEntity
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //������ �ƴ϶� �� �Ʒ� ���� ��������?
 
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //���� �̵�
+            if (axisH < 0.0f && rigidbody.velocity.x >= -maxSpeed) //���� �̵�
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
                 renderer.flipX = true;  //�������� ��� �ٲ��ֱ�
 
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //������ �̵� �׻� ������ �ӵ� 
+            else if (axisH > 0.0f && rigidbody.velocity.x <= maxSpeed) //������ �̵� �׻� ������ �ӵ� 
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
                 renderer.flipX = false;  //���������� (�������� ����Ʈ)
@@ -1675,12 +1675,12 @@ public class PlayerController : LivingEntity
             axisH = Input.GetAxisRaw("Horizontal");
             axisV = Input.GetAxisRaw("Vertical"); //������ �ƴ϶� �� �Ʒ� ���� ��������?
 
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //���� �̵�
+            if (axisH < 0.0f && rigidbody.velocity.x >= -maxSpeed) //���� �̵�
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
                 renderer.flipX = true;  //�������� ��� �ٲ��ֱ�
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //������ �̵� �׻� ������ �ӵ� 
+            else if (axisH > 0.0f && rigidbody.velocity.x <= maxSpeed) //������ �̵� �׻� ������ �ӵ� 
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
                 renderer.flipX = false;  //���������� (�������� ����Ʈ)
@@ -1783,7 +1783,7 @@ public class PlayerController : LivingEntity
 
         public override void Enter()
         {
-            animator.Play("Run");
+            animator.Play("Run"); //런은 반복재생 맞고 
         }
 
         public override void Update()
@@ -1792,7 +1792,7 @@ public class PlayerController : LivingEntity
             axisV = Input.GetAxisRaw("Vertical"); //�밢�� ���� �޸��°� ����������� 
 
 
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //���� �̵�
+            if (axisH < 0.0f && rigidbody.velocity.x >= -maxSpeed) //���� �̵�
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
@@ -1815,7 +1815,7 @@ public class PlayerController : LivingEntity
 
                 }
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //������ �̵� �׻� ������ �ӵ� 
+            else if (axisH > 0.0f && rigidbody.velocity.x <= maxSpeed) //������ �̵� �׻� ������ �ӵ� 
             {
 
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
@@ -1827,6 +1827,7 @@ public class PlayerController : LivingEntity
 
                 if (Input.GetKeyDown(KeyCode.X) || Input.GetKey(KeyCode.X))
                 {
+                    
                     animator.SetBool("RunShoot", true);
                     player.StartCoroutine(player.ShootCoroutine());
                 }
@@ -1834,11 +1835,13 @@ public class PlayerController : LivingEntity
                 animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f ||
                 Input.GetKeyUp(KeyCode.X))
                 {
+                    Debug.Log("런샷 false진입");
                     animator.SetBool("RunShoot", false);
                 }
             }
 
-            //���ӻ��� --> �����ӵ� ���� �� ������ �ٷ� ���ߵ��� 
+            //튜토에서 왜 안나가지 런샷이???
+
             if (axisH == 0 && rigidbody.velocity.x > 0.02f) //���������� �̵����� ���¿��� ���߸� 
             {
                 rigidbody.velocity = new Vector2(0, rigidbody.velocity.y);
@@ -1851,7 +1854,7 @@ public class PlayerController : LivingEntity
 
         public override void Exit()
         {
-            animator.Play("Down");
+            
         }
 
         public override void Transition() //Ʈ�����ǿ��� �޸��鼭 ��� �޸��鼭 ���� ��� ��ȯ���� 
@@ -1884,11 +1887,14 @@ public class PlayerController : LivingEntity
             }
             if (!onGround && player.FootIsTrigger == false)
             {
+                
+                
                 ChangeState(State.Fall);
             }
 
             if (axisV == -1)
             {
+                animator.Play("Down"); //다운 exit에 있길래 여기로 옮김. 
                 ChangeState(State.Down);
 
             }
@@ -1933,7 +1939,7 @@ public class PlayerController : LivingEntity
             // �ִ� ���� �� ��� �۾� + �׿� �´ºҷ� �۾��� ����.
             player.StartCoroutine(player.ShootCoroutine());
 
-            if (axisH < 0.0f && rigidbody.velocity.x > -maxSpeed) //���� �̵�
+            if (axisH < 0.0f && rigidbody.velocity.x >= -maxSpeed) //���� �̵�
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
                 renderer.flipX = true;  //�������� ��� �ٲ��ֱ�
@@ -1941,7 +1947,7 @@ public class PlayerController : LivingEntity
                 spawnPos.transform.localPosition = new Vector2(-2.2f, 2.4f);
 
             }
-            else if (axisH > 0.0f && rigidbody.velocity.x < maxSpeed) //������ �̵� �׻� ������ �ӵ� 
+            else if (axisH > 0.0f && rigidbody.velocity.x <= maxSpeed) //������ �̵� �׻� ������ �ӵ� 
             {
                 rigidbody.velocity = new Vector2(axisH * accelPower, rigidbody.velocity.y);
                 renderer.flipX = false;  //���������� (�������� ����Ʈ)

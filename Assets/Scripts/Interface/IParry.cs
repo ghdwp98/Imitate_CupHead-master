@@ -28,9 +28,9 @@ public class IParry : MonoBehaviour //패리 가능한 물체들에 붙여주기.
 
         if (isparrying == false)
         {
-            Time.timeScale = 0.7f;
+            Time.timeScale = 0.1f;
             isparrying = true;
-            yield return new WaitForSecondsRealtime(0.5f);
+            yield return new WaitForSecondsRealtime(0.2f);
             Time.timeScale = 1.0f;
             isparrying = false;
             
