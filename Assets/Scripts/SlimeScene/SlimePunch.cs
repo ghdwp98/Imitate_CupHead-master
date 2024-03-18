@@ -26,6 +26,10 @@ public class SlimePunch : MonoBehaviour
                 transform.localPosition = new Vector2(8.47f, 3.13f);
 
             }
+            else if(gameObject.name=="SmallPunch")
+            {
+                transform.localPosition = new Vector2(10.5f, 0.2f);
+            }
 
         }
         else
@@ -38,8 +42,11 @@ public class SlimePunch : MonoBehaviour
             {
                 transform.localPosition = new Vector2(-7.18f,3.13f);
             }
+            else if(gameObject.name=="SmallPunch")
+            {
+                transform.localPosition = new Vector2(-1.8f, 0.25f);
 
-
+            }
         }
     }
 }

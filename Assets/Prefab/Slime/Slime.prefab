@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6489555390473408900
 Transform:
   m_ObjectHideFlags: 0
@@ -48,6 +48,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slime: {fileID: 8274531975546714958}
   lastVelocity: {x: 0, y: 0}
+  slimeBoss: {fileID: 0}
 --- !u!61 &644325925584972847
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -120,6 +121,140 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!1 &1105567777501452309
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5329288963665648625}
+  - component: {fileID: 1258110006337950057}
+  - component: {fileID: 8265475953180962786}
+  - component: {fileID: 8396983738108132313}
+  m_Layer: 13
+  m_Name: SmallPunch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5329288963665648625
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105567777501452309}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 10.55, y: 0.21, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6365308483107302922}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &1258110006337950057
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105567777501452309}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: -3.9662824, y: 2.8622007}
+  serializedVersion: 2
+  m_Radius: 3.524177
+--- !u!212 &8265475953180962786
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105567777501452309}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 0
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!114 &8396983738108132313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1105567777501452309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70402cb217611864fae2cfec7dec6a72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slime: {fileID: 8274531975546714958}
 --- !u!1 &2343705926219370974
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,7 +273,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4596754385065875720
 Transform:
   m_ObjectHideFlags: 0
@@ -264,7 +399,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slime: {fileID: 8274531975546714958}
-  myRenderer: {fileID: 7760561546778577436}
 --- !u!1 &4527801539992966162
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +444,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dustPrefab: {fileID: 6529270875762832685, guid: 3bcefb58835e7064bb4db2db04b16262, type: 3}
+  TombFallDust: {fileID: 3896949955808834248, guid: 9483c8ea2abf25046b74d73f5aa1cf4f, type: 3}
+  TombAttackDust: {fileID: 192884078658411767, guid: 5fb2ce32d7aa6384ca3c4e6600fea381, type: 3}
   size: 3
   capacity: 3
 --- !u!1 &7291195054464829171
@@ -330,7 +466,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4842886556408345416
 Transform:
   m_ObjectHideFlags: 0
@@ -360,6 +496,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slime: {fileID: 8274531975546714958}
   lastVelocity: {x: 0, y: 0}
+  slimeBoss: {fileID: 0}
 --- !u!61 &6774528386912388230
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -450,7 +587,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2034704710127548904
 Transform:
   m_ObjectHideFlags: 0
@@ -576,7 +713,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slime: {fileID: 8274531975546714958}
-  myRenderer: {fileID: 5111050772119702465}
 --- !u!1 &8274531975546714958
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,6 +730,8 @@ GameObject:
   - component: {fileID: 8930718692190976795}
   - component: {fileID: 4846584836435734136}
   - component: {fileID: 4969558235042276484}
+  - component: {fileID: 4859856432881526745}
+  - component: {fileID: 3465680294882116945}
   m_Layer: 13
   m_Name: Slime
   m_TagString: Monster
@@ -620,6 +758,7 @@ Transform:
   - {fileID: 3117486742788627588}
   - {fileID: 2034704710127548904}
   - {fileID: 4596754385065875720}
+  - {fileID: 5329288963665648625}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8627854244867491531
@@ -686,7 +825,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 756311d738356f64e8ae4addff08edd7, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 2
+  m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -754,12 +893,20 @@ MonoBehaviour:
   lastVelocity: {x: 0, y: 0}
   jumpCount: 0
   bigJumpCount: 0
+  tombMoveCount: 0
   questionPrefab1: {fileID: 3460122353794184909, guid: 8a891df6b0c6bfb439630a37a49f8006, type: 3}
   questionPrefab2: {fileID: 3460122353794184909, guid: 50ecec85219bafb49a38f7a4d54a4e38, type: 3}
   questionPrefab3: {fileID: 3460122353794184909, guid: 230f6efa019c66c46b40c187d470532a, type: 3}
+  tombPrefab: {fileID: 8566383971724872291, guid: 059dce9b6e5d4ee49ae8932470ecc03e, type: 3}
   spawner: {fileID: 2184183885599128476}
+  DeadTomb: {fileID: 0}
+  TombCollid: 0
+  questionBox: 0
   SmallcircleCollider: {fileID: 6776870781757114118}
   BigcircleCollider: {fileID: 4969558235042276484}
+  BoxCollider: {fileID: 8930718692190976795}
+  TombCircleCollider: {fileID: 4859856432881526745}
+  TombBoxCollider: {fileID: 3465680294882116945}
   BigSlime: {fileID: 21300000, guid: 92bee1e325264314f844fa0ca76ee182, type: 3}
   Tomb: {fileID: 21300000, guid: e18a14bb99906db40af5da198583537f, type: 3}
   Mark1: {fileID: 7486580765931986755}
@@ -767,6 +914,10 @@ MonoBehaviour:
   Mark3: {fileID: 6489555390473408900}
   PunchArm: {fileID: 7811537981829850694}
   punchFist: {fileID: 2343705926219370974}
+  smallPunch: {fileID: 1105567777501452309}
+  TombTarget:
+    serializedVersion: 2
+    m_Bits: 8
   onGround: 0
   groundCheckLayer:
     serializedVersion: 2
@@ -978,6 +1129,86 @@ CircleCollider2D:
   m_Offset: {x: -0.03465867, y: 2.9}
   serializedVersion: 2
   m_Radius: 2.9626596
+--- !u!58 &4859856432881526745
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8274531975546714958}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.068, y: 5}
+  serializedVersion: 2
+  m_Radius: 1.51
+--- !u!61 &3465680294882116945
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8274531975546714958}
+  m_Enabled: 0
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.12, y: 3.54}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 3.03125, y: 3.3125}
+    newSize: {x: 5.25, y: 6.21875}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 5, y: 7}
+  m_EdgeRadius: 0
 --- !u!1 &8461682839588466875
 GameObject:
   m_ObjectHideFlags: 0
@@ -996,7 +1227,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7486580765931986755
 Transform:
   m_ObjectHideFlags: 0
@@ -1026,6 +1257,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slime: {fileID: 8274531975546714958}
   lastVelocity: {x: 0, y: 0}
+  slimeBoss: {fileID: 0}
 --- !u!61 &1597074625921073085
 BoxCollider2D:
   m_ObjectHideFlags: 0

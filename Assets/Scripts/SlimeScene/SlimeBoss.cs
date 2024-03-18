@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlimeBoss : LivingEntity
@@ -32,6 +31,7 @@ public class SlimeBoss : LivingEntity
     [SerializeField] SlimeDustSpawner spawner;
     [SerializeField] Sprite DeadTomb;
     public bool TombCollid;
+    public bool questionBox = false;
 
     [SerializeField] CircleCollider2D SmallcircleCollider;
     [SerializeField] CircleCollider2D BigcircleCollider;
@@ -46,8 +46,14 @@ public class SlimeBoss : LivingEntity
     [SerializeField] Transform Mark1;
     [SerializeField] Transform Mark2;
     [SerializeField] Transform Mark3;
+
+    [SerializeField] GameObject Makr1G;
+    [SerializeField] GameObject Makr2G;
+    [SerializeField] GameObject Makr3G;
+
     [SerializeField] GameObject PunchArm;
     [SerializeField] GameObject punchFist;
+    [SerializeField] GameObject smallPunch;
     GameObject tombInstance;
     Rigidbody2D slimeRb;
 
@@ -71,6 +77,7 @@ public class SlimeBoss : LivingEntity
     [SerializeField] byte green = 233;
     [SerializeField] byte blue = 217;
     [SerializeField] byte alpha = 255;
+
 
     private StateMachine stateMachine;
 
@@ -108,6 +115,7 @@ public class SlimeBoss : LivingEntity
         BigcircleCollider.enabled = false;
         PunchArm.SetActive(false);
         punchFist.SetActive(false);
+        smallPunch.SetActive(false);
 
     }
 
@@ -336,23 +344,26 @@ public class SlimeBoss : LivingEntity
     private class BigDeadState : SlimeState
     {
 
+
         public int count = 0;
         public BigDeadState(SlimeBoss slime) : base(slime) { }
 
         public float deathAnimPlaying = 0;
 
         public override void Enter()
-        {
+        { // 자식 오브젝트 켜줘야함. 
+            slimeRb.velocity = Vector2.zero;
+
             animator.Play("BigSlimeDeath");
             Vector2 pos = new Vector2(transform.position.x, transform.position.y + 100);
             slime.tombInstance = Instantiate(slime.tombPrefab, pos, Quaternion.identity);
+
+            slime.questionBox = true;
 
         }
 
         public override void Update()
         {
-
-
             slimeRb.velocity = Vector2.zero;
 
             if (slime.TombCollid == true) //충돌 했으면. 
@@ -523,7 +534,7 @@ public class SlimeBoss : LivingEntity
                 ChangeState(State.TombAttack);
             }
 
-            if (hp <= 0)
+            if (health <= 0)
             {
                 ChangeState(State.TombDead);
             }
@@ -535,25 +546,25 @@ public class SlimeBoss : LivingEntity
     {
         public TombAttackState(SlimeBoss slime) : base(slime) { }
 
-       
+
 
         public override void Enter()
         {
-            
+
             slimeRb.velocity = Vector2.zero;
             animator.Play("TombAttack");
         }
 
         public override void Update()
         {
-           
 
-            
+
+
         }
 
         public override void Exit()
         {
-            
+
         }
 
         public override void Transition()
@@ -563,7 +574,7 @@ public class SlimeBoss : LivingEntity
             {
                 ChangeState(State.TombMove);
             }
-            if (hp <= 0)
+            if (health <= 0&&onGround==true)
             {
                 ChangeState(State.TombDead);
             }
@@ -584,8 +595,8 @@ public class SlimeBoss : LivingEntity
             // 이거 플레이어랑 연계해서 클리어 단계 state를 플레이어에도 만들어줘야함. 
             slimeRb.velocity = Vector2.zero;
             animator.Play("TombDeath"); //죽는 애니메이션 재생 및 클리어 애니메이션 
-            //폭발 애니메이션도 재생해줘야함.. 
-            
+                                        //폭발 애니메이션도 재생해줘야함.. 
+
         }
 
         public override void Update()
@@ -599,7 +610,6 @@ public class SlimeBoss : LivingEntity
         }
 
     }
-
 
     private class IntroState : SlimeState
     {
@@ -671,7 +681,7 @@ public class SlimeBoss : LivingEntity
             }
 
             if (health <= 400 && (transform.position.x <= 6 && transform.position.x >= -6)
-                &&onGround==true)
+                && onGround == true)
             {
                 ChangeState(State.Dead);
             }
@@ -704,6 +714,12 @@ public class SlimeBoss : LivingEntity
             // 타겟 위치로 돌아줘야 하는데 회전 시키는 건 안될 것 같은데.. 
 
         }
+
+        public override void Exit()
+        {
+            slime.smallPunch.SetActive(false);
+        }
+
         public override void Transition()
         {
             if (animator.GetCurrentAnimatorStateInfo(0).IsName("SlimePunch") &&
@@ -712,7 +728,7 @@ public class SlimeBoss : LivingEntity
                 ChangeState(State.Jump);
             }
             if (health <= 400 && (transform.position.x <= 6 && transform.position.x >= -6)
-                &&onGround==true)
+                && onGround == true)
             {
                 ChangeState(State.Dead);
             }
@@ -727,7 +743,7 @@ public class SlimeBoss : LivingEntity
 
         public override void Enter()
         {
-            slimeRb.velocity= Vector2.zero;
+            slimeRb.velocity = Vector2.zero;
             animator.Play("SlimeToBigSlime");
         }
 
@@ -747,7 +763,6 @@ public class SlimeBoss : LivingEntity
         }
 
     }
-
 
     public override void OnDamage(float damage)
     {
@@ -904,6 +919,20 @@ public class SlimeBoss : LivingEntity
         PunchArm.SetActive(true);
         punchFist.SetActive(true);
     }
+
+    public void SmallPunchCollider()
+    {
+        smallPunch.SetActive(true);
+    }
+
+    public void BoxON()
+    {
+        Makr1G.SetActive(true);
+        Makr2G.SetActive(true);
+        Makr3G.SetActive(true);
+
+    }
+
 
     IEnumerator TargetTombCoroutine()
     {
