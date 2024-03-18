@@ -30,16 +30,18 @@ public class TombPrefab : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
-        if(onGround==true)
+        onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
+
+        if (onGround==true)
         {
             rb.velocity= Vector2.zero;
+            
         }
         else
         {
-            rb.AddForce(Vector2.up * -13);
+            rb.AddForce(Vector2.up * -30);
         }
-        onGround = Physics2D.Linecast(transform.position, transform.position - (transform.up * 0.1f), groundCheckLayer);
+        
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

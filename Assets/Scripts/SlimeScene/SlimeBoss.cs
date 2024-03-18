@@ -327,6 +327,8 @@ public class SlimeBoss : LivingEntity
     }
     private class BigDeadState : SlimeState
     {
+
+        public int count = 0;
         public BigDeadState(SlimeBoss slime) : base(slime) { }
 
         public float deathAnimPlaying = 0;
@@ -334,13 +336,14 @@ public class SlimeBoss : LivingEntity
         public override void Enter()
         {
             animator.Play("BigSlimeDeath");
-            Vector2 pos=new Vector2(transform.position.x,transform.position.y+50);
+            Vector2 pos=new Vector2(transform.position.x,transform.position.y+100);
             slime.tombInstance= Instantiate(slime.tombPrefab, pos, Quaternion.identity);
           
         }
 
         public override void Update()
         {
+            
 
             slimeRb.velocity = Vector2.zero;
 
@@ -352,6 +355,13 @@ public class SlimeBoss : LivingEntity
                 slime.SmallcircleCollider.enabled = false;
                 slime.BigcircleCollider.enabled = false;
                 animator.Play("BigSlimeExplode");
+                
+                if(count==0)
+                {
+                    slime.spawner.TombFallSpawn();
+                    count = 1;
+                }
+                
 
             }
 
@@ -419,7 +429,7 @@ public class SlimeBoss : LivingEntity
         {
 
             Debug.Log("move진입");
-
+            slimeRb.velocity = Vector2.zero;
             rand = Random.Range(3, 5);
 
             //slime.TombCollid 이거 재활용하자. wall이랑 부딪히면 wall이 slime한테 이거 넘겨주고
@@ -446,6 +456,10 @@ public class SlimeBoss : LivingEntity
                 ChangeState(State.TombAttack);
             }
 
+            if(hp<=0)
+            {
+                ChangeState(State.TombDead);
+            }
         }
 
     }
@@ -468,6 +482,11 @@ public class SlimeBoss : LivingEntity
         public override void Transition()
         {
 
+
+            if(hp<=0)
+            {
+                ChangeState(State.TombDead);
+            }
         }
     }
 
@@ -527,6 +546,7 @@ public class SlimeBoss : LivingEntity
         public override void Enter()
         {
             rand = Random.Range(3, 6);
+            
         }
         public override void FixedUpdate()
         {
@@ -746,13 +766,27 @@ public class SlimeBoss : LivingEntity
             if(spriteRenderer.flipX == true) //오른쪽 보고 있는 경우 오른쪽이동 
             {
                 animator.Play("TombRightMove");
-                slimeRb.velocity=new Vector2(5,transform.position.y);
+                slimeRb.velocity=new Vector2(5,slimeRb.velocity.y);
+
+                if(transform.position.x<=-7.95)
+                {
+                    spriteRenderer.flipX = false;
+                    {
+                        animator.Play("TombLeftMove");
+                    }
+                }
             }
             else //왼쪽 보고 있는 경우 왼쪽 이동 
             {
                 animator.Play("TombLeftMove");
-                slimeRb.velocity = new Vector2(-5, transform.position.y);
-
+                slimeRb.velocity = new Vector2(-5, slimeRb.velocity.y);
+                if (transform.position.x >=7.5)
+                {
+                    spriteRenderer.flipX = true;
+                    {
+                        animator.Play("TombRightMove");
+                    }
+                }
 
             }
             yield return new WaitForSeconds(0.5f);
