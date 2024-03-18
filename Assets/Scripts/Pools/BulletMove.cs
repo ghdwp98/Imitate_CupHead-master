@@ -6,23 +6,30 @@ public class BulletMove : MonoBehaviour
     [SerializeField] float speed = 35f;
 
     [SerializeField] Animator animator;
+    [SerializeField] AudioSource audioSource;
     [SerializeField] Rigidbody2D rb;
     [SerializeField] PooledObject pooledObject;
     [SerializeField] PooledObject bulletCollision;
     [SerializeField] float bulletDamage = 2f;
     BarController barCard;
-    
+    [SerializeField] AudioClip shootAD;
    
 
     
     private void OnEnable()
     {
+        audioSource=GetComponent<AudioSource>();
         GameObject card= GameObject.Find("Card");
+
         barCard=card.gameObject.GetComponent<BarController>(); //어쩔 수 없다... 나중에 바꿔보자.. 
   
         animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         animator.Play("WeaponShot");
+        audioSource.clip = shootAD;
+        audioSource.PlayOneShot(shootAD);
+        
+
     }
 
     void Update()

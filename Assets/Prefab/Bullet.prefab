@@ -187,10 +187,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 35
   animator: {fileID: 8165679019879598460}
+  audioSource: {fileID: -8503772513378873665}
   rb: {fileID: 6868940174769955599}
   pooledObject: {fileID: 2606218724657552123}
   bulletCollision: {fileID: 7271132754538127614, guid: 97ee9ca6d11c7d5449491163932195a8, type: 3}
   bulletDamage: 2
+  shootAD: {fileID: 8300000, guid: 18ed9cb941ad52244abad43bbf855039, type: 3}
 --- !u!114 &2606218724657552123
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,7 +218,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

@@ -123,11 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &10640130 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 844226905074796030, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
-  m_PrefabInstance: {fileID: 7728139397931344939}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &385420599
 GameObject:
   m_ObjectHideFlags: 0
@@ -589,18 +584,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1961520626}
     - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      propertyPath: takeHit
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      propertyPath: maxSpeed
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
-      propertyPath: accelPower
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4779257412819213586, guid: 646ce22736b755c458dd6683c62ddc6b, type: 3}
       propertyPath: barController
       value: 
       objectReference: {fileID: 718711098}
@@ -730,11 +713,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1396539138}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &610037537 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8461682839588466875, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
-  m_PrefabInstance: {fileID: 7728139397931344939}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &718711098 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6823700282132448035, guid: 14bcc79d2b6f56a448253614bab40a7d, type: 3}
@@ -1998,11 +1976,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14bcc79d2b6f56a448253614bab40a7d, type: 3}
---- !u!1 &1857302506 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7291195054464829171, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
-  m_PrefabInstance: {fileID: 7728139397931344939}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1955786664
 GameObject:
   m_ObjectHideFlags: 0
@@ -2237,22 +2210,6 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
-      propertyPath: hp
-      value: 100
-      objectReference: {fileID: 0}
-    - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
-      propertyPath: Makr1G
-      value: 
-      objectReference: {fileID: 610037537}
-    - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
-      propertyPath: Makr2G
-      value: 
-      objectReference: {fileID: 1857302506}
-    - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
-      propertyPath: Makr3G
-      value: 
-      objectReference: {fileID: 10640130}
-    - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 1190605213}
@@ -2299,18 +2256,6 @@ PrefabInstance:
     - target: {fileID: 8274531975546714958, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: m_Name
       value: Slime
-      objectReference: {fileID: 0}
-    - target: {fileID: 8627854244867491531, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
-      propertyPath: m_SortingLayer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8627854244867491531, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
-      propertyPath: m_SortingOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8627854244867491531, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
-      propertyPath: m_SortingLayerID
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

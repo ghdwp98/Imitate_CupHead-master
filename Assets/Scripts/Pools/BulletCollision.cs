@@ -5,13 +5,18 @@ using UnityEngine;
 public class BulletCollision : MonoBehaviour
 {
     [SerializeField] PooledObject pooledObject;
+    [SerializeField] AudioSource audioSource;
     [SerializeField] Animator animator;
     [SerializeField] float releaseTime = 0f;
+    [SerializeField] AudioClip clip;
 
     private void OnEnable()
     {
+        audioSource=GetComponent<AudioSource>();
         animator = GetComponent<Animator>();
         animator.Play("WeaponCollision");
+       /* audioSource.clip = clip;
+        audioSource.Play();*/
     }
 
     void Update()

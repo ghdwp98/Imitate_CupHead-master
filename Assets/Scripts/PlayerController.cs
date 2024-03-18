@@ -29,6 +29,7 @@ public class PlayerController : LivingEntity
     [SerializeField] new SpriteRenderer renderer;
     [SerializeField] Animator animator;
     [SerializeField] AudioSource playerAudio;
+    [SerializeField] AudioClip hitClip;
 
 
     [SerializeField] BulletSpawner bulletSpawner;
@@ -627,7 +628,6 @@ public class PlayerController : LivingEntity
             }
         }
     }
-
 
     private class GameOverState : PlayerState
     {
@@ -2140,6 +2140,8 @@ public class PlayerController : LivingEntity
     {
         if (takeHit == false && hp > 0)
         {
+            playerAudio.clip = hitClip;
+            playerAudio.Play();
             this.gameObject.layer = 15; //인빈시블 상태로 전환 
             takeHit = true;
             hpui.HpChange();

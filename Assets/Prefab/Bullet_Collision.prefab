@@ -136,8 +136,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pooledObject: {fileID: 7271132754538127614}
+  audioSource: {fileID: -1400525055584490747}
   animator: {fileID: 9008587930152145540}
   releaseTime: 0
+  clip: {fileID: 0}
 --- !u!82 &-1400525055584490747
 AudioSource:
   m_ObjectHideFlags: 0
@@ -149,7 +151,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

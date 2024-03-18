@@ -7,20 +7,25 @@ public class ExBulletMove : MonoBehaviour
 
     [SerializeField] float EXbulletSpeed = 15;
     Animator animator;
+    [SerializeField]AudioSource audioSource;
     Rigidbody2D rb;
     [SerializeField]PooledObject pooledObject;
     [SerializeField]PooledObject ExBulletCollision;
     [SerializeField] float bulletDamage = 20f; //필살기 데미지 --> IDamagerble에 데미지 줘야함..
     // 몬스터 스크립트와 연계해줘야함. 
     BarController barCard;
+    [SerializeField]AudioClip clip;
 
     void OnEnable()
     {
+        audioSource = GetComponent<AudioSource>();
         GameObject card = GameObject.Find("Card");
         barCard = card.gameObject.GetComponent<BarController>(); //어쩔 수 없다... 나중에 바꿔보자.. 
         animator = GetComponent<Animator>();
         rb= GetComponent<Rigidbody2D>();
         animator.Play("EXShoot");
+        audioSource.clip = clip;
+        audioSource.PlayOneShot(clip);
     }
 
     void Update()

@@ -5,6 +5,8 @@ using UnityEngine;
 public class JumpEffectSpawn : MonoBehaviour
 {
     [SerializeField] PooledObject jumpEffectPrefab;
+    /*[SerializeField] AudioSource audioSource;
+    [SerializeField] AudioClip clip;*/
 
     int size = 3;
     int capacity = 3;
