@@ -1835,7 +1835,7 @@ public class PlayerController : LivingEntity
                 animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f ||
                 Input.GetKeyUp(KeyCode.X))
                 {
-                    Debug.Log("런샷 false진입");
+                    
                     animator.SetBool("RunShoot", false);
                 }
             }

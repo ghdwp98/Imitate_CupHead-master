@@ -35,6 +35,7 @@ public class BulletMove : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Bullet" ||
             collision.gameObject.tag == "Checking"||collision.gameObject.tag=="Exit")
+            
         {
             return;
         }
