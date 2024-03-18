@@ -7,6 +7,22 @@ public class GoSlime : MonoBehaviour
     [SerializeField] GameObject DoorKeyPrefab;
     GameObject popUp;
     [SerializeField] GameObject pos;
+    [SerializeField] PopUpUI popUpPrefab;
+
+
+    private void Start()
+    {
+        
+    }
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape)) //escÅ°·Î ÄÑÁ® ÀÖ´Â ÆË¾÷ ui ´ÝÀ» ¼ö ÀÖÀ½. 
+        {
+            Manager.UI.ClosePopUpUI();
+        }
+        
+    }
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -26,7 +42,10 @@ public class GoSlime : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Debug.Log("ÆË¾÷Ã¢ ¶ç¿ì±â");
+            Manager.UI.ShowPopUpUI<PopUpUI>(popUpPrefab);
+            
         }
     }
+
+       
 }
