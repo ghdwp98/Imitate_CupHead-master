@@ -9,7 +9,7 @@ public class PlayerController : LivingEntity
     public enum State
     {
         Idle, Run, Attack, Jump, AttackRun, JumpAttack, Down, Anchor, Dash, JumpDash
-        , Fall, Parrying, Up, Ex, Dead, Hit, GameOver
+        , Fall, Parrying, Up, Ex, Dead, Hit, GameOver,Intro
     }
 
 
@@ -90,9 +90,9 @@ public class PlayerController : LivingEntity
         stateMachine.AddState(State.Dead, new DeadState(this));
         stateMachine.AddState(State.Hit, new HitState(this));
         stateMachine.AddState(State.GameOver, new GameOverState(this));
+        stateMachine.AddState(State.Intro, new IntroState(this));
 
-
-        stateMachine.InitState(State.Idle);
+        stateMachine.InitState(State.Intro); //시작 상태 인트로로 변경 
 
     }
 

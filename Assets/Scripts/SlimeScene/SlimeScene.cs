@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class SlimeScene : BaseScene
 {
+    [SerializeField] GameObject playerPos; 
+
     public override IEnumerator LoadingRoutine()
     {
         // 시간 멈춰 있는 상태에서 이 씬의 로딩 루틴이 진행된다.

@@ -36,6 +36,7 @@ public class SlimeBoss : LivingEntity
     [SerializeField] CircleCollider2D SmallcircleCollider;
     [SerializeField] CircleCollider2D BigcircleCollider;
     [SerializeField] BoxCollider2D BoxCollider;
+    [SerializeField] PopUpUI KnockOutUI;
 
     [SerializeField] CircleCollider2D TombCircleCollider;
     [SerializeField] BoxCollider2D TombBoxCollider;
@@ -77,6 +78,10 @@ public class SlimeBoss : LivingEntity
     [SerializeField] byte green = 233;
     [SerializeField] byte blue = 217;
     [SerializeField] byte alpha = 255;
+
+    [SerializeField] AudioClip dingdongClip;
+    [SerializeField] AudioClip KnockOutClip;
+
 
 
     private StateMachine stateMachine;
@@ -589,13 +594,16 @@ public class SlimeBoss : LivingEntity
             //살짝 시간 멈추고 --> 넉아웃(승리문구)  나오고
             // 죽는 애니메이션 반복 + 파괴되는 폭발 애니메이션 재생 (둘 다 반복)
             // 반복되면서 점점 페이드 아웃 됨 --> 페이드 아웃 되면서 씬 전환 하면 될듯
-
-            slime.spriteRenderer.sprite = slime.DeadTomb;
-            //Time.timeScale = 0f; //이거 플레이어 입력 들어옴
-            // 이거 플레이어랑 연계해서 클리어 단계 state를 플레이어에도 만들어줘야함. 
+            // 
             slimeRb.velocity = Vector2.zero;
             animator.Play("TombDeath"); //죽는 애니메이션 재생 및 클리어 애니메이션 
-                                        //폭발 애니메이션도 재생해줘야함.. 
+            slime.StartCoroutine(slime.KnockOutCoroutine());       
+            
+
+            //폭발 애니메이션도 재생해줘야함.. 
+             //이거 넉아웃 문자 popup으로 해주면 멈출 수 있고
+             // 그 다음에 코루틴 돌려서 어느정도 파괴이미지나오고
+             // 씬 전환 해주기
 
         }
 
@@ -993,5 +1001,21 @@ public class SlimeBoss : LivingEntity
         Debug.Log("코루틴함수실행");
         StartCoroutine(TombDelay());
     }
+
+    IEnumerator KnockOutCoroutine()
+    {
+        Manager.UI.ShowPopUpUI<PopUpUI>(KnockOutUI);               
+        SlimeAudio.PlayOneShot(dingdongClip);
+        yield return new WaitForSecondsRealtime(1f);
+        SlimeAudio.PlayOneShot(KnockOutClip);
+        yield return new WaitForSecondsRealtime(0.5f);
+        yield return new WaitForSecondsRealtime(0.5f); //넉아웃 나와있는 상태. 
+        Manager.UI.ClearPopUpUI();
+
+        //폭발 애니메이션 원 반경으로 재생해주고
+        // 3초 정도 재생한 후에 씬 전환해서 월드맵으로 
+    }
+
+
 
 }
