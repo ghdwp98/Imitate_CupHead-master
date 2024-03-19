@@ -67,6 +67,7 @@ public class SlimeBoss : LivingEntity
     float overLapCollTime;
     float targetRange = 3f;
     bool isAttack = false;
+    bool isCE = false;
 
     [SerializeField] LayerMask TombTarget;
 
@@ -387,7 +388,6 @@ public class SlimeBoss : LivingEntity
                     count = 1;
                 }
 
-
             }
 
         }
@@ -407,7 +407,6 @@ public class SlimeBoss : LivingEntity
         }
 
     }
-
     private class TombIdleState : SlimeState
     {
         public TombIdleState(SlimeBoss slime) : base(slime) { }
@@ -455,7 +454,6 @@ public class SlimeBoss : LivingEntity
 
         public override void Enter()
         {
-
 
             slimeRb.velocity = Vector2.zero;
             rand = Random.Range(10, 15); //이 사이로 랜덤값 가지고 time이 이 값을 넘어버리면
@@ -552,8 +550,6 @@ public class SlimeBoss : LivingEntity
     {
         public TombAttackState(SlimeBoss slime) : base(slime) { }
 
-
-
         public override void Enter()
         {
 
@@ -593,7 +589,6 @@ public class SlimeBoss : LivingEntity
         public float delay = 0f;
         public bool istrue=false;
         
-
         public override void Enter()
         {
             //살짝 시간 멈추고 --> 넉아웃(승리문구)  나오고
@@ -606,23 +601,21 @@ public class SlimeBoss : LivingEntity
 
             //코루틴 시간 조정 해주고 timedelta가 계속 지나고 있으니까 이거 잘 조정해주기. 
 
-
-            slime.StartCoroutine(slime.ExplosionCoroutine());
-
+            if(slime.isCE==true)
+            {
+                slime.StartCoroutine(slime.ExplosionCoroutine());
+            }
         }
-
         public override void Update()
         {
             delay += Time.deltaTime;
 
-            if (delay>=3f&&istrue==false)
+            if (delay>=8f&&istrue==false)
             {
                 istrue = true; 
                 Manager.Scene.LoadScene("WorldMapScene");
             }
         }
-
-
 
         public override void Transition()
         {
@@ -1024,18 +1017,26 @@ public class SlimeBoss : LivingEntity
         yield return new WaitForSecondsRealtime(0.5f);
         yield return new WaitForSecondsRealtime(0.5f); //넉아웃 나와있는 상태. 
         Manager.UI.ClearPopUpUI();
+        isCE = true;
+
+        yield return ExplosionCoroutine();
 
         //폭발 애니메이션 원 반경으로 재생해주고
         // 3초 정도 재생한 후에 씬 전환해서 월드맵으로 
     }
 
-
-    IEnumerator ExplosionCoroutine()
+    IEnumerator ExplosionCoroutine() //주변 위치 랜덤으로 정해줘야함. 
     {
-        //랜덤 위치 정해주기 
 
-        Instantiate(BossExplosion);
-        yield return new WaitForSeconds(0.5f);
+        for(int i=0;i<10;i++)
+        {
+            Vector2 pos = (Vector2)(transform.position+new Vector3(0,3,0))
+                + (Random.insideUnitCircle * 3f);
+
+            Instantiate(BossExplosion,pos,Quaternion.identity);
+            yield return new WaitForSecondsRealtime(0.5f);
+        }
+        
     }
 
 

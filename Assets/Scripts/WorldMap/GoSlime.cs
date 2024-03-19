@@ -22,11 +22,8 @@ public class GoSlime : MonoBehaviour
         {
             Manager.UI.ClosePopUpUI();
         }
-        
-        
-
+ 
     }
-
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -47,8 +44,6 @@ public class GoSlime : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             Manager.UI.ShowPopUpUI<PopUpUI>(popUpPrefab);
-            
-            
 
 
         }

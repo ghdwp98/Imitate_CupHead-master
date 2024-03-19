@@ -9,7 +9,7 @@ public class SceneManager : Singleton<SceneManager>
     [SerializeField] Slider loadingBar;
     [SerializeField] float fadeTime;
     [SerializeField] GameObject loadingAnim;
-
+    [SerializeField] GameObject playerPos;
     private BaseScene curScene;
 
     public BaseScene GetCurScene()
