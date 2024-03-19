@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SlimeScene : BaseScene
 {
-    [SerializeField] GameObject playerPos; 
+    [SerializeField] GameObject playerPos;
+    [SerializeField] SlimeBoss slime;
 
     public override IEnumerator LoadingRoutine()
     {

@@ -28,6 +28,7 @@ public class SlimeBoss : LivingEntity
     [SerializeField] GameObject questionPrefab2;
     [SerializeField] GameObject questionPrefab3;
     [SerializeField] GameObject tombPrefab;
+    [SerializeField] GameObject BossExplosion;
     [SerializeField] SlimeDustSpawner spawner;
     [SerializeField] Sprite DeadTomb;
     public bool TombCollid;
@@ -589,6 +590,10 @@ public class SlimeBoss : LivingEntity
     {
         public TombDeadState(SlimeBoss slime) : base(slime) { }
 
+        public float delay = 0f;
+        public bool istrue=false;
+        
+
         public override void Enter()
         {
             //살짝 시간 멈추고 --> 넉아웃(승리문구)  나오고
@@ -597,23 +602,31 @@ public class SlimeBoss : LivingEntity
             // 
             slimeRb.velocity = Vector2.zero;
             animator.Play("TombDeath"); //죽는 애니메이션 재생 및 클리어 애니메이션 
-            slime.StartCoroutine(slime.KnockOutCoroutine());       
-            
+            slime.StartCoroutine(slime.KnockOutCoroutine());
 
-            //폭발 애니메이션도 재생해줘야함.. 
-             //이거 넉아웃 문자 popup으로 해주면 멈출 수 있고
-             // 그 다음에 코루틴 돌려서 어느정도 파괴이미지나오고
-             // 씬 전환 해주기
+            //코루틴 시간 조정 해주고 timedelta가 계속 지나고 있으니까 이거 잘 조정해주기. 
+
+
+            slime.StartCoroutine(slime.ExplosionCoroutine());
 
         }
 
         public override void Update()
         {
+            delay += Time.deltaTime;
 
+            if (delay>=3f&&istrue==false)
+            {
+                istrue = true; 
+                Manager.Scene.LoadScene("WorldMapScene");
+            }
         }
+
+
 
         public override void Transition()
         {
+            
 
         }
 
@@ -1014,6 +1027,15 @@ public class SlimeBoss : LivingEntity
 
         //폭발 애니메이션 원 반경으로 재생해주고
         // 3초 정도 재생한 후에 씬 전환해서 월드맵으로 
+    }
+
+
+    IEnumerator ExplosionCoroutine()
+    {
+        //랜덤 위치 정해주기 
+
+        Instantiate(BossExplosion);
+        yield return new WaitForSeconds(0.5f);
     }
 
 
