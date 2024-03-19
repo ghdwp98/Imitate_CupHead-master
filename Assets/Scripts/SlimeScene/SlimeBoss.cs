@@ -945,6 +945,13 @@ public class SlimeBoss : LivingEntity
         smallPunch.SetActive(false);
     }
 
+    public void BigPunchOff() //이거 애니이벤트 등록해주기. 
+    {
+        PunchArm.SetActive(false);
+        punchFist.SetActive(false);
+    }
+
+
     public void BoxON()
     {
         Makr1G.SetActive(true);
