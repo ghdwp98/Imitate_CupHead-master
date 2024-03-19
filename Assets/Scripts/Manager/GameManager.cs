@@ -5,6 +5,13 @@ public class GameManager : Singleton<GameManager>
 {
     int coinScore = 0;
 
+    public bool playerWin;
+
+    public bool slimeDie;
+
+    
+
+
     public void SetScore(int value)
     {
         coinScore += value;

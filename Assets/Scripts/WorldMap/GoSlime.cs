@@ -10,7 +10,19 @@ public class GoSlime : MonoBehaviour
     GameObject popUp;
     [SerializeField] GameObject pos;
     [SerializeField] PopUpUI popUpPrefab;
-    
+    [SerializeField] GameObject flagPrefab;
+    bool SlimeflagOn = false;
+
+    private void Awake()
+    {
+        if(Manager.Game.slimeDie==true)
+        {
+            Instantiate(flagPrefab,transform.localPosition,Quaternion.identity);
+
+            SlimeflagOn=true; //나중에 저장에 쓸 용도 --> true 상태로 남아 있음. 
+            Manager.Game.slimeDie = false;
+        }
+    }
 
     private void Start()
     {

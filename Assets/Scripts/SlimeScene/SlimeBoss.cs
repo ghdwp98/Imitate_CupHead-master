@@ -594,6 +594,10 @@ public class SlimeBoss : LivingEntity
             // 죽는 애니메이션 반복 + 파괴되는 폭발 애니메이션 재생 (둘 다 반복)
             // 반복되면서 점점 페이드 아웃 됨 --> 페이드 아웃 되면서 씬 전환 하면 될듯
             // 
+
+            Manager.Game.slimeDie = true; //슬라임 다이가 트루이면.. 
+            Manager.Game.playerWin = true; //플레이어 승리 트루--> 월드맵 승리 애니메이션 재생 
+
             slimeRb.velocity = Vector2.zero;
             animator.Play("TombDeath"); //죽는 애니메이션 재생 및 클리어 애니메이션 
             slime.StartCoroutine(slime.KnockOutCoroutine());
