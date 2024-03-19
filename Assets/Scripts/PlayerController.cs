@@ -30,6 +30,7 @@ public class PlayerController : LivingEntity
     [SerializeField] Animator animator;
     [SerializeField] AudioSource playerAudio;
     [SerializeField] AudioClip hitClip;
+    [SerializeField] PopUpUI diePopUpPrefab; //죽었을 때 띄워줄 ui 프리팹 
 
 
     [SerializeField] BulletSpawner bulletSpawner;
@@ -637,7 +638,14 @@ public class PlayerController : LivingEntity
         {
             Instantiate(player.GhostPrefab, transform.position, Quaternion.identity);
             Debug.Log("게임오버"); //팝업창 열어주는 이벤트를 여기서 실행해주자. 
+            //꺼주기 전에 popup ui 실행. 
+            Manager.UI.ShowPopUpUI<PopUpUI>(player.diePopUpPrefab);
+
             player.gameObject.SetActive(false);
+
+
+
+
         }
     }
 
@@ -651,7 +659,7 @@ public class PlayerController : LivingEntity
             animator.Play("Death");
 
 
-            // 그리고 팝업도 띄워줘야함. --> 다시 하기 팝업 + 머그샷
+            
         }
 
         public override void Update()

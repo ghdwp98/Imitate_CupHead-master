@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class GoSlime : MonoBehaviour
 {
@@ -8,7 +10,7 @@ public class GoSlime : MonoBehaviour
     GameObject popUp;
     [SerializeField] GameObject pos;
     [SerializeField] PopUpUI popUpPrefab;
-
+    
 
     private void Start()
     {
@@ -21,6 +23,8 @@ public class GoSlime : MonoBehaviour
             Manager.UI.ClosePopUpUI();
         }
         
+        
+
     }
 
 
@@ -44,6 +48,9 @@ public class GoSlime : MonoBehaviour
         {
             Manager.UI.ShowPopUpUI<PopUpUI>(popUpPrefab);
             
+            
+
+
         }
     }
 

@@ -548,6 +548,7 @@ MonoBehaviour:
   animator: {fileID: 4207917155024812343}
   playerAudio: {fileID: 7316722485303158118}
   hitClip: {fileID: 8300000, guid: ca9ea78b2dfb88b4ab7c8acb99f71aa3, type: 3}
+  diePopUpPrefab: {fileID: -8660593463693484342, guid: 0506d3eb43428bf4987e10aa9d588a73, type: 3}
   bulletSpawner: {fileID: 7916512936479786408}
   FootBoxCollider: {fileID: 7404011098452842406}
   JumpEffectSpawn: {fileID: 6131803793254209839}

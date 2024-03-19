@@ -11,9 +11,6 @@ public class SlimeScene : BaseScene
 
         //넉아웃이나 인트로는 ui에서 관리를 해줘야하나??? 씬에서 관리를 해야하나 고민되네 
 
-
-
-
         yield return null;
     }
 
