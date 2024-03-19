@@ -47,7 +47,8 @@ public class QuestionMark : IParry
 
     public override void Parried()
     {
-        StartCoroutine(parryCoroutine());
+        //StartCoroutine(parryCoroutine()); --> 이거 플레이어 에서 해줘야됨 
+        // 오브젝트 삭제되면서 시간이 다시 안돌아옴 ㅋㅋ
         Destroy(gameObject);
        
     }

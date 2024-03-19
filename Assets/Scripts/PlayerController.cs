@@ -239,6 +239,27 @@ public class PlayerController : LivingEntity
     }
 
     
+    private class IntroState :PlayerState
+    {
+        public IntroState(PlayerController player) : base(player) { }
+
+        public override void Enter()
+        {
+            animator.Play("Intro");
+        }
+
+        public override void Transition()
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).IsName("Intro") &&
+            animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+            {
+                ChangeState(State.Idle);
+            }
+
+        }
+    }
+
+
 
     private class ExState : PlayerState
     {
