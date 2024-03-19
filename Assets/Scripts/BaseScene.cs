@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BaseScen : MonoBehaviour
 {
-    void Start()
+    void Start() 
     {
         
     }
