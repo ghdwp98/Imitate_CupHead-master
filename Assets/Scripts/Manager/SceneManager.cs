@@ -9,8 +9,9 @@ public class SceneManager : Singleton<SceneManager>
     [SerializeField] Slider loadingBar;
     [SerializeField] float fadeTime;
     [SerializeField] GameObject loadingAnim;
-    [SerializeField] GameObject playerPos;
+    [SerializeField] public Vector2 playerPos;
     private BaseScene curScene;
+    
 
     public BaseScene GetCurScene()
     {
@@ -45,9 +46,19 @@ public class SceneManager : Singleton<SceneManager>
         Manager.UI.ClearWindowUI();
         Manager.UI.CloseInGameUI();
 
+        // 월드맵으로 이동할 때면 위치를 저장해줘야하니까
+        // 모든 경우에 가능할까? 
+
         Time.timeScale = 0f;
 
         loadingAnim.gameObject.SetActive(true);
+
+        BaseScene PrevScene=GetCurScene(); //일단 로딩 이전씬을 가지고 오고
+
+        playerPos = PrevScene.worldPos; 
+        Debug.Log("매니저 pos");
+        Debug.Log(playerPos);
+
 
         AsyncOperation oper = UnitySceneManager.LoadSceneAsync(sceneName);
         while (oper.isDone == false)
@@ -61,8 +72,13 @@ public class SceneManager : Singleton<SceneManager>
         Manager.UI.EnsureEventSystem();
 
         BaseScene curScene = GetCurScene();
+        curScene.worldPos = PrevScene.worldPos;
+        playerPos= curScene.worldPos;
+        Debug.Log("매니저 pos cur씬 ");
+        Debug.Log(playerPos); //여기서 0 0 으로 초기화 
         yield return curScene.LoadingRoutine(); //현재씬의 로딩 루틴 실행 하는 위치.
 
+        
         
 
         loadingAnim.gameObject.SetActive(false);

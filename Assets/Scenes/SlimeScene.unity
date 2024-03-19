@@ -1875,7 +1875,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e4bc89230ba8d07499929872329e5ba1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerPos: {fileID: 0}
+  worldPos: {x: 0, y: 0}
+  playerPos: {x: 0, y: 0}
   slime: {fileID: 2058784551}
 --- !u!1001 &1854490620
 PrefabInstance:
@@ -2229,7 +2230,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: hp
-      value: 500
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: target

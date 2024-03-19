@@ -1,3 +1,4 @@
+using TreeEditor;
 using UnityEngine;
 
 public class WorldMapPlayerController : MonoBehaviour
@@ -9,14 +10,9 @@ public class WorldMapPlayerController : MonoBehaviour
     [SerializeField] float playerMoveSpeed;
     [SerializeField] float breakPower;
     [SerializeField] float accelPower;
+    [SerializeField] WorldMapScene scene;
 
     float delay = 0f;
-
-    
-
-    //이 위치를 어디서 저장해 주지? 
-
-
 
     private void Awake()
     {
@@ -25,6 +21,12 @@ public class WorldMapPlayerController : MonoBehaviour
 
         //여기서 할 때 클리어 했으면 승리 애니메이션을 진행해보자. 
 
+        if(Manager.Scene.playerPos.x!=0&&Manager.Scene.playerPos.y!=0)
+        {
+            Debug.Log("실행");
+            transform.position = Manager.Scene.playerPos;
+        }
+        
         if (Manager.Game.playerWin == true)
         {
             myAnim.Play("Win");
