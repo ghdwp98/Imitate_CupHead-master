@@ -48,7 +48,7 @@ public class QuestionMark : IParry
     public override void Parried()
     {
         StartCoroutine(parryCoroutine());
-        Destroy(gameObject,0.2f);
+        Destroy(gameObject);
        
     }
     IEnumerator parryCoroutine()
