@@ -23,6 +23,7 @@ public class PlayerController : LivingEntity
     [SerializeField] bool parrySucess = false;
     [SerializeField] bool EXshooting = false;
     [SerializeField] GameObject GhostPrefab;
+    
 
     [Header("Component")]
     [SerializeField] new Rigidbody2D rigidbody;
@@ -246,6 +247,9 @@ public class PlayerController : LivingEntity
         public override void Enter()
         {
             animator.Play("Intro");
+
+            
+
         }
 
         public override void Transition()
@@ -258,7 +262,6 @@ public class PlayerController : LivingEntity
 
         }
     }
-
 
 
     private class ExState : PlayerState

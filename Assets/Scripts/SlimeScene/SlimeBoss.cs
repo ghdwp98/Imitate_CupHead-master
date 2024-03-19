@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class SlimeBoss : LivingEntity
 {
-
-
-
     public enum State //이거 애기 슬라임이니까 phase가 아니라 각 공격 모션들로 나눠주자. 
     {
         Intro, Punch, Jump, Dead, BigIdle, BigJump, BigPunch, BigDead, TombIdle, TombMove, TombDead
@@ -83,6 +80,8 @@ public class SlimeBoss : LivingEntity
 
     [SerializeField] AudioClip dingdongClip;
     [SerializeField] AudioClip KnockOutClip;
+
+    [SerializeField] GameObject introRunAndGunPrefab;
 
 
 
@@ -632,6 +631,8 @@ public class SlimeBoss : LivingEntity
         public override void Enter()
         {
             animator.Play("SlimeIntro");
+
+            Instantiate(slime.introRunAndGunPrefab);
         }
 
         public override void Transition()
@@ -757,7 +758,7 @@ public class SlimeBoss : LivingEntity
 
         public override void Enter()
         {
-            slimeRb.velocity = Vector2.zero;
+            slimeRb.velocity = Vector2.zero; //움직임 멈춰줬는데 어째서???? 위로 뜨는거지...
             animator.Play("SlimeToBigSlime");
         }
 
@@ -937,6 +938,11 @@ public class SlimeBoss : LivingEntity
     public void SmallPunchCollider()
     {
         smallPunch.SetActive(true);
+    }
+
+    public void SmallPunchOff()
+    {
+        smallPunch.SetActive(false);
     }
 
     public void BoxON()

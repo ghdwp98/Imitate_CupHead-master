@@ -2215,9 +2215,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 4846584836435734136, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
+      propertyPath: Loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4846584836435734136, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
+      propertyPath: m_Volume
+      value: 0.146
+      objectReference: {fileID: 0}
+    - target: {fileID: 4846584836435734136, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 8dd9f5aa0fe4ab14bbc3c3a57dba1066, type: 3}
+    - target: {fileID: 4846584836435734136, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
+      propertyPath: m_PlayOnAwake
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: hp
-      value: 0
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: target
@@ -2239,6 +2255,10 @@ PrefabInstance:
       propertyPath: BossExplosion
       value: 
       objectReference: {fileID: 6461294867585760676, guid: 58506feca843b6b43a830a674398d5a8, type: 3}
+    - target: {fileID: 6264667661307240857, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
+      propertyPath: introRunAndGunPrefab
+      value: 
+      objectReference: {fileID: 8888140972604241541, guid: 5ac5123123201eb4db70c07add564bb0, type: 3}
     - target: {fileID: 6365308483107302922, guid: 1a9be1aae8de38d4a90fecae658c621a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.25
