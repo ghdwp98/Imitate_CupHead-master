@@ -18,12 +18,14 @@ public class IParry : MonoBehaviour //패리 가능한 물체들에 붙여주기.
 
     public virtual void Parried()
     {
-        
-        StartCoroutine(parryCoroutine());
+
+        StartCoroutine(IsParry());
+
+        // StartCoroutine(parryCoroutine());
 
     }
 
-    IEnumerator parryCoroutine()
+    /*IEnumerator parryCoroutine()
     {
 
         if (isparrying == false)
@@ -34,9 +36,20 @@ public class IParry : MonoBehaviour //패리 가능한 물체들에 붙여주기.
             Time.timeScale = 1.0f;
             isparrying = false;
             
-        }
-    }
+        } //나중에 이거 플레이어 위치로 바꿔줘야함. 
+    }*/
     
+
+    IEnumerator IsParry()
+    {
+        if (isparrying == false)
+        {
+            isparrying = true;
+            yield return new WaitForSecondsRealtime(0.2f);
+            isparrying = false;
+        }
+
+    }
 
 
 

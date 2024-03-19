@@ -33,7 +33,7 @@ public class GhostMove : IParry
         Debug.Log("패리드 ");
         base.Parried();
         animator.Play("Revive");
-        capsuleCollider.enabled = false;
+        capsuleCollider.enabled = false; //아 여기서 collider 없애주니까 얘는괜찮음. 
         Destroy(gameObject, 1.2f);
 
     }
