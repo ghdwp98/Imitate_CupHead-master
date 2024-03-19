@@ -12,6 +12,12 @@ public class WorldMapPlayerController : MonoBehaviour
 
     float delay = 0f;
 
+    
+
+    //이 위치를 어디서 저장해 주지? 
+
+
+
     private void Awake()
     {
         playerRb = GetComponent<Rigidbody2D>();
@@ -26,8 +32,6 @@ public class WorldMapPlayerController : MonoBehaviour
             Manager.Game.playerWin = false;
         }
 
-
-
     }
 
     private void FixedUpdate()
@@ -37,9 +41,6 @@ public class WorldMapPlayerController : MonoBehaviour
         {
             myAnim.SetTrigger("WinTrigger");
         }
-
-
-
 
         playerRb.velocity = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized *
             playerMoveSpeed * Time.deltaTime;
@@ -53,7 +54,6 @@ public class WorldMapPlayerController : MonoBehaviour
             myAnim.SetFloat("LastMoveX", Input.GetAxisRaw("Horizontal"));
             myAnim.SetFloat("LastMoveY", Input.GetAxisRaw("Vertical"));
         }
-
 
     }
 }

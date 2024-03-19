@@ -9,6 +9,7 @@ public class GameManager : Singleton<GameManager>
 
     public bool slimeDie;
 
+
     
 
 
@@ -28,5 +29,8 @@ public class GameManager : Singleton<GameManager>
         Debug.Log(coinScore);
     }
 
+
     
+
+
 }
